@@ -1,4 +1,4 @@
-# Stemlen Next.js Application
+# CC-Plan-B Next.js Application
 
 This is a fully migrated Next.js 15 application converted from the original React application. The application now uses Next.js App Router with all the modern features.
 
