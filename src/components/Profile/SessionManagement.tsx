@@ -167,8 +167,8 @@ const SessionManagement = () => {
           <Text size="lg" mb="md" className={isDarkMode ? 'text-cape-cod-300' : 'text-gray-600'}>
             No mentorship requests yet
           </Text>
-          <Text size="sm" className={isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'}>
-            When students request mentorship, they'll appear here
+            <Text size="sm" className={isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'}>
+            When students request mentorship, they&apos;ll appear here
           </Text>
         </div>
       ) : (

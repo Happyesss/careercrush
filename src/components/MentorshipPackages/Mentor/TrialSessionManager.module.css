@@ -1,0 +1,324 @@
+/* Container and Layout */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 2rem 0;
+}
+
+/* Header Section */
+.headerSection {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.title {
+  background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.primaryButton {
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+  transition: all 0.3s ease;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.5);
+}
+
+/* Filters Section */
+.filtersSection {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.filterItem {
+  min-width: 220px;
+}
+
+.dateFilterContainer {
+  max-width: 280px;
+  background: rgba(249, 250, 251, 0.8) !important;
+}
+
+.filterCalendar {
+  --mantine-shadow-xs: none;
+}
+
+.filterCalendar [data-mantine-color-scheme] .mantine-Calendar-calendarHeader {
+  margin-bottom: 0.5rem;
+}
+
+.filterCalendar .mantine-Calendar-day {
+  font-size: 0.75rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.filterCalendar .mantine-Calendar-day:hover {
+  background-color: #e0f2fe !important;
+  transform: scale(1.05);
+}
+
+/* Sessions Header */
+.sessionsHeader {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+}
+
+.sessionsBadge {
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+}
+
+/* Session Cards */
+.sessionCard {
+  background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sessionCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #06b6d4, #10b981);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sessionCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: #d1d5db;
+}
+
+.sessionCard:hover::before {
+  opacity: 1;
+}
+
+.menuButton {
+  transition: all 0.2s ease;
+}
+
+.menuButton:hover {
+  background-color: #f3f4f6 !important;
+  transform: scale(1.1);
+}
+
+.notesSection {
+  background: #f8fafc;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border-left: 3px solid #e2e8f0;
+}
+
+/* Calendar Container Styling */
+.calendarContainer {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.calendarContainer:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.batchCalendar {
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.modalCalendar {
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+.filterCalendar {
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.calendar {
+  width: 100%;
+}
+
+.calendar [data-mantine-color-scheme] .mantine-Calendar-calendarHeader {
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.calendar [data-mantine-color-scheme] .mantine-Calendar-calendarHeaderLevel {
+  font-weight: 600;
+  color: #374151;
+}
+
+.calendar [data-mantine-color-scheme] .mantine-Calendar-calendarHeaderControl {
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.calendar [data-mantine-color-scheme] .mantine-Calendar-calendarHeaderControl:hover {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.calendar .mantine-Calendar-monthsList,
+.calendar .mantine-Calendar-yearsList,
+.calendar .mantine-Calendar-decadesList {
+  gap: 0.5rem;
+}
+
+.calendar .mantine-Calendar-monthsListCell,
+.calendar .mantine-Calendar-yearsListCell,
+.calendar .mantine-Calendar-decadesListCell {
+  border-radius: 8px;
+}
+
+.calendarDay {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.calendarDay:hover {
+  background-color: #e0f2fe;
+  transform: scale(1.1);
+}
+
+.selectedDay {
+  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+}
+
+.selectedDay:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%) !important;
+  transform: scale(1.05);
+}
+
+/* Empty State */
+.emptyStateCard,
+.loadingCard {
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border: 2px dashed #d1d5db;
+  transition: all 0.3s ease;
+}
+
+.emptyStateCard:hover {
+  border-color: #9ca3af;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 0;
+  }
+  
+  .headerSection {
+    padding: 1.5rem !important;
+  }
+  
+  .filtersSection {
+    padding: 1rem !important;
+  }
+  
+  .filterItem {
+    min-width: 100%;
+  }
+  
+  .dateFilterContainer {
+    max-width: 100%;
+  }
+  
+  .sessionsHeader {
+    padding: 1rem !important;
+  }
+  
+  .sessionCard {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Dark mode support */
+[data-mantine-color-scheme="dark"] .headerSection,
+[data-mantine-color-scheme="dark"] .filtersSection,
+[data-mantine-color-scheme="dark"] .sessionsHeader,
+[data-mantine-color-scheme="dark"] .sessionCard,
+[data-mantine-color-scheme="dark"] .emptyStateCard,
+[data-mantine-color-scheme="dark"] .loadingCard {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  border-color: #374151;
+}
+
+[data-mantine-color-scheme="dark"] .calendarContainer {
+  background: linear-gradient(135deg, #374151 0%, #1f2937 100%) !important;
+  border-color: #4b5563;
+}
+
+[data-mantine-color-scheme="dark"] .dateFilterContainer {
+  background: rgba(55, 65, 81, 0.8) !important;
+}
+
+[data-mantine-color-scheme="dark"] .notesSection {
+  background: #374151;
+  border-left-color: #4b5563;
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sessionCard {
+  animation: fadeInUp 0.3s ease;
+}
+
+/* Custom scrollbar */
+.container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+  border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+}

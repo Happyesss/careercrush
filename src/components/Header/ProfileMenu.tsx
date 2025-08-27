@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, Menu, rem, Switch } from '@mantine/core'
-import { IconBrandAppgallery, IconLogout, IconMoonStars, IconSun, IconUserCircle } from '@tabler/icons-react'
+import { IconBrandAppgallery, IconLogout, IconMoonStars, IconSun, IconUserCircle, IconPackage } from '@tabler/icons-react'
 import {  useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
@@ -40,6 +40,16 @@ const ProfileMenu = () => {
             Profile
           </Menu.Item>
         </Link>
+
+        {/* Show package management for mentors */}
+        {user.accountType === 'MENTOR' && (
+          <Link href="/packages/mentor">
+            <Menu.Item leftSection={<IconPackage size={14} />}>
+              Manage Packages
+            </Menu.Item>
+          </Link>
+        )}
+
   <Link href="/job-gallery">
           <Menu.Item leftSection={<IconBrandAppgallery size={14} />}>
             Gallery
