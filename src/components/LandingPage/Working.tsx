@@ -1,20 +1,20 @@
 import { IconBriefcaseFilled, IconBrowserCheck, IconBrowserShare, IconChecklist } from '@tabler/icons-react';
 import { useTheme } from "../../ThemeContext";
+import Dot from './Dot';
+import Heading from './Heading';
 
 const Working = () => {
   const { isDarkMode } = useTheme();
 
   return (
-    <div className={`mt-20 pb-20 flex flex-col items-center ${isDarkMode ? 'bg-cape-cod-950 text-white' : ' text-black'}`}>
+    <div className={`mt-28 pb-20 flex flex-col items-center ${isDarkMode ? 'bg-cape-cod-950 text-white' : ' text-black'}`}>
+
+      <Dot name='Process'/>
+
+      <Heading heading={"Kickstart Your Journey"} subheading={"Take the first step toward building the career you’ve always wanted."}/>
+
       {/* Heading Section */}
-      <div className="text-center mb-16">
-        <h1 className={`text-4xl font-semibold ${isDarkMode ? 'text-white' : 'text-cape-cod-900'}`}>
-          How to get <span className="text-blue-400">started</span>
-        </h1>
-        <p className={`text-lg mt-4 ${isDarkMode ? 'text-cape-cod-200' : 'text-cape-cod-300'} max-w-2xl mx-auto`}>
-          Follow these simple steps to land your dream job.
-        </p>
-      </div>
+      
 
       {/* Content Section */}
       <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl px-8">
@@ -24,58 +24,97 @@ const Working = () => {
         </div>
 
         {/* Steps Section */}
-        <div className="md:w-1/2 flex flex-col gap-8">
+        <div className="md:w-1/2  flex flex-col gap-8">
           {/* Step 1 */}
-          <div className="flex items-center gap-6">
-            <div className=" flex-shrink-0">
-              <IconChecklist size='64'/>  
-            </div>
-            <div>
-              <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-cape-cod-800'}`}>1. Build Your Resume</h2>
-              <p className={`${isDarkMode ? 'text-cape-cod-200' : 'text-cape-cod-600'}`}>
-                Create a professional resume that highlights your skills and experience.
-              </p>
-            </div>
-          </div>
+        
+        <div className='flex items-start justify-center border-b border-b-gray-300 pb-6'>
 
-          {/* Step 2 */}
-          <div className="flex items-center gap-6">
-            <div className=" flex-shrink-0">
-              <IconBrowserShare size='64' className='text-blue-400'/>
-            </div>
-            <div>
-              <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-cape-cod-800'}`}>2. Search for Jobs</h2>
-              <p className={`${isDarkMode ? 'text-cape-cod-200' : 'text-cape-cod-600'}`}>
-                Use our search tool to find job listings that match your criteria.
-              </p>
-            </div>
-          </div>
+              <div className=' w-[10%] flex items-start mr-3  justify-center '>
+                <h1 className='rounded-full border border-[#cccccc] text-black px-2 py-1 text-[12px] font-medium'>
+                01
 
-          {/* Step 3 */}
-          <div className="flex items-center gap-6">
-            <div className=" flex-shrink-0">
-            <IconBrowserCheck size='64' className='text-green-400'/>
+                </h1>
               </div>
-            <div>
-              <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-cape-cod-800'}`}>3. Apply Online</h2>
-              <p className={`${isDarkMode ? 'text-cape-cod-200' : 'text-cape-cod-600'}`}>
-                Submit your application directly through our portal.
-              </p>
-            </div>
+
+              <div className='text-2xl tracking-tighter w-[50%] font-medium text-black'>
+                      Create Resume
+              </div>
+
+
+              <div className='text-[14px] text-lightBlack'>
+                     Make you resume add project and archivements to get started.
+
+              </div>
+        </div>
+
+                <div className='flex items-start justify-center border-b border-b-gray-300 pb-6'>
+
+              <div className=' w-[10%] flex items-start mr-3  justify-center '>
+                <h1 className='rounded-full border border-[#cccccc] text-black px-2 py-1 text-[12px] font-medium'>
+                02
+
+                </h1>
+              </div>
+
+              <div className='text-2xl tracking-tighter w-[50%] font-medium text-black'>
+                      Create Resume
+              </div>
+
+
+              <div className='text-[14px] text-lightBlack'>
+                     Make you resume add project and archivements to get started.
+
+              </div>
+        </div>
+
+
+
+        <div className='flex items-start justify-center border-b border-b-gray-300 pb-6'>
+
+        <div className=' w-[10%] flex items-start mr-3  justify-center '>
+          <h1 className='rounded-full border border-[#cccccc] text-black px-2 py-1 text-[12px] font-medium'>
+          01
+
+          </h1>
+                  </div>
+
+          <div className='text-2xl tracking-tighter w-[50%] font-medium text-black'>
+                  Create Resume
           </div>
 
-          {/* Step 4 */}
-          <div className="flex items-center gap-6">
-            <div className=" flex-shrink-0">
-            <IconBriefcaseFilled size='64' className='text-yellow-400'/>
-              </div>
-            <div>
-              <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-cape-cod-800'}`}>4. Get Hired</h2>
-              <p className={`${isDarkMode ? 'text-cape-cod-200' : 'text-cape-cod-600'}`}>
-                Receive job offers and start your new career.
-              </p>
-            </div>
+
+          <div className='text-[14px] text-lightBlack'>
+          Make you resume add project and archivements to get started.
+
           </div>
+        </div>
+
+
+
+                    <div className='flex items-start justify-center border-b border-b-gray-300 pb-6'>
+
+            <div className=' w-[10%] flex items-start mr-3  justify-center '>
+              <h1 className='rounded-full border border-[#cccccc] text-black px-2 py-1 text-[12px] font-medium'>
+              01
+
+              </h1>
+            </div>
+
+            <div className='text-2xl tracking-tighter w-[50%] font-medium text-black'>
+                    Create Resume
+            </div>
+
+
+            <div className='text-[14px] text-lightBlack'>
+            Make you resume add project and archivements to get started.
+
+            </div>
+            </div>
+
+
+
+
+
         </div>
       </div>
     </div>

@@ -7,36 +7,20 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"],
+      },
       colors: {
-        'cape-cod': {
-          '10':'#f4f2ee',
-          '50': '#f5f8f7',
-          '100': '#e0e7e6',
-          '200': '#c0cfcc',
-          '300': '#99afab',
-          '400': '#748d8a',
-          '500': '#597370',
-          '600': '#465b59',
-          '700': '#3b4a49',
-          '800': '#364342',
-          '900': '#2c3534',
-          '950': '#161d1d',
-        },
-        'blue': {
-          '50': '#eff6ff',
-          '100': '#dbeafe',
-          '200': '#bfdbfe',
-          '300': '#93c5fd',
-          '400': '#60a5fa',
-          '500': '#3b82f6',
-          '600': '#2563eb',
-          '700': '#1d4ed8',
-          '800': '#1e40af',
-          '900': '#1e3a8a',
-          '950': '#172554',
-        },
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+        foreground: "rgb(var(--foreground))",
+        background: "rgb(var(--background))",
+        black:"var(--color-blackk)",
+        lightBlack:"var(--color-lightBlack)",
+        third:"var(--color-third)"
       },
       screens: {
         xsm: "350px",

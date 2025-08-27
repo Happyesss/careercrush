@@ -1,7 +1,6 @@
 'use client'
 
-import { IconBrandGmail, IconBrandLinkedin } from "@tabler/icons-react";
-import { footerLinks } from "../../assets/Data/Data";
+import { IconBrandFacebook, IconBrandLinkedin, IconBrandTwitter } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "@/ThemeContext";
@@ -15,84 +14,62 @@ const Footer = () => {
   }
 
   return (
-    <footer className={`pt-16 pb-8 ${isDarkMode ? 'bg-cape-cod-950 text-gray-300' : 'bg-white text-cape-cod-900'}`}>
+    <footer className="py-12 bg-secondary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
-          {/* Logo & Description Column */}
-          <div className="md:col-span-2 space-y-6">
-            <div className="flex items-center gap-3">
-              <img 
-                src={((): string => { const mod = require("../../assets/images/logo.png"); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()} 
-                alt="Stemlen Logo" 
-                className="h-12 w-12"
-              />
-              <Link href="/" className="text-2xl font-bold">
-                <span className={isDarkMode ? 'text-gray-100' : 'text-cape-cod-900'}>Stem</span>
-                <span className="text-blue-500">len</span>
-              </Link>
-            </div>
-            <p className="text-sm leading-relaxed opacity-90">
-              Stem around and connecting minds. A platform for jobs, hackathons, and talent collaboration. 
-              Grow together like a plant stem, reaching new heights.
-            </p>
-            <div className="flex gap-4">
-              {[{ Icon: IconBrandLinkedin, url: "https://www.linkedin.com" }, { Icon: IconBrandGmail, url: "mailto:stemlen.co@gmail.com" }].map(({ Icon, url }, index) => (
-                <a
-                  key={index}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`p-2 rounded-lg transition-all duration-300 hover:bg-blue-500 hover:text-white ${
-                    isDarkMode 
-                      ? 'text-gray-400 hover:bg-opacity-100' 
-                      : 'text-cape-cod-700 bg-gray-100 hover:bg-blue-500'
-                  }`}
-                >
-                  <Icon size={24} />
-                </a>
-              ))}
-            </div>
+        <div className="relative rounded-[28px] bg-primary text-white overflow-hidden p-8 sm:p-12">
+          {/* Watermark word */}
+          <div className="pointer-events-none select-none absolute -bottom-10 left-0 right-0 text-white/20 font-extrabold tracking-tight text-[140px] leading-none hidden md:block">
+            CareerCrush
           </div>
 
-          {/* Links Columns */}
-          {footerLinks.map((section, index) => (
-            <div key={index} className="space-y-4">
-              <h3 className="text-lg font-semibold text-blue-500 mb-4">
-                {section.title}
-              </h3>
-              <div className="flex flex-col gap-3">
-                {section.links.map((link, linkIndex) => (
-                  <Link
-                    key={linkIndex}
-                    href={link.url}
-                    className={`text-sm hover:text-blue-500 transition-colors duration-300 ${
-                      isDarkMode ? 'text-gray-400' : 'text-cape-cod-700'
-                    }`}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-2xl font-semibold mb-6">Quick Links</h3>
+              <ul className="space-y-4 text-white/90">
+                <li><Link href="/about-us" className="hover:underline">About us</Link></li>
+                <li><Link href="/find-jobs" className="hover:underline">Work</Link></li>
+                <li><Link href="/find-talent" className="hover:underline">Services</Link></li>
+                <li><Link href="/about-us" className="hover:underline">How it work</Link></li>
+                <li><Link href="/contact" className="hover:underline">Contact us</Link></li>
+                <li><Link href="/404" className="hover:underline">Error 404</Link></li>
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h3 className="text-2xl font-semibold mb-6">Contact</h3>
+              <div className="space-y-4 text-white/90">
+                <p>testing@gmail.com</p>
+                <p>+123 456 789</p>
+                <p>Amsterdam, USA</p>
               </div>
             </div>
-          ))}
+
+            {/* Follow us */}
+            <div>
+              <h3 className="text-2xl font-semibold mb-6">Follow us</h3>
+              <div className="space-y-4 text-white/90">
+                <Link href="https://twitter.com" target="_blank" className="flex items-center gap-3 hover:underline">
+                  <IconBrandTwitter size={20} /> <span>Twitter</span>
+                </Link>
+                <Link href="https://linkedin.com" target="_blank" className="flex items-center gap-3 hover:underline">
+                  <IconBrandLinkedin size={20} /> <span>Linkedin</span>
+                </Link>
+                <Link href="https://facebook.com" target="_blank" className="flex items-center gap-3 hover:underline">
+                  <IconBrandFacebook size={20} /> <span>Facebook</span>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Copyright & Legal */}
-        <div className={`border-t pt-8 ${
-          isDarkMode ? 'border-gray-800' : 'border-gray-200'
-        }`}>
-          <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-4">
-            <p className="text-sm opacity-75">
-              © {new Date().getFullYear()} Stemlen. All rights reserved.
-            </p>
-            <div className="flex gap-6">
-              <Link href="/privacy-policy" className="text-sm hover:text-blue-500 transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms-of-service" className="text-sm hover:text-blue-500 transition-colors">
-                Terms of Service
-              </Link>
-            </div>
+        {/* Bottom legal row */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6 px-2 text-sm text-lightBlack">
+          <p>© {new Date().getFullYear()} CareerCrush. All rights reserved.</p>
+          <div className="flex gap-6">
+            <Link href="/privacy-policy" className="hover:underline">Privacy Policy</Link>
+            <Link href="/terms-of-service" className="hover:underline">Terms of Service</Link>
           </div>
         </div>
       </div>
