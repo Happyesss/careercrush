@@ -3,14 +3,20 @@
 import Marquee from "react-fast-marquee";
 import { companies } from "../../assets/Data/Data";
 import { useTheme } from "../../ThemeContext";
+import Dot from "./Dot";
 
 const Companies = () => {
   const { isDarkMode } = useTheme();
 
   return (
-    <div className={`mt-20 pb-5 ${isDarkMode ? ' text-white' : ' text-black'}`}>
-      <div className={`text-4xl text-center font-semibold mb-10 ${isDarkMode ? 'text-cape-cod-100' : 'text-cape-cod-900'}`}>
-        Featuring <span className="text-blue-400">100+</span> jobs by
+    <div className={`mt-[450px] flex items-center flex-col pb-5 ${isDarkMode ? ' text-white' : ' text-black'}`}>
+
+
+     <Dot name="Archivements" />
+
+      <div className={`text-3xl tracking-tight text-center font-medium mb-10 ${isDarkMode ? 'text-cape-cod-100' : 'text-cape-cod-900'}`}>
+
+        Featuring <span className="text-primary">100+</span> jobs by
       </div>
       <Marquee pauseOnHover={true}>
         {companies.map((company, index) => {

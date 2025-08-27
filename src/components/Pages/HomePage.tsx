@@ -7,18 +7,20 @@ import QuickSection from '../LandingPage/QuickSection';
 import { useTheme } from '@/ThemeContext';
 import { Divider } from '@mantine/core';
 import Testimonials from '../LandingPage/Testimonial';
+import FAQ from '../LandingPage/FAQ';
 
 const HomePage = () => {
   const { isDarkMode } = useTheme();
 
   return (
-    <div className={`min-h-[100vh] ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'} font-['poppins']`}>
+    <div className={`min-h-[100vh] mt-[-80px] bg-secondary ${isDarkMode ? 'dark' : ''}`}>
       <DreamJob />
       <Companies />
       <QuickSection />
-      <Information />
+      {/* <Information /> */}
       <Working />
       <Testimonials />
+      <FAQ/>
       <Divider mx="md" size="xs" color={isDarkMode ? 'dark' : 'gray'} />
     </div>
   );

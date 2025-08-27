@@ -13,7 +13,8 @@ import { setUser } from "../../Slices/UserSlices";
 import { setupResponseInterceptors } from "../../Interceptor/AxiosInterceptor";
 import { useDisclosure } from "@mantine/hooks";
 import { IconMoonStars, IconSun, IconX } from "@tabler/icons-react";
-import Logo from "../../assets/images/logo.png";
+import Image from "next/image";
+import CcLogo from "../../assets/Icons/cc-logo.jpg";
 import { useTheme } from "../../ThemeContext";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -75,47 +76,86 @@ const Header = () => {
   }
 
   return (
-    <div className={`w-full px-6 sm-mx:px-3 h-20 flex justify-between items-center font-['poppins'] 
-        ${isDarkMode ? "bg-cape-cod-950 text-white" : "bg-white text-cape-cod-900"}
-    `}>
-      <div className="flex gap-3 items-center text-blue-400">
+    <div
+      className="w-full rounded-lg bg-white dark:bg-third px-6 py-3 sm-mx:px-3 sm-mx:py-2 text-black dark:text-secondary flex justify-between items-center transition-colors duration-300 shadow-sm dark:shadow-gray-800/20"
+    >
+      {/* Logo */}
+      <div className="flex gap-3 items-center">
         <Link href="/" className="flex items-center gap-2">
-          <img src={typeof Logo === 'string' ? Logo : (Logo as any)?.src ?? (Logo as any)?.default ?? ''} alt="Stemlen Logo" className="h-[2.70rem] w-11" />
-          <div className="text-3xl font-semibold xs-mx:hidden">
-            <span className={isDarkMode ? "text-cape-cod-100" : "text-cape-cod-900"}>Stem</span>len
-          </div>
+          <Image
+            src={CcLogo}
+            alt="cc"
+            width={40}
+            height={34}
+            className="h-10 w-11"
+            priority
+          />
+         <div>
+            <h1 className="font-bold text-lg text-black dark:text-primary hidden md:block">CareerCrush</h1>
+         </div>
         </Link>
       </div>
 
-  <NavLinks />
+      {/* Nav Links */}
+      <NavLinks />
 
+      {/* Right Section */}
       <div className="flex gap-3 items-center">
+        {/* Theme Switcher */}
         {!user && (
           <Switch
             checked={isDarkMode}
             onChange={toggleTheme}
             size="md"
             color="dark.4"
-            onLabel={<IconSun size={16} stroke={2.5} color="var(--mantine-color-yellow-4)" />}
-            offLabel={<IconMoonStars size={16} stroke={2.5} color="var(--mantine-color-blue-6)" />}
+            onLabel={
+              <IconSun
+                size={16}
+                stroke={2.5}
+                className="text-primary"
+              />
+            }
+            offLabel={
+              <IconMoonStars
+                size={16}
+                stroke={2.5}
+                className="text-primary"
+              />
+            }
           />
         )}
 
+        {/* Profile / Login buttons */}
         {user ? (
           <ProfileMenu />
         ) : (
           <>
-            <Link href="/login" className="text-blue-400">
-              <Button color="blue.4" variant="outline">Login</Button>
+            <Link href="/login">
+              <button
+                className="font-semibold text-black dark:text-primary text-sm mx-3 hover:text-primary  transition-colors duration-300"
+              >
+                Login
+              </button>
             </Link>
-            <Link href="/signup" className="text-blue-400">
-              <Button color="blue.4" variant="filled">SignUp</Button>
+            <Link href="/signup">
+              <button
+                className="bg-black dark:bg-secondary text-white dark:text-black px-4 py-1.5 rounded-md text-[13px] font-semibold hover:bg-gray-800 transition-colors duration-300"
+              >
+                SignUp
+              </button>
             </Link>
           </>
         )}
 
-        <Burger className="bs:hidden" opened={opened} onClick={open} aria-label="Toggle navigation" color={isDarkMode ? "white" : "black"} />
+        {/* Burger Menu */}
+        <Burger
+          className="bs:hidden text-primary dark:text-primary"
+          opened={opened}
+          onClick={open}
+          aria-label="Toggle navigation"
+        />
 
+        {/* Drawer for mobile */}
         <Drawer
           size="xs"
           overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
@@ -123,22 +163,25 @@ const Header = () => {
           onClose={close}
           position="right"
           closeButtonProps={{ icon: <IconX size={30} /> }}
+          className="dark:bg-secondary"
         >
-          <div className="flex flex-col gap-5 p-5">
+          <div className="flex flex-col gap-5 p-5 bg-white dark:bg-secondary">
             {links.map((link, index) => (
               <Link
                 key={index}
                 href={`/${link.url}`}
-                onClick={close} 
-                className={`transition-colors duration-300 flex text-lg ${pathname === `/${link.url}` ? "text-blue-400" : "hover:text-blue-500"
-                  }`}
+                onClick={close}
+                className={`transition-colors duration-300 flex text-lg text-primary hover:opacity-80 ${
+                  pathname === `/${link.url}`
+                    ? "font-semibold"
+                    : ""
+                }`}
               >
                 {link.name}
               </Link>
             ))}
           </div>
         </Drawer>
-
       </div>
     </div>
   );
