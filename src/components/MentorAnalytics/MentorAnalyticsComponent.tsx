@@ -3,19 +3,15 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Text, Grid } from "@mantine/core";
-import { IconArrowLeft } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 import { useTheme } from "../../ThemeContext";
 import { getMentorByEmail } from "../../Services/MentorService";
 import AnalyticsMetrics from "./AnalyticsMetrics";
 import PerformanceOverview from "./PerformanceOverview";
 import RecentActivity from "./RecentActivity";
-import ProfileSummary from "./ProfileSummary";
 
 const MentorAnalyticsComponent = () => {
   const { isDarkMode } = useTheme();
   const user = useSelector((state: any) => state.user);
-  const router = useRouter();
   const [mentor, setMentor] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
@@ -49,16 +45,6 @@ const MentorAnalyticsComponent = () => {
       <div className={`min-h-screen ${isDarkMode ? 'bg-cape-cod-950 text-white' : 'bg-gray-50 text-black'}`}>
         <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
-              <button 
-                onClick={() => router.back()}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg ${isDarkMode ? 'bg-cape-cod-800 hover:bg-cape-cod-700' : 'bg-white hover:bg-gray-100'} transition-colors`}
-              >
-                <IconArrowLeft size={16} />
-                Back to Profile
-              </button>
-            </div>
-            
             <div className={`text-center py-16 rounded-lg ${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'} mx-4`}>
               <Text size="xl" fw={600} mb="md">
                 No Mentor Profile Found
@@ -107,13 +93,6 @@ const MentorAnalyticsComponent = () => {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
-            <button 
-              onClick={() => router.back()}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg ${isDarkMode ? 'bg-cape-cod-800 hover:bg-cape-cod-700' : 'bg-white hover:bg-gray-100'} transition-colors`}
-            >
-              <IconArrowLeft size={16} />
-              Back to Profile
-            </button>
             <Text size="xl" fw={700} className="text-xl sm:text-2xl">
               Mentor Analytics Dashboard
             </Text>
@@ -132,9 +111,6 @@ const MentorAnalyticsComponent = () => {
               <RecentActivity />
             </Grid.Col>
           </Grid>
-
-          {/* Profile Summary, Experience & Certifications */}
-          <ProfileSummary mentor={mentor} />
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useTheme } from "../../ThemeContext";
 import About from "./About";
 import Skills from "./Skills";
-import MentorAnalyticsButton from "./MentorAnalyticsButton";
+import MentorshipDashboardRedirect from "./MentorshipDashboardRedirect";
 
 const RightSidebar: React.FC = () => {
   const tags = [
@@ -30,9 +30,9 @@ const RightSidebar: React.FC = () => {
             <Skills />
           </div>
 
-          {/* Mentor Analytics Shortcut */}
-          <div className={`p-4 rounded-lg shadow-md ${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'}`}>
-            <MentorAnalyticsButton />
+          {/* Mentorship Dashboard Shortcut */}
+          <div className={`rounded-lg shadow-md ${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'}`}>
+            <MentorshipDashboardRedirect />
           </div>
         </div>
       </aside>

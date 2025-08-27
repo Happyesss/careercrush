@@ -125,7 +125,7 @@ const UserProfile = (props: any) => {
           <MentorInfo />
           <Divider mx="xs" my="xl" color="dark" />
           <SessionManagement />
-          
+          <Divider mx="xs" my="xl" color="dark" />
           <Experience />
           <Divider mx="xs" my="xl" color="dark" />
           <Certificate />
