@@ -10,6 +10,8 @@ import Certificate from "./Certificate";
 import { successNotification } from "../../Services/NotificationService";
 import { getBase64 } from "../../Services/Utilities";
 import ProfilePostedJob from "../PostedJob/ProfilePostedJob";
+import MentorInfo from "./MentorInfo";
+import SessionManagement from "./SessionManagement";
 
 const UserProfile = (props: any) => {
   const dispatch = useDispatch();
@@ -93,18 +95,37 @@ const UserProfile = (props: any) => {
         </div>
       </div>
       <Info />
-      <Divider mx="xs" my="xl" color="dark" />
-      <About />
+      
+      {/* Only show About for non-mentors */}
+      {user.accountType !== 'MENTOR' && (
+        <>
+          <Divider mx="xs" my="xl" color="dark" />
+          <About />
+        </>
+      )}
 
       {user.accountType === 'COMPANY' &&
       <><Divider mx="xs" my="xl" color="dark" /><ProfilePostedJob /></>
        }
       
-      {user.accountType !== 'COMPANY' && (
+      {user.accountType !== 'COMPANY' && user.accountType !== 'MENTOR' && (
         <>
           <Divider mx="xs" my="xl" color="dark" />
           <Skills />
           <Divider mx="xs" my="xl" color="dark" />
+          <Experience />
+          <Divider mx="xs" my="xl" color="dark" />
+          <Certificate />
+        </>
+      )}
+
+      {user.accountType === 'MENTOR' && (
+        <>
+          <Divider mx="xs" my="xl" color="dark" />
+          <MentorInfo />
+          <Divider mx="xs" my="xl" color="dark" />
+          <SessionManagement />
+          
           <Experience />
           <Divider mx="xs" my="xl" color="dark" />
           <Certificate />

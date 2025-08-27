@@ -177,6 +177,7 @@ const SignUp = () => {
           <Group mt="xs" className="sm-mx:flex-col sm-mx:gap-2">
             <Radio value="APPLICANT" label="Applicant" />
             <Radio value="COMPANY" label="Company" />
+            <Radio value="MENTOR" label="Mentor" />
           </Group>
         </Radio.Group>
 

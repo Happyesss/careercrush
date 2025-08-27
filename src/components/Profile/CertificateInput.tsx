@@ -31,7 +31,12 @@ const CertificateInput = (props: any) => {
     if (!form.isValid()) return;
 
     let certi = [...profile.certifications];
-    certi.push(form.getValues());
+    const certificationData = {
+      ...form.getValues(),
+      // Convert Date to ISO string for Redux serialization
+      issueDate: form.getValues().issueDate?.toISOString()
+    };
+    certi.push(certificationData);
     let updatedProfile = { ...profile, certifications: certi };
     props.setEdit(false);
     dispatch(changeProfile(updatedProfile));

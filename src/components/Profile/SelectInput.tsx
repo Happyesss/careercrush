@@ -55,7 +55,7 @@ const SelectInput = (props: any) => {
           (() => {
             const inputProps = props.form.getInputProps(props.name) || {};
             // Remove value from spread and control it via local `search` state
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            // eslint-disable-next-line no-unused-vars
             const { value: _val, onChange: _oc, ...rest } = inputProps;
             return (
               <InputBase

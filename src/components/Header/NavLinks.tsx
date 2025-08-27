@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const NavLinks = () => {
   const links = [
     { name: "Jobs", url: "find-jobs" },
+    { name: "Mentors", url: "find-mentors" },
     { name: "Hackathon & Events", url: "find-hackathon" },
     { name: "Post jobs", url: "post-job/0" },
     { name: "About us", url: "about-us" },
