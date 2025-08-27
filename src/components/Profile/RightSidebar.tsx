@@ -1,6 +1,11 @@
 import React from "react";
 import { IconPencil } from "@tabler/icons-react";
+import { Divider } from "@mantine/core";
+import { useSelector } from "react-redux";
 import { useTheme } from "../../ThemeContext";
+import About from "./About";
+import Skills from "./Skills";
+import MentorAnalyticsButton from "./MentorAnalyticsButton";
 
 const RightSidebar: React.FC = () => {
   const tags = [
@@ -8,7 +13,33 @@ const RightSidebar: React.FC = () => {
     "mongodb", "mysql", "next.js", "node.js", "php", "python", "reactjs"
   ];
   const { isDarkMode } = useTheme();
+  const user = useSelector((state: any) => state.user);
 
+  // Show About and Skills in right sidebar for mentors
+  if (user?.accountType === 'MENTOR') {
+    return (
+      <aside className="hidden lg:block w-80 mt-10 mr-6">
+        <div className="space-y-6">
+          {/* About Section */}
+          <div className={`p-4 rounded-lg shadow-md ${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'}`}>
+            <About />
+          </div>
+          
+          {/* Skills Section */}
+          <div className={`p-4 rounded-lg shadow-md ${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'}`}>
+            <Skills />
+          </div>
+
+          {/* Mentor Analytics Shortcut */}
+          <div className={`p-4 rounded-lg shadow-md ${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'}`}>
+            <MentorAnalyticsButton />
+          </div>
+        </div>
+      </aside>
+    );
+  }
+
+  // Show original content for other users
   return (
     <aside className="hidden lg:block w-72 mt-10 mr-6 text-sm">
       {/* Widget Section */}
