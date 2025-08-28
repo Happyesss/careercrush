@@ -11,9 +11,7 @@ export interface Mentor {
   totalExp: number;
   timezone: string;
   currentMentees: number;
-  maxMentees: number;
   isAvailable: boolean;
-  hourlyRate?: number;
   mentorshipAreas: string[];
   sessionPreference: string;
   availableDays: string[] | string;
@@ -36,6 +34,7 @@ export interface Experience {
   working?: boolean; // Current job indicator
   description?: string; // Make optional
   location?: string; // Add location field for consistency
+  companyLogo?: string; // Base64 encoded company logo image
 }
 
 export interface Certification {
@@ -43,6 +42,7 @@ export interface Certification {
   issuer: string;
   issueDate?: string | Date;
   certificateID?: string;
+  certificateImage?: string; // Base64 encoded certificate image
 }
 
 export interface MentorshipRequest {

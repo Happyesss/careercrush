@@ -78,7 +78,7 @@ const MentorAnalyticsComponent = () => {
   // Mock analytics data (replace with real data from API)
   const analyticsData = {
     totalMentees: mentor.currentMentees || 0,
-    maxMentees: mentor.maxMentees || 5,
+    maxMentees: mentor.maxMentees || 20, // Add default max mentees
     totalSessions: 24,
     avgRating: 4.8,
     responseRate: 95,

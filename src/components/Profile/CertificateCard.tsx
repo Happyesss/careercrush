@@ -20,7 +20,28 @@ const CertificateCard = (props:any) => {
         <div className="flex justify-between">
             <div className="flex gap-2 items-center mb-4">
                 <div className="p-2 bg-cape-cod-800 rounded-md">
-                    <img className="h-7" src={((): string => { const mod = require(`../../assets/Icons/${props.issuer}.png`); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()} alt="" />
+                    {props.certificateImage ? (
+                        <img 
+                            className="h-7 w-7 object-cover rounded" 
+                            src={`data:image/jpeg;base64,${props.certificateImage}`} 
+                            alt="Certificate" 
+                        />
+                    ) : (
+                        <img 
+                            className="h-7" 
+                            src={((): string => { 
+                                try {
+                                    const mod = require(`../../assets/Icons/${props.issuer}.png`); 
+                                    return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); 
+                                } catch {
+                                    // Fallback to a generic certificate icon - using an existing icon as placeholder
+                                    const defaultMod = require(`../../assets/Icons/Google.png`);
+                                    return typeof defaultMod === 'string' ? defaultMod : (defaultMod?.default?.src ?? defaultMod?.src ?? defaultMod?.default ?? '');
+                                }
+                            })()} 
+                            alt="Certificate issuer" 
+                        />
+                    )}
                 </div>
                 <div className="flex flex-col">
                     <div className="font-semibold">{props.name}</div>

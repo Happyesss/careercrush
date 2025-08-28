@@ -1,4 +1,4 @@
-import { Button, Checkbox, Textarea } from "@mantine/core";
+import { Button, Checkbox, Textarea, FileInput } from "@mantine/core";
 import fields from "../../assets/Data/Profile"
 import SelectInput from "./SelectInput";
 import { useEffect } from "react";
@@ -9,6 +9,8 @@ import { changeProfile } from "../../Slices/ProfileSlice";
 import { successNotification } from "../../Services/NotificationService";
 import { MonthPickerInput } from "@mantine/dates";
 import { useTheme } from "../../ThemeContext";
+import { getBase64 } from "../../Services/Utilities";
+import { IconUpload } from "@tabler/icons-react";
 
 const ExpInput = (props: any) => {
     const select = fields;
@@ -16,12 +18,12 @@ const ExpInput = (props: any) => {
      const { isDarkMode } = useTheme();
     const profile = useSelector((state: any) => state.profile);
     useEffect(() => {
-        if(!props.add)form.setValues({ title: props.title, company: props.company, location: props.location, description: props.description, startDate:new Date (props.startDate), endDate:new Date (props.endDate), working: props.working });
+        if(!props.add)form.setValues({ title: props.title, company: props.company, location: props.location, description: props.description, startDate:new Date (props.startDate), endDate:new Date (props.endDate), working: props.working, companyLogo: props.companyLogo || '' });
     }, [])
     const form = useForm({
         mode: 'controlled',
         validateInputOnChange: true,
-        initialValues: { title: '', company: '', location: '', description: '', startDate: new Date(), endDate: new Date(), working: false },
+        initialValues: { title: '', company: '', location: '', description: '', startDate: new Date(), endDate: new Date(), working: false, companyLogo: '' },
         validate: {
             title: isNotEmpty('This field is required'),
             company: isNotEmpty('This field is required'),
@@ -29,6 +31,23 @@ const ExpInput = (props: any) => {
             description: isNotEmpty('This field is required'),
         }
     });
+
+    const handleCompanyLogoChange = async (image: File | null) => {
+        if (!image) return;
+        
+        if (image.size > 2 * 1024 * 1024) { // 2MB limit
+            successNotification('Company logo must be less than 2MB', 'Error');
+            return;
+        }
+
+        try {
+            let companyLogo: any = await getBase64(image);
+            form.setFieldValue('companyLogo', companyLogo.split(',')[1]);
+            successNotification('Company logo uploaded successfully', 'Success');
+        } catch (error) {
+            successNotification('Failed to upload company logo', 'Error');
+        }
+    };
     const handleSave = () => {
         form.validate();
         if (!form.isValid()) return;
@@ -72,6 +91,31 @@ const ExpInput = (props: any) => {
                     }
                 })}
             />
+            <div className={`${isDarkMode ? ' text-cape-cod-100 ' : 'text-cape-cod-900'}`}>
+                <FileInput
+                    label="Company Logo (Optional)"
+                    placeholder="Upload company logo"
+                    accept="image/*"
+                    onChange={handleCompanyLogoChange}
+                    leftSection={<IconUpload size={16} />}
+                    styles={() => ({
+                        input: {
+                            backgroundColor: isDarkMode ? "#2c3534" : "white",
+                            color: isDarkMode ? "white" : "black",
+                            borderColor: isDarkMode ? "#161d1d" : "#d1d5db"
+                        }
+                    })}
+                />
+                {form.getValues().companyLogo && (
+                    <div className="mt-2">
+                        <img
+                            src={`data:image/jpeg;base64,${form.getValues().companyLogo}`}
+                            alt="Company logo preview"
+                            className="w-16 h-16 object-cover rounded border"
+                        />
+                    </div>
+                )}
+            </div>
             <div className="flex gap-10 [&>*]:w-1/2  ">
                 <MonthPickerInput
                     withAsterisk

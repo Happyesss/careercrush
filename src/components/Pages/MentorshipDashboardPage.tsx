@@ -30,19 +30,6 @@ const MentorshipDashboardPage = () => {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-cape-cod-950' : 'bg-gray-50'}`}>
-      {/* Mobile Menu Button */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
-        <Button
-          variant="filled"
-          color="blue"
-          size="sm"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="shadow-lg"
-        >
-          {isMobileMenuOpen ? <IconX size={18} /> : <IconMenu2 size={18} />}
-        </Button>
-      </div>
-
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
         <div 
@@ -51,7 +38,7 @@ const MentorshipDashboardPage = () => {
         />
       )}
 
-      <div className="flex">
+  <div className="flex">
         {/* Left Navigation Sidebar */}
         <div className={`
           ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} 
@@ -159,6 +146,18 @@ const MentorshipDashboardPage = () => {
         {/* Main Content Area */}
         <div className="flex-1 overflow-auto lg:ml-0">
           <Container size="xl" py="xl" className="max-w-none px-4 lg:px-8">
+            {/* Mobile Menu Button (small screens) - placed above the dashboard title */}
+            <div className="lg:hidden mb-4">
+              <Button
+                variant="filled"
+                color="blue"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="shadow-lg"
+              >
+                {isMobileMenuOpen ? <IconX size={18} /> : <IconMenu2 size={18} />}
+              </Button>
+            </div>
             {/* Packages Content */}
             {activeTab === 'packages' && (
               <MentorPackageDashboard mentorId={user.id || 1} />

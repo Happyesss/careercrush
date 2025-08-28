@@ -8,7 +8,6 @@ interface PerformanceOverviewProps {
     responseRate: number;
     completionRate: number;
     totalMentees: number;
-    maxMentees: number;
   };
 }
 
@@ -40,10 +39,10 @@ const PerformanceOverview = ({ analyticsData }: PerformanceOverviewProps) => {
 
         <div>
           <Group justify="space-between" className="mb-2">
-            <p className="text-sm">Capacity Utilization</p>
-            <p className="text-sm font-semibold">{Math.round((analyticsData.totalMentees / analyticsData.maxMentees) * 100)}%</p>
+            <p className="text-sm">Total Mentees</p>
+            <p className="text-sm font-semibold">{analyticsData.totalMentees}</p>
           </Group>
-          <Progress value={(analyticsData.totalMentees / analyticsData.maxMentees) * 100} color="purple" size="lg" />
+          <div className="text-sm text-gray-600">Currently mentoring active students</div>
         </div>
       </div>
     </Card>

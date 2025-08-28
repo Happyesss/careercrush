@@ -74,6 +74,12 @@ const WIZARD_STEPS: WizardStep[] = [
     icon: <IconCurrencyRupee size={20} />
   },
   {
+    key: 'inclusions',
+    title: 'Package Inclusions',
+    description: 'Configure what your package includes',
+    icon: <IconSettings size={20} />
+  },
+  {
     key: 'topics',
     title: 'Topics Covered',
     description: 'Add topics you will cover',
@@ -110,12 +116,20 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
     initialValues: {
       packageName: '',
       description: '',
-      durationMonths: 6,
-      sessionsPerMonth: 8,
-      pricePerMonth: 10000,
+      basePricePerMonth: 12500, // Base monthly price
+      threeMonthDiscount: 0, // Discount % for 3-month plan (0-50%)
+      sixMonthDiscount: 0, // Discount % for 6-month plan (0-50%)
+      sessionsPerMonth: 8, // Expected sessions per month
       sessionType: 'Video Call',
       sessionDurationMinutes: 60,
       isFreeTrialIncluded: true,
+      // Package Inclusions (as per Preplaced documentation)
+      hasUnlimitedChat: true,
+      hasCuratedTasks: true,
+      hasRegularFollowups: true,
+      hasJobReferrals: false,
+      hasCertification: true,
+      hasRescheduling: true,
     },
     validate: {
       packageName: (value) => {
@@ -128,16 +142,20 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
         if (value.length > 500) return 'Description must be less than 500 characters';
         return null;
       },
-      durationMonths: (value) => {
-        if (value < 1 || value > 24) return 'Duration must be between 1-24 months';
+      basePricePerMonth: (value) => {
+        if (value < 5000 || value > 100000) return 'Base price must be between ₹5,000-₹100,000';
+        return null;
+      },
+      threeMonthDiscount: (value) => {
+        if (value < 0 || value > 50) return 'Discount must be between 0-50%';
+        return null;
+      },
+      sixMonthDiscount: (value) => {
+        if (value < 0 || value > 50) return 'Discount must be between 0-50%';
         return null;
       },
       sessionsPerMonth: (value) => {
-        if (value < 1 || value > 20) return 'Sessions must be between 1-20 per month';
-        return null;
-      },
-      pricePerMonth: (value) => {
-        if (value < 1000 || value > 100000) return 'Price must be between ₹1,000-₹100,000';
+        if (value < 2 || value > 20) return 'Sessions must be between 2-20 per month';
         return null;
       },
       sessionDurationMinutes: (value) => {
@@ -152,12 +170,20 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
       form.setValues({
         packageName: initialData.packageName,
         description: initialData.description,
-        durationMonths: initialData.durationMonths,
+        basePricePerMonth: initialData.pricePerMonth, // Map old field to new
+        threeMonthDiscount: 0, // Default to 0 for existing packages
+        sixMonthDiscount: 0, // Default to 0 for existing packages
         sessionsPerMonth: initialData.sessionsPerMonth,
-        pricePerMonth: initialData.pricePerMonth,
         sessionType: initialData.sessionType,
         sessionDurationMinutes: initialData.sessionDurationMinutes,
         isFreeTrialIncluded: initialData.isFreeTrialIncluded,
+        // Package Inclusions
+        hasUnlimitedChat: initialData.hasUnlimitedChat ?? true,
+        hasCuratedTasks: initialData.hasCuratedTasks ?? true,
+        hasRegularFollowups: initialData.hasRegularFollowups ?? true,
+        hasJobReferrals: initialData.hasJobReferrals ?? false,
+        hasCertification: initialData.hasCertification ?? true,
+        hasRescheduling: initialData.hasRescheduling ?? true,
       });
       setTopics(initialData.topicsCovered || []);
       setModules(initialData.modules || []);
@@ -167,54 +193,27 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
       setTopics([]);
       setCurrentTopic('');
       setCurrentStep(0);
-      // Generate default modules with default values
+      // Generate default modules with default values (fixed to 6 months as standard)
       const defaultModules: PackageModule[] = [];
       for (let i = 1; i <= 6; i++) {
         defaultModules.push({
           monthNumber: i,
           moduleNumber: i,
-          moduleTitle: `Month ${i} of Mentorship`,
-          moduleName: `Month ${i} of Mentorship`,
-          moduleDescription: 'This Module Contains Following:',
-          description: 'This Module Contains Following:',
-          sessionsInMonth: 8,
-          sessionsCount: 8,
+          moduleTitle: `Month ${i} Learning Path`,
+          moduleName: `Month ${i} Learning Path`,
+          moduleDescription: 'Comprehensive learning objectives for this month',
+          description: 'Comprehensive learning objectives for this month',
+          sessionsInMonth: form.values.sessionsPerMonth,
+          sessionsCount: form.values.sessionsPerMonth,
           durationWeeks: 4,
           topicsInMonth: [`Advanced Topics for Month ${i}`],
-          learningObjectives: [`Master concepts in month ${i}`],
-          deliverables: ['Practice problems', 'Mock interviews'],
+          learningObjectives: [`Master key concepts in month ${i}`],
+          deliverables: ['Hands-on projects', 'Practice assignments', 'Progress assessments'],
         });
       }
       setModules(defaultModules);
     }
   }, [initialData, opened]);
-
-  useEffect(() => {
-    if (form.values.durationMonths && currentStep >= 1 && !initialData) {
-      generateDefaultModules(form.values.durationMonths, form.values.sessionsPerMonth);
-    }
-  }, [form.values.durationMonths, form.values.sessionsPerMonth, currentStep, initialData]);
-
-  const generateDefaultModules = (durationMonths: number, sessionsPerMonth: number) => {
-    const defaultModules: PackageModule[] = [];
-    for (let i = 1; i <= durationMonths; i++) {
-      defaultModules.push({
-        monthNumber: i,
-        moduleNumber: i,
-        moduleTitle: `Month ${i} of Mentorship`,
-        moduleName: `Month ${i} of Mentorship`,
-        moduleDescription: 'This Module Contains Following:',
-        description: 'This Module Contains Following:',
-        sessionsInMonth: sessionsPerMonth,
-        sessionsCount: sessionsPerMonth,
-        durationWeeks: 4,
-        topicsInMonth: [`Advanced Topics for Month ${i}`],
-        learningObjectives: [`Master concepts in month ${i}`],
-        deliverables: ['Practice problems', 'Mock interviews'],
-      });
-    }
-    setModules(defaultModules);
-  };
 
   const addTopic = () => {
     if (currentTopic.trim() && !topics.includes(currentTopic.trim())) {
@@ -259,14 +258,18 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
         return nameValid && descValid;
       case 1:
         // Validate pricing and sessions
-        const durationValid = form.values.durationMonths >= 1 && form.values.durationMonths <= 24;
-        const sessionsValid = form.values.sessionsPerMonth >= 1 && form.values.sessionsPerMonth <= 20;
-        const priceValid = form.values.pricePerMonth >= 1000 && form.values.pricePerMonth <= 100000;
+        const priceValid = form.values.basePricePerMonth >= 5000 && form.values.basePricePerMonth <= 100000;
+        const sessionsValid = form.values.sessionsPerMonth >= 2 && form.values.sessionsPerMonth <= 20;
         const sessionDurationValid = form.values.sessionDurationMinutes >= 30 && form.values.sessionDurationMinutes <= 180;
-        return durationValid && sessionsValid && priceValid && sessionDurationValid;
+        const threeMonthDiscountValid = form.values.threeMonthDiscount >= 0 && form.values.threeMonthDiscount <= 50;
+        const sixMonthDiscountValid = form.values.sixMonthDiscount >= 0 && form.values.sixMonthDiscount <= 50;
+        return priceValid && sessionsValid && sessionDurationValid && threeMonthDiscountValid && sixMonthDiscountValid;
       case 2:
-        return topics.length > 0;
+        // Package inclusions - always valid since they have defaults
+        return true;
       case 3:
+        return topics.length > 0;
+      case 4:
         return modules.every(module => 
           module.moduleTitle && 
           module.moduleDescription && 
@@ -299,7 +302,7 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
 
   const handleSubmit = async () => {
     // Validate all steps before submitting
-    const allStepsValid = [0, 1, 2, 3].every(step => {
+    const allStepsValid = [0, 1, 2, 3, 4].every(step => {
       const oldStep = currentStep;
       const isValid = validateStep(step);
       return isValid;
@@ -316,24 +319,33 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
 
     setLoading(true);
     try {
-      const totalSessions = form.values.durationMonths * form.values.sessionsPerMonth;
-      const totalPrice = form.values.durationMonths * form.values.pricePerMonth;
-
+      // Use mentor's custom pricing strategy
+      const mentorBasePrice = form.values.basePricePerMonth;
+      const finalSixMonthPrice = Math.round(mentorBasePrice * (1 - form.values.sixMonthDiscount / 100));
+      
+      // Create 6-month package with mentor's chosen pricing
       const packageData: CreatePackageRequest = {
         mentorId,
         packageName: form.values.packageName,
         description: form.values.description,
-        durationMonths: form.values.durationMonths,
-        totalSessions,
+        durationMonths: 6, // Fixed 6-month as primary package
+        totalSessions: 6 * form.values.sessionsPerMonth,
         sessionsPerMonth: form.values.sessionsPerMonth,
-        pricePerMonth: form.values.pricePerMonth,
-        totalPrice,
+        pricePerMonth: finalSixMonthPrice, // Mentor's chosen price after their discount
+        totalPrice: 6 * finalSixMonthPrice,
         topicsCovered: topics,
         modules,
         isActive: true,
         isFreeTrialIncluded: form.values.isFreeTrialIncluded,
         sessionType: form.values.sessionType,
         sessionDurationMinutes: form.values.sessionDurationMinutes,
+        // Package Inclusions
+        hasUnlimitedChat: form.values.hasUnlimitedChat,
+        hasCuratedTasks: form.values.hasCuratedTasks,
+        hasRegularFollowups: form.values.hasRegularFollowups,
+        hasJobReferrals: form.values.hasJobReferrals,
+        hasCertification: form.values.hasCertification,
+        hasRescheduling: form.values.hasRescheduling,
       };
 
       await onSubmit(packageData);
@@ -376,93 +388,338 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
         );
 
       case 1:
+        // Calculate pricing based on mentor's chosen discounts
+        const mentorBasePrice = form.values.basePricePerMonth;
+        const threeMonthPrice = Math.round(mentorBasePrice * (1 - form.values.threeMonthDiscount / 100));
+        const sixMonthPrice = Math.round(mentorBasePrice * (1 - form.values.sixMonthDiscount / 100));
+        
         return (
           <Stack gap="md">
             <Alert icon={<IconCurrencyRupee size={16} />} color="green" variant="light" className={styles.alertBox}>
-              Configure the duration, sessions, and pricing for your package
+              Set your pricing strategy - you control all discounts and pricing
             </Alert>
             
-            <Grid>
-              <Grid.Col span={6}>
-                <NumberInput
-                  label="Duration (Months)"
-                  min={1}
-                  max={24}
-                  {...form.getInputProps('durationMonths')}
-                  required
-                  size="md"
-                />
-              </Grid.Col>
-              <Grid.Col span={6}>
-                <NumberInput
-                  label="Sessions per Month"
-                  min={1}
-                  max={20}
-                  {...form.getInputProps('sessionsPerMonth')}
-                  required
-                  size="md"
-                />
-              </Grid.Col>
-            </Grid>
-
-            <Grid>
-              <Grid.Col span={6}>
-                <NumberInput
-                  label="Price per Month (₹)"
-                  min={1000}
-                  max={100000}
-                  step={1000}
-                  thousandSeparator=","
-                  {...form.getInputProps('pricePerMonth')}
-                  required
-                  size="md"
-                />
-              </Grid.Col>
-              <Grid.Col span={6}>
-                <NumberInput
-                  label="Session Duration (Minutes)"
-                  min={30}
-                  max={180}
-                  step={15}
-                  {...form.getInputProps('sessionDurationMinutes')}
-                  required
-                  size="md"
-                />
-              </Grid.Col>
-            </Grid>
-
-            <Grid>
-              <Grid.Col span={6}>
-                <Select
-                  label="Session Type"
-                  data={[
-                    { value: 'Video Call', label: 'Video Call' },
-                    { value: 'Audio Call', label: 'Audio Call' },
-                    { value: 'Chat', label: 'Chat' },
-                    { value: 'In-Person', label: 'In-Person' },
-                  ]}
-                  {...form.getInputProps('sessionType')}
-                  required
-                  size="md"
-                />
-              </Grid.Col>
-              <Grid.Col span={6}>
-                <Box>
-                  <Text size="sm" fw={500} mb="xs">Package Options</Text>
-                  <Chip
-                    checked={form.values.isFreeTrialIncluded}
-                    onChange={(checked) => form.setFieldValue('isFreeTrialIncluded', checked)}
+            <Paper p="lg" withBorder radius="md" className={styles.pricingContainer}>
+              <Title order={4} mb="md">Base Pricing Configuration</Title>
+              
+              <Grid>
+                <Grid.Col span={6}>
+                  <NumberInput
+                    label="Base Price per Month (₹)"
+                    description="Your full monthly rate"
+                    min={5000}
+                    max={100000}
+                    step={500}
+                    thousandSeparator=","
+                    {...form.getInputProps('basePricePerMonth')}
+                    required
                     size="md"
-                  >
-                    Include Free Trial
-                  </Chip>
-                </Box>
-              </Grid.Col>
-            </Grid>
+                    leftSection="₹"
+                  />
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  <NumberInput
+                    label="Expected Sessions per Month"
+                    description="Average sessions you'll provide"
+                    min={2}
+                    max={20}
+                    {...form.getInputProps('sessionsPerMonth')}
+                    required
+                    size="md"
+                  />
+                </Grid.Col>
+              </Grid>
+
+              <Grid mt="md">
+                <Grid.Col span={6}>
+                  <NumberInput
+                    label="Session Duration (Minutes)"
+                    min={30}
+                    max={180}
+                    step={15}
+                    {...form.getInputProps('sessionDurationMinutes')}
+                    required
+                    size="md"
+                  />
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  <Select
+                    label="Session Type"
+                    data={[
+                      { value: 'Video Call', label: '📹 Video Call' },
+                      { value: 'Audio Call', label: '📞 Audio Call' },
+                      { value: 'Chat', label: '💬 Chat' },
+                      { value: 'In-Person', label: '👥 In-Person' },
+                    ]}
+                    {...form.getInputProps('sessionType')}
+                    required
+                    size="md"
+                  />
+                </Grid.Col>
+              </Grid>
+            </Paper>
+
+            <Paper p="lg" withBorder radius="md" className={styles.discountContainer}>
+              <Title order={4} mb="md">Discount Strategy (Optional)</Title>
+              <Text size="sm" c="dimmed" mb="lg">
+                Set discounts for longer commitments to encourage mentees to choose extended plans
+              </Text>
+              
+              <Grid>
+                <Grid.Col span={6}>
+                  <NumberInput
+                    label="3-Month Plan Discount (%)"
+                    description="Discount for 3-month commitment"
+                    min={0}
+                    max={50}
+                    step={5}
+                    {...form.getInputProps('threeMonthDiscount')}
+                    size="md"
+                    rightSection="%"
+                  />
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  <NumberInput
+                    label="6-Month Plan Discount (%)"
+                    description="Discount for 6-month commitment"
+                    min={0}
+                    max={50}
+                    step={5}
+                    {...form.getInputProps('sixMonthDiscount')}
+                    size="md"
+                    rightSection="%"
+                  />
+                </Grid.Col>
+              </Grid>
+
+              <Alert color="blue" variant="light" mt="md">
+                <Text size="sm">
+                  💡 <strong>Tip:</strong> Higher discounts for longer plans can increase conversion rates. Set 0% for no discount.
+                </Text>
+              </Alert>
+            </Paper>
+
+            <Paper p="lg" withBorder radius="md" className={styles.planPreviewContainer}>
+              <Title order={4} mb="md">Plan Pricing Preview</Title>
+              <Text size="sm" c="dimmed" mb="lg">
+                This is how your pricing will appear to mentees
+              </Text>
+              
+              <div className={styles.planCards}>
+                {/* Monthly Plan */}
+                <Paper p="md" withBorder radius="md" className={styles.planCard}>
+                  <Badge color="gray" variant="light" mb="sm">Monthly Plan</Badge>
+                  <Text size="lg" fw={700} c="blue">₹{mentorBasePrice.toLocaleString()}</Text>
+                  <Text size="xs" c="dimmed">per month</Text>
+                  <Text size="xs" mt="xs">No commitment</Text>
+                </Paper>
+
+                {/* 3 Month Plan */}
+                <Paper p="md" withBorder radius="md" className={`${styles.planCard} ${form.values.threeMonthDiscount > 0 ? styles.popularPlan : ''}`}>
+                  <Badge color={form.values.threeMonthDiscount > 0 ? "blue" : "gray"} variant={form.values.threeMonthDiscount > 0 ? "filled" : "light"} mb="sm">
+                    3 Months
+                  </Badge>
+                  <Group gap="xs" align="baseline">
+                    <Text size="lg" fw={700} c="blue">₹{threeMonthPrice.toLocaleString()}</Text>
+                    {form.values.threeMonthDiscount > 0 && (
+                      <Text size="sm" td="line-through" c="dimmed">₹{mentorBasePrice.toLocaleString()}</Text>
+                    )}
+                  </Group>
+                  <Text size="xs" c="dimmed">per month</Text>
+                  {form.values.threeMonthDiscount > 0 ? (
+                    <Badge color="green" variant="light" size="xs" mt="xs">Save {form.values.threeMonthDiscount}%</Badge>
+                  ) : (
+                    <Text size="xs" mt="xs">No discount</Text>
+                  )}
+                </Paper>
+
+                {/* 6 Month Plan */}
+                <Paper p="md" withBorder radius="md" className={`${styles.planCard} ${form.values.sixMonthDiscount > 0 ? styles.bestValuePlan : ''}`}>
+                  <Badge color={form.values.sixMonthDiscount > 0 ? "green" : "gray"} variant={form.values.sixMonthDiscount > 0 ? "filled" : "light"} mb="sm">
+                    6 Months
+                  </Badge>
+                  <Group gap="xs" align="baseline">
+                    <Text size="lg" fw={700} c="blue">₹{sixMonthPrice.toLocaleString()}</Text>
+                    {form.values.sixMonthDiscount > 0 && (
+                      <Text size="sm" td="line-through" c="dimmed">₹{mentorBasePrice.toLocaleString()}</Text>
+                    )}
+                  </Group>
+                  <Text size="xs" c="dimmed">per month</Text>
+                  {form.values.sixMonthDiscount > 0 ? (
+                    <Badge color="orange" variant="light" size="xs" mt="xs">Save {form.values.sixMonthDiscount}%</Badge>
+                  ) : (
+                    <Text size="xs" mt="xs">No discount</Text>
+                  )}
+                </Paper>
+              </div>
+
+              <Alert color="blue" variant="light" mt="md">
+                <Text size="sm">
+                  <strong>Your pricing flexibility:</strong> You can always update these discounts later
+                </Text>
+              </Alert>
+            </Paper>
+
+            <Group>
+              <Chip
+                checked={form.values.isFreeTrialIncluded}
+                onChange={(checked) => form.setFieldValue('isFreeTrialIncluded', checked)}
+                size="md"
+                color="green"
+              >
+                Include Free Trial (30 minutes)
+              </Chip>
+            </Group>
           </Stack>
         );
 
       case 2:
+        return (
+          <Stack gap="md">
+            <Alert icon={<IconSettings size={16} />} color="indigo" variant="light" className={styles.alertBox}>
+              Configure what your mentorship package includes (based on Preplaced.in standards)
+            </Alert>
+            
+            <Paper p="md" withBorder radius="md" className={styles.inclusionsContainer}>
+              <Title order={4} mb="md">Package Inclusions</Title>
+              <Text size="sm" c="dimmed" mb="lg">
+                Select the features and services included in your mentorship package. These align with industry standards for long-term mentorship programs.
+              </Text>
+              
+              <Stack gap="lg">
+                <Paper p="sm" radius="sm" className={styles.inclusionItem}>
+                  <Group justify="space-between" align="center">
+                    <div>
+                      <Text fw={500} size="sm">1:1 Live Sessions</Text>
+                      <Text size="xs" c="dimmed">Regular one-on-one video/audio sessions</Text>
+                    </div>
+                    <Badge color="blue" variant="light">Always Included</Badge>
+                  </Group>
+                </Paper>
+
+                <Paper p="sm" radius="sm" className={styles.inclusionItem}>
+                  <Group justify="space-between" align="center">
+                    <div>
+                      <Text fw={500} size="sm">Unlimited Chat with Mentor</Text>
+                      <Text size="xs" c="dimmed">24/7 chat support and quick queries</Text>
+                    </div>
+                    <Chip
+                      checked={form.values.hasUnlimitedChat}
+                      onChange={(checked) => form.setFieldValue('hasUnlimitedChat', checked)}
+                      size="md"
+                      color="green"
+                    >
+                      {form.values.hasUnlimitedChat ? 'Included' : 'Add (+₹2,000/mo)'}
+                    </Chip>
+                  </Group>
+                </Paper>
+
+                <Paper p="sm" radius="sm" className={styles.inclusionItem}>
+                  <Group justify="space-between" align="center">
+                    <div>
+                      <Text fw={500} size="sm">Task & Curated Resources</Text>
+                      <Text size="xs" c="dimmed">Weekly assignments and learning materials</Text>
+                    </div>
+                    <Chip
+                      checked={form.values.hasCuratedTasks}
+                      onChange={(checked) => form.setFieldValue('hasCuratedTasks', checked)}
+                      size="md"
+                      color="violet"
+                    >
+                      {form.values.hasCuratedTasks ? 'Included' : 'Add (+₹1,500/mo)'}
+                    </Chip>
+                  </Group>
+                </Paper>
+
+                <Paper p="sm" radius="sm" className={styles.inclusionItem}>
+                  <Group justify="space-between" align="center">
+                    <div>
+                      <Text fw={500} size="sm">Regular Follow-ups</Text>
+                      <Text size="xs" c="dimmed">Accountability check-ins and progress tracking</Text>
+                    </div>
+                    <Chip
+                      checked={form.values.hasRegularFollowups}
+                      onChange={(checked) => form.setFieldValue('hasRegularFollowups', checked)}
+                      size="md"
+                      color="teal"
+                    >
+                      {form.values.hasRegularFollowups ? 'Included' : 'Add (+₹1,000/mo)'}
+                    </Chip>
+                  </Group>
+                </Paper>
+
+                <Paper p="sm" radius="sm" className={styles.inclusionItem}>
+                  <Group justify="space-between" align="center">
+                    <div>
+                      <Text fw={500} size="sm">Job Referrals</Text>
+                      <Text size="xs" c="dimmed">Referrals to companies in mentor network</Text>
+                    </div>
+                    <Chip
+                      checked={form.values.hasJobReferrals}
+                      onChange={(checked) => form.setFieldValue('hasJobReferrals', checked)}
+                      size="md"
+                      color="orange"
+                    >
+                      {form.values.hasJobReferrals ? 'Included' : 'Add (+₹5,000/mo)'}
+                    </Chip>
+                  </Group>
+                </Paper>
+
+                <Paper p="sm" radius="sm" className={styles.inclusionItem}>
+                  <Group justify="space-between" align="center">
+                    <div>
+                      <Text fw={500} size="sm">Certification</Text>
+                      <Text size="xs" c="dimmed">Certificate of completion with skills validation</Text>
+                    </div>
+                    <Chip
+                      checked={form.values.hasCertification}
+                      onChange={(checked) => form.setFieldValue('hasCertification', checked)}
+                      size="md"
+                      color="cyan"
+                    >
+                      {form.values.hasCertification ? 'Included' : 'Add (+₹500/mo)'}
+                    </Chip>
+                  </Group>
+                </Paper>
+
+                <Paper p="sm" radius="sm" className={styles.inclusionItem}>
+                  <Group justify="space-between" align="center">
+                    <div>
+                      <Text fw={500} size="sm">Reschedule Anytime</Text>
+                      <Text size="xs" c="dimmed">Flexible session rescheduling (≥3 hours notice)</Text>
+                    </div>
+                    <Chip
+                      checked={form.values.hasRescheduling}
+                      onChange={(checked) => form.setFieldValue('hasRescheduling', checked)}
+                      size="md"
+                      color="pink"
+                    >
+                      {form.values.hasRescheduling ? 'Included' : 'Standard Policy'}
+                    </Chip>
+                  </Group>
+                </Paper>
+              </Stack>
+
+              <Divider my="md" />
+              
+              <Group justify="space-between" align="center">
+                <Text fw={600} size="sm">Package Value Summary:</Text>
+                <Text fw={700} size="lg" c="blue">
+                  ₹{(
+                    form.values.basePricePerMonth + 
+                    (form.values.hasUnlimitedChat ? 2000 : 0) +
+                    (form.values.hasCuratedTasks ? 1500 : 0) +
+                    (form.values.hasRegularFollowups ? 1000 : 0) +
+                    (form.values.hasJobReferrals ? 5000 : 0) +
+                    (form.values.hasCertification ? 500 : 0)
+                  ).toLocaleString()}/month worth of value
+                </Text>
+              </Group>
+            </Paper>
+          </Stack>
+        );
+
+      case 3:
         return (
           <Stack gap="md">
             <Alert icon={<IconTarget size={16} />} color="violet" variant="light" className={styles.alertBox}>
@@ -518,11 +775,11 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
           </Stack>
         );
 
-      case 3:
+      case 4:
         return (
           <Stack gap="md">
             <Alert icon={<IconCalendar size={16} />} color="teal" variant="light" className={styles.alertBox}>
-              Design the monthly curriculum for your {form.values.durationMonths}-month program
+              Design the monthly curriculum for your 6-month mentorship program (Preplaced Standard)
             </Alert>
             
             <Stack gap="lg" className={styles.moduleScroll}>
@@ -593,15 +850,17 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
           </Stack>
         );
 
-      case 4:
-        const totalSessions = form.values.durationMonths * form.values.sessionsPerMonth;
-        const totalPrice = form.values.durationMonths * form.values.pricePerMonth;
-        const pricePerSession = Math.round(form.values.pricePerMonth / form.values.sessionsPerMonth);
+      case 5:
+        const mentorBasePriceForSummary = form.values.basePricePerMonth;
+        const finalSixMonthPrice = Math.round(mentorBasePriceForSummary * (1 - form.values.sixMonthDiscount / 100));
+        const totalSessions = 6 * form.values.sessionsPerMonth; // Fixed 6-month package
+        const totalPrice = 6 * finalSixMonthPrice;
+        const pricePerSession = Math.round(finalSixMonthPrice / form.values.sessionsPerMonth);
 
         return (
           <Stack gap="md">
             <Alert icon={<IconCheck size={16} />} color="green" variant="light" className={styles.alertBox}>
-              Review your package details before creating
+              Review your package details before creating (6-Month Package)
             </Alert>
             
             <Grid>
@@ -615,7 +874,7 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
                     </Group>
                     <Group>
                       <Text fw={500}>Duration:</Text>
-                      <Text>{form.values.durationMonths} months</Text>
+                      <Text>6 months (Premium Plan)</Text>
                     </Group>
                     <Group>
                       <Text fw={500}>Session Type:</Text>
@@ -624,34 +883,85 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
                     <Group>
                       <Text fw={500}>Free Trial:</Text>
                       <Badge color={form.values.isFreeTrialIncluded ? 'green' : 'red'} variant="light">
-                        {form.values.isFreeTrialIncluded ? 'Included' : 'Not Included'}
+                        {form.values.isFreeTrialIncluded ? 'Included (30 min)' : 'Not Included'}
                       </Badge>
                     </Group>
                   </Stack>
                 </Paper>
               </Grid.Col>
 
-              <Grid.Col span={6}>
+              <Grid.Col span={4}>
                 <Paper p="md" withBorder radius="md" h="100%" className={styles.summaryCard}>
-                  <Title order={5} mb="md">Pricing Summary</Title>
+                  <Title order={5} mb="md">Your Pricing Strategy</Title>
                   <Stack gap="sm">
                     <Group justify="space-between">
-                      <Text size="sm">Total Sessions</Text>
-                      <Text fw={600}>{totalSessions}</Text>
+                      <Text size="sm">Base Monthly Price</Text>
+                      <Text fw={600}>₹{mentorBasePriceForSummary.toLocaleString()}</Text>
                     </Group>
                     <Group justify="space-between">
-                      <Text size="sm">Total Price</Text>
+                      <Text size="sm">3-Month Discount</Text>
+                      <Text fw={600}>{form.values.threeMonthDiscount}%</Text>
+                    </Group>
+                    <Group justify="space-between">
+                      <Text size="sm">6-Month Discount</Text>
+                      <Text fw={600}>{form.values.sixMonthDiscount}%</Text>
+                    </Group>
+                    <Divider my="xs" />
+                    <Group justify="space-between">
+                      <Text size="sm" c="blue">6-Month Plan Price</Text>
+                      <Text fw={600} c="blue">₹{finalSixMonthPrice.toLocaleString()}/mo</Text>
+                    </Group>
+                    <Group justify="space-between">
+                      <Text size="sm">Total 6-Month Price</Text>
                       <Text fw={600}>₹{totalPrice.toLocaleString()}</Text>
-                    </Group>
-                    <Group justify="space-between">
-                      <Text size="sm">Price per Session</Text>
-                      <Text fw={600}>₹{pricePerSession.toLocaleString()}</Text>
                     </Group>
                   </Stack>
                 </Paper>
               </Grid.Col>
 
-              <Grid.Col span={6}>
+              <Grid.Col span={4}>
+                <Paper p="md" withBorder radius="md" h="100%" className={styles.summaryCard}>
+                  <Title order={5} mb="md">Package Inclusions</Title>
+                  <Stack gap="xs">
+                    <Group justify="space-between">
+                      <Text size="sm">1:1 Live Sessions</Text>
+                      <Badge color="blue" variant="light" size="sm">Always Included</Badge>
+                    </Group>
+                    {form.values.hasUnlimitedChat && (
+                      <Group justify="space-between">
+                        <Text size="sm">Unlimited Chat</Text>
+                        <Badge color="green" variant="light" size="sm">Included</Badge>
+                      </Group>
+                    )}
+                    {form.values.hasCuratedTasks && (
+                      <Group justify="space-between">
+                        <Text size="sm">Curated Tasks</Text>
+                        <Badge color="violet" variant="light" size="sm">Included</Badge>
+                      </Group>
+                    )}
+                    {form.values.hasRegularFollowups && (
+                      <Group justify="space-between">
+                        <Text size="sm">Regular Follow-ups</Text>
+                        <Badge color="teal" variant="light" size="sm">Included</Badge>
+                      </Group>
+                    )}
+                    {form.values.hasJobReferrals && (
+                      <Group justify="space-between">
+                        <Text size="sm">Job Referrals</Text>
+                        <Badge color="orange" variant="light" size="sm">Included</Badge>
+                      </Group>
+                    )}
+                    {form.values.hasCertification && (
+                      <Group justify="space-between">
+                        <Text size="sm">Certification</Text>
+                        <Badge color="cyan" variant="light" size="sm">Included</Badge>
+                      </Group>
+                    )}
+                  </Stack>
+                </Paper>
+              </Grid.Col>
+
+              <Grid.Col span={4}>
                 <Paper p="md" withBorder radius="md" h="100%" className={styles.summaryCard}>
                   <Title order={5} mb="md">Topics ({topics.length})</Title>
                   <Stack gap="xs" style={{ maxHeight: '120px', overflowY: 'auto' }}>

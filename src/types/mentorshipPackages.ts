@@ -33,6 +33,15 @@ export interface MentorshipPackage {
   isFreeTrialIncluded: boolean;
   sessionType: string;
   sessionDurationMinutes: number;
+  
+  // Package Inclusions (as per Preplaced documentation)
+  hasUnlimitedChat?: boolean; // Unlimited chat with mentor
+  hasCuratedTasks?: boolean; // Task & Curated Resources
+  hasRegularFollowups?: boolean; // Regular follow-ups (accountability)
+  hasJobReferrals?: boolean; // Job referrals from mentor community
+  hasCertification?: boolean; // Certification of mentorship completion
+  hasRescheduling?: boolean; // Reschedule anytime capability
+  
   createdAt?: string;
   updatedAt?: string;
 }
@@ -105,6 +114,14 @@ export interface CreatePackageRequest {
   isFreeTrialIncluded?: boolean;
   sessionType: string;
   sessionDurationMinutes: number;
+  
+  // Package Inclusions (as per Preplaced documentation)
+  hasUnlimitedChat?: boolean;
+  hasCuratedTasks?: boolean;
+  hasRegularFollowups?: boolean;
+  hasJobReferrals?: boolean;
+  hasCertification?: boolean;
+  hasRescheduling?: boolean;
 }
 
 export interface CreateTrialSlotRequest {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Select, TextInput, Slider, Switch, MultiSelect } from "@mantine/core";
+import { Button, TextInput, RangeSlider, Switch, MultiSelect, Chip, Group, Divider } from "@mantine/core";
 import { IconSearch, IconFilter, IconX } from "@tabler/icons-react";
 import { useTheme } from "../../ThemeContext";
 
@@ -12,10 +12,11 @@ interface MentorFiltersProps {
   filters: {
     expertise: string;
     location: string;
-    maxRate: number;
     availableOnly: boolean;
     experience: string;
     skills: string[];
+    offering?: string;
+    expRange?: [number, number];
   };
   setFilters: (filters: any) => void;
   clearFilters: () => void;
@@ -68,90 +69,92 @@ const MentorFilters = ({
   ];
 
   return (
-    <div className={`rounded-xl p-6 mb-8 ${isDarkMode ? "bg-cape-cod-900" : "bg-white"}`}>
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <TextInput
-          placeholder="Search mentors by name, skills, or company..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.currentTarget.value)}
-          leftSection={<IconSearch size={16} />}
-          className="flex-1"
-        />
-        <Button
-          variant={showFilters ? "filled" : "outline"}
-          leftSection={<IconFilter size={16} />}
-          onClick={() => setShowFilters(!showFilters)}
-        >
-          Filters
-        </Button>
+    <div className={`rounded-xl p-5 ${isDarkMode ? "bg-cape-cod-900" : "bg-white"}`}>
+      {/* Search */}
+      <TextInput
+        placeholder="Search mentors by name, skills, or company..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.currentTarget.value)}
+        leftSection={<IconSearch size={16} />}
+      />
+
+      <Divider className="my-4" />
+
+      {/* Domain chips */}
+      <div className="mb-3">
+        <div className="text-sm font-medium mb-2">Domain</div>
+        <Group gap="xs">
+          {[
+            "Frontend",
+            "Backend",
+            "Fullstack",
+            "DevOps / SRE / Cloud",
+            "QA / Automation Testing",
+            "Data Scientist / AI/ML",
+            "Data Analyst",
+          ].map((d) => (
+            <Chip
+              key={d}
+              checked={filters.expertise === d}
+              onChange={() => setFilters({ ...filters, expertise: filters.expertise === d ? "" : d })}
+              variant="outline"
+              color="blue"
+            >
+              {d}
+            </Chip>
+          ))}
+        </Group>
       </div>
 
-      {showFilters && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 border-t border-gray-200">
-          <Select
-            label="Expertise Area"
-            placeholder="Select area"
-            value={filters.expertise}
-            onChange={(value) => setFilters({ ...filters, expertise: value || "" })}
-            data={expertiseOptions}
-            searchable
-            clearable
-          />
-          <Select
-            label="Experience Level"
-            placeholder="Select experience"
-            value={filters.experience}
-            onChange={(value) => setFilters({ ...filters, experience: value || "" })}
-            data={experienceOptions}
-            clearable
-          />
-          <TextInput
-            label="Location"
-            placeholder="Enter location"
-            value={filters.location}
-            onChange={(e) => setFilters({ ...filters, location: e.currentTarget.value })}
-          />
-          <MultiSelect
-            label="Skills"
-            placeholder="Select skills"
-            value={filters.skills}
-            onChange={(value) => setFilters({ ...filters, skills: value })}
-            data={skillOptions}
-            searchable
-            clearable
-          />
+      {/* 'Offering mentorship for' filter removed as requested */}
 
-          <div className="col-span-full">
-            <label className="block text-sm font-medium mb-2">
-              Max Hourly Rate: {filters.maxRate === 5000 ? "5000+" : filters.maxRate}
-            </label>
-            <Slider
-              value={filters.maxRate}
-              onChange={(value) => setFilters({ ...filters, maxRate: value })}
-              min={0}
-              max={5000}
-              step={100}
-              marks={[
-                { value: 0, label: "0" },
-                { value: 1000, label: "1K" },
-                { value: 2500, label: "2.5K" },
-                { value: 5000, label: "5K+" },
-              ]}
-            />
-          </div>
+      <TextInput
+        label="Location"
+        placeholder="Enter location"
+        value={filters.location}
+        onChange={(e) => setFilters({ ...filters, location: e.currentTarget.value })}
+        className="mb-4"
+      />
 
-          <div className="col-span-full flex items-center justify-between">
-            <Switch
-              label="Available mentors only"
-              checked={filters.availableOnly}
-              onChange={(e) => setFilters({ ...filters, availableOnly: e.currentTarget.checked })}
-            />
-            <Button variant="subtle" leftSection={<IconX size={16} />} onClick={clearFilters}>
-              Clear Filters
-            </Button>
-          </div>
-        </div>
-      )}
+      <MultiSelect
+        label="Skills"
+        placeholder="Select skills"
+        value={filters.skills}
+        onChange={(value) => setFilters({ ...filters, skills: value })}
+        data={skillOptions}
+        searchable
+        clearable
+        className="mb-5"
+      />
+
+
+
+      {/* Experience range */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium mb-2">Experience</label>
+        <RangeSlider
+          value={(filters.expRange || [0, 15]) as [number, number]}
+          onChange={(value: [number, number]) => setFilters({ ...filters, expRange: value })}
+          min={0}
+          max={15}
+          step={1}
+          marks={[
+            { value: 0, label: "0 Years" },
+            { value: 15, label: "15+ Years" },
+          ]}
+        />
+      </div>
+
+      <div className="flex items-center justify-between">
+        <Switch
+          label="Available mentors only"
+          checked={filters.availableOnly}
+          onChange={(e) => setFilters({ ...filters, availableOnly: e.currentTarget.checked })}
+        />
+        <Button variant="subtle" leftSection={<IconX size={16} />} onClick={clearFilters}>
+          Clear Filters
+        </Button>
+      </div>
     </div>
   );
 };

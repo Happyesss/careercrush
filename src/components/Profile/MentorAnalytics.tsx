@@ -57,8 +57,6 @@ const MentorAnalytics = () => {
   }
 
   const currentMentees = mentor.currentMentees || 0;
-  const maxMentees = mentor.maxMentees || 5;
-  const capacityPercentage = (currentMentees / maxMentees) * 100;
   
   const totalRequests = mentor.mentorshipRequests?.length || 0;
   const pendingRequests = mentor.mentorshipRequests?.filter((req: any) => req.status === 'PENDING').length || 0;
@@ -88,20 +86,14 @@ const MentorAnalytics = () => {
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <IconUsers size={20} className="text-blue-500" />
-              <Text size="sm" fw={500}>Capacity</Text>
+              <Text size="sm" fw={500}>Active Mentees</Text>
             </div>
-            <Text size="xs" className={isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'}>
-              {currentMentees}/{maxMentees}
-            </Text>
           </div>
-          <Progress 
-            value={capacityPercentage} 
-            size="sm" 
-            color={capacityPercentage > 80 ? 'red' : capacityPercentage > 60 ? 'yellow' : 'blue'} 
-            className="mb-2"
-          />
+          <Text size="xl" fw={700} className="text-blue-500">
+            {currentMentees}
+          </Text>
           <Text size="xs" className={isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'}>
-            {capacityPercentage.toFixed(0)}% utilized
+            Currently mentoring
           </Text>
         </Card>
 

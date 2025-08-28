@@ -501,8 +501,9 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
 
         {/* Filters */}
         <Paper p="lg" radius="lg" withBorder className={styles.filtersSection}>
-          <Group gap="lg">
-            <div className={styles.filterItem}>
+          <Group gap="lg" justify="space-between" align="center">
+            <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+              <div className={styles.filterItem}>
               <Group gap="xs" mb="xs">
                 <ThemeIcon variant="light" color="violet" size="sm">
                   <IconFilter size={14} />
@@ -524,7 +525,7 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
               />
             </div>
             
-            <div className={styles.filterItem}>
+              <div className={styles.filterItem}>
               <Group gap="xs" mb="xs">
                 <ThemeIcon variant="light" color="blue" size="sm">
                   <IconCalendar size={14} />
@@ -542,32 +543,20 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
                 {selectedDate ? selectedDate.toLocaleDateString() : 'Select Date'}
               </Button>
             </div>
+            </div>
+            <Badge
+              variant="gradient"
+              gradient={{ from: 'blue', to: 'cyan' }}
+              size="lg"
+              className={styles.sessionsBadge}
+            >
+              {filteredSessions.length} {filteredSessions.length === 1 ? 'session' : 'sessions'}
+            </Badge>
           </Group>
         </Paper>
 
         {/* Sessions Grid */}
         <div>
-          <Paper p="lg" radius="lg" withBorder mb="lg" className={styles.sessionsHeader}>
-            <Group justify="space-between">
-              <div>
-                <Title order={3} mb="xs">
-                  Trial Sessions {selectedDate && `for ${selectedDate.toLocaleDateString()}`}
-                </Title>
-                <Text c="dimmed">
-                  {filteredSessions.length} {filteredSessions.length === 1 ? 'session' : 'sessions'} found
-                </Text>
-              </div>
-              <Badge 
-                variant="gradient" 
-                gradient={{ from: 'blue', to: 'cyan' }} 
-                size="lg"
-                className={styles.sessionsBadge}
-              >
-                {filteredSessions.length} sessions
-              </Badge>
-            </Group>
-          </Paper>
-
           {loading ? (
             <Paper p="xl" radius="lg" withBorder className={styles.loadingCard}>
               <Flex align="center" justify="center" gap="md">

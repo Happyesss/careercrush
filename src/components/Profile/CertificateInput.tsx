@@ -1,4 +1,4 @@
-import { Button, TextInput } from "@mantine/core";
+import { Button, TextInput, FileInput } from "@mantine/core";
 import fields from "../../assets/Data/Profile";
 import SelectInput from "./SelectInput";
 import { MonthPickerInput } from "@mantine/dates";
@@ -8,6 +8,8 @@ import { successNotification } from "../../Services/NotificationService";
 import { changeProfile } from "../../Slices/ProfileSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "../../ThemeContext";
+import { getBase64 } from "../../Services/Utilities";
+import { IconUpload } from "@tabler/icons-react";
 
 const CertificateInput = (props: any) => {
   const select = fields;
@@ -18,13 +20,30 @@ const CertificateInput = (props: any) => {
   const form = useForm({
     mode: 'controlled',
     validateInputOnChange: true,
-    initialValues: { name: '', issuer: '', issueDate: new Date(), certificateID: '' },
+    initialValues: { name: '', issuer: '', issueDate: new Date(), certificateID: '', certificateImage: '' },
     validate: {
       name: isNotEmpty('This field is required'),
       issuer: isNotEmpty('This field is required'),
       certificateID: isNotEmpty('This field is required'),
     }
   });
+
+  const handleCertificateImageChange = async (image: File | null) => {
+    if (!image) return;
+    
+    if (image.size > 2 * 1024 * 1024) { // 2MB limit
+      successNotification('Certificate image must be less than 2MB', 'Error');
+      return;
+    }
+
+    try {
+      let certificateImage: any = await getBase64(image);
+      form.setFieldValue('certificateImage', certificateImage.split(',')[1]);
+      successNotification('Certificate image uploaded successfully', 'Success');
+    } catch (error) {
+      successNotification('Failed to upload certificate image', 'Error');
+    }
+  };
 
   const handleSave = () => {
     form.validate();
@@ -66,6 +85,31 @@ const CertificateInput = (props: any) => {
         })}
         />
         <TextInput {...form.getInputProps("certificateID")} label="Certificate ID" placeholder="Enter ID" required />
+      </div>
+      <div className={`${isDarkMode ? ' text-cape-cod-100 ' : 'text-cape-cod-900'}`}>
+        <FileInput
+          label="Certificate Image (Optional)"
+          placeholder="Upload certificate image"
+          accept="image/*"
+          onChange={handleCertificateImageChange}
+          leftSection={<IconUpload size={16} />}
+          styles={() => ({
+            input: {
+              backgroundColor: isDarkMode ? "#2c3534" : "white",
+              color: isDarkMode ? "white" : "black",
+              borderColor: isDarkMode ? "#161d1d" : "#d1d5db"
+            }
+          })}
+        />
+        {form.getValues().certificateImage && (
+          <div className="mt-2">
+            <img
+              src={`data:image/jpeg;base64,${form.getValues().certificateImage}`}
+              alt="Certificate preview"
+              className="w-32 h-32 object-cover rounded border"
+            />
+          </div>
+        )}
       </div>
       <div className="flex gap-3">
         <Button onClick={handleSave} color="blue.4" variant="outline">Save</Button>

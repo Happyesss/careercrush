@@ -106,7 +106,7 @@ const FeaturedMentors = () => {
                     
                     <div className="flex justify-between items-center pt-2">
                       <span className={`font-semibold ${isDarkMode ? 'text-cape-cod-200' : 'text-gray-700'}`}>
-                        {mentor.hourlyRate ? `₹${mentor.hourlyRate}/hr` : "Free"}
+                        Mentorship Available
                       </span>
                       <span className={`text-xs px-2 py-1 rounded ${
                         mentor.isAvailable 

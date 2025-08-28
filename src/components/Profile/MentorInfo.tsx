@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Modal, Text, TextInput, Textarea, NumberInput, MultiSelect, Group, Switch, Badge } from "@mantine/core";
+import { Button, Modal, Text, TextInput, Textarea, MultiSelect, Group, Switch, Badge } from "@mantine/core";
 import { IconEdit, IconClock, IconUsers, IconStar, IconMapPin, IconLock, IconTarget, IconCheck } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -35,7 +35,6 @@ const MentorInfo = () => {
     certifications: [] as any[],
     totalExp: 0,
     mentorshipAreas: [] as string[],
-    maxMentees: 5,
     linkedinUrl: "",
     portfolioUrl: "",
     languages: [] as string[],
@@ -119,7 +118,6 @@ const MentorInfo = () => {
           certifications: profile.certifications || data.certifications || [],
           totalExp: profile.totalExp || data.totalExp || 0,
           mentorshipAreas: data.mentorshipAreas || [],
-          maxMentees: data.maxMentees || 5,
           linkedinUrl: data.linkedinUrl || "",
           portfolioUrl: data.portfolioUrl || "",
           languages: data.languages || [],
@@ -326,10 +324,10 @@ const MentorInfo = () => {
                 <IconUsers size={20} className="text-blue-500" />
                 <div>
                   <Text size="sm" className={isDarkMode ? 'text-cape-cod-400' : 'text-gray-600'}>
-                    Mentees
+                    Active Mentees
                   </Text>
                   <Text size="lg" fw={700}>
-                    {mentor.currentMentees || 0}/{mentor.maxMentees || 5}
+                    {mentor.currentMentees || 0}
                   </Text>
                 </div>
               </div>
@@ -475,22 +473,6 @@ const MentorInfo = () => {
               required
               className="mb-4"
             />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <NumberInput 
-                label="Hourly Rate (₹)" 
-                value={mentorForm.hourlyRate} 
-                onChange={(v) => setMentorForm({ ...mentorForm, hourlyRate: Number(v) || 0 })} 
-                min={0} 
-                required
-              />
-              <NumberInput 
-                label="Max Mentees" 
-                value={mentorForm.maxMentees} 
-                onChange={(v) => setMentorForm({ ...mentorForm, maxMentees: Number(v) || 0 })} 
-                min={1} 
-              />
-            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <TextInput 

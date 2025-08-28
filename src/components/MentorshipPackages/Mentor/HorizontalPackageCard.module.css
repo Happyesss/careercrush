@@ -1,0 +1,124 @@
+/* HorizontalPackageCard.module.css */
+.horizontalCard {
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.horizontalCard:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.planCard {
+  position: relative;
+  transition: all 0.2s ease;
+  height: 100%;
+  min-height: 280px;
+}
+
+.planCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.popularCard {
+  background: linear-gradient(135deg, #fff8f0 0%, #ffffff 100%);
+  border-color: #fd7e14 !important;
+  border-width: 2px !important;
+}
+
+.bestValueCard {
+  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+  border-color: #4c6ef5 !important;
+  border-width: 2px !important;
+}
+
+.planBadge {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.packageTitle {
+  background: linear-gradient(135deg, #228be6 0%, #15aabf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.inclusionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.inclusionItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+}
+
+.priceContainer {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+.discountBadge {
+  background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(81, 207, 102, 0.3);
+}
+
+.viewProfileBtn {
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.viewProfileBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+  .planCard {
+    min-height: auto;
+  }
+  
+  .inclusionGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .horizontalCard {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.packageStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.topicsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}

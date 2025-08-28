@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { Mentor } from "../../types/mentor";
 import MentorProfileHeader from "./MentorProfileHeader";
 import MentorProfileTabs from "./MentorProfileTabs";
+import PricingCard from "./PricingCard";
+import { packageService } from "../../Services/MentorshipPackageService";
 import MentorshipRequestModal from "./MentorshipRequestModal";
 
 const MentorProfileComponent = () => {
@@ -20,6 +22,8 @@ const MentorProfileComponent = () => {
   const [requestModalOpen, setRequestModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const user = useSelector((state: any) => state.user);
+  const [activePackageId, setActivePackageId] = useState<number | null>(null);
+  const [basePrice, setBasePrice] = useState<number>(0);
   
   const [requestForm, setRequestForm] = useState({
     menteeName: "",
@@ -44,6 +48,17 @@ const MentorProfileComponent = () => {
       const data = await getMentor(params.id);
       console.log("Fetched mentor data:", data);
       setMentor(data);
+      // Fetch an active package for this mentor to power pricing card
+      try {
+        const pkgList = await packageService.getActivePackagesByMentor(Number(params.id));
+        if (pkgList && pkgList.length > 0) {
+          const first = pkgList[0] as any;
+          setActivePackageId(first.id ?? null);
+          setBasePrice(Number(first.pricePerMonth ?? 0));
+        }
+      } catch (e) {
+        console.error("Failed to fetch active packages for mentor", e);
+      }
     } catch (error) {
       console.error("Error fetching mentor:", error);
     } finally {
@@ -114,7 +129,7 @@ const MentorProfileComponent = () => {
                   <div className="flex flex-col gap-3 w-full max-w-sm mb-6 xl:self-end">
                     <Button
                       size="lg"
-                      disabled={!mentor.isAvailable || mentor.currentMentees >= mentor.maxMentees}
+                      disabled={!mentor.isAvailable}
                       onClick={() => setRequestModalOpen(true)}
                       className="w-full"
                     >
@@ -122,6 +137,12 @@ const MentorProfileComponent = () => {
                     </Button>
                   </div>
                   
+                  {activePackageId && (
+                    <div className="mb-6">
+                      <PricingCard mentorId={Number(params.id)} packageId={activePackageId} basePricePerMonth={basePrice} />
+                    </div>
+                  )}
+
                   <MentorProfileTabs 
                     mentor={mentor} 
                     activeTab={activeTab} 

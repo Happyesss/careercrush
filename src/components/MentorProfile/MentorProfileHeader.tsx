@@ -61,13 +61,13 @@ const MentorProfileHeader = ({ mentor }: MentorProfileHeaderProps) => {
           </div>
           <div className="flex items-center gap-2 justify-center xl:justify-start">
             <IconUser size={16} />
-            <span>{mentor.currentMentees}/{mentor.maxMentees} mentees</span>
+            <span>{mentor.currentMentees} mentees</span>
           </div>
         </div>
         
         <div className="text-center">
           <Text className={`font-bold text-lg ${isDarkMode ? 'text-cape-cod-200' : 'text-gray-700'}`}>
-            {mentor.hourlyRate ? `₹${mentor.hourlyRate}/hour` : "Rate not specified"}
+            Available for mentorship
           </Text>
         </div>
       </div>

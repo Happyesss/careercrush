@@ -212,3 +212,152 @@
   background: linear-gradient(135deg, rgba(37, 38, 43, 0.95), rgba(26, 27, 30, 0.95));
   border-color: rgba(55, 58, 64, 0.3);
 }
+
+/* Package Inclusions Styling */
+.inclusionsContainer {
+  background: rgba(248, 249, 250, 0.7);
+  border: 1px solid rgba(206, 212, 218, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.inclusionItem {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(206, 212, 218, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.2s ease;
+}
+
+.inclusionItem:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--mantine-color-blue-3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+[data-mantine-color-scheme="dark"] .inclusionsContainer {
+  background: rgba(37, 38, 43, 0.7);
+  border-color: rgba(55, 58, 64, 0.3);
+}
+
+[data-mantine-color-scheme="dark"] .inclusionItem {
+  background: rgba(37, 38, 43, 0.8);
+  border-color: rgba(55, 58, 64, 0.2);
+}
+
+[data-mantine-color-scheme="dark"] .inclusionItem:hover {
+  background: rgba(37, 38, 43, 0.95);
+  border-color: var(--mantine-color-blue-4);
+}
+
+/* Pricing Container Styling */
+.pricingContainer {
+  background: linear-gradient(135deg, rgba(248, 249, 250, 0.9), rgba(255, 255, 255, 0.9));
+  border: 1px solid rgba(206, 212, 218, 0.3);
+  border-radius: 12px;
+}
+
+.discountContainer {
+  background: linear-gradient(135deg, rgba(254, 249, 195, 0.3), rgba(255, 255, 255, 0.9));
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+}
+
+.planPreviewContainer {
+  background: linear-gradient(135deg, rgba(240, 242, 255, 0.7), rgba(250, 251, 255, 0.9));
+  border: 1px solid rgba(147, 197, 253, 0.3);
+  border-radius: 12px;
+}
+
+.planCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.planCard {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(206, 212, 218, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.planCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: var(--mantine-color-blue-4);
+}
+
+.popularPlan {
+  border-color: var(--mantine-color-blue-4);
+  background: linear-gradient(135deg, rgba(219, 234, 254, 0.6), rgba(255, 255, 255, 0.9));
+}
+
+.popularPlan::before {
+  content: "Most Popular";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--mantine-color-blue-6);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.bestValuePlan {
+  border-color: var(--mantine-color-green-4);
+  background: linear-gradient(135deg, rgba(220, 252, 231, 0.6), rgba(255, 255, 255, 0.9));
+}
+
+.bestValuePlan::before {
+  content: "Best Value";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--mantine-color-green-6);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Dark mode support for pricing */
+[data-mantine-color-scheme="dark"] .pricingContainer {
+  background: linear-gradient(135deg, rgba(37, 38, 43, 0.9), rgba(26, 27, 30, 0.9));
+  border-color: rgba(55, 58, 64, 0.3);
+}
+
+[data-mantine-color-scheme="dark"] .discountContainer {
+  background: linear-gradient(135deg, rgba(69, 59, 19, 0.3), rgba(37, 38, 43, 0.9));
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+[data-mantine-color-scheme="dark"] .planPreviewContainer {
+  background: linear-gradient(135deg, rgba(30, 31, 44, 0.7), rgba(37, 38, 43, 0.9));
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+[data-mantine-color-scheme="dark"] .planCard {
+  background: rgba(37, 38, 43, 0.9);
+  border-color: rgba(55, 58, 64, 0.3);
+}
+
+[data-mantine-color-scheme="dark"] .popularPlan {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.3), rgba(37, 38, 43, 0.9));
+  border-color: var(--mantine-color-blue-5);
+}
+
+[data-mantine-color-scheme="dark"] .bestValuePlan {
+  background: linear-gradient(135deg, rgba(22, 101, 52, 0.3), rgba(37, 38, 43, 0.9));
+  border-color: var(--mantine-color-green-5);
+}

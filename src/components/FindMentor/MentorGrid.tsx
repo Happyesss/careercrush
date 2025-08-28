@@ -16,18 +16,23 @@ const MentorGrid = ({ mentors, loading, clearFilters }: MentorGridProps) => {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(6)].map((_, index) => (
+      <div className="flex flex-col gap-6">
+        {[...Array(3)].map((_, index) => (
           <div key={index} className={`rounded-xl p-6 animate-pulse ${isDarkMode ? "bg-cape-cod-800" : "bg-white"}`}>
-            <div className="flex items-center gap-4 mb-4">
-              <div className={`${isDarkMode ? "bg-cape-cod-700" : "bg-gray-200"} w-16 h-16 rounded-full`} />
+            <div className="flex gap-6">
               <div className="flex-1">
-                <div className={`${isDarkMode ? "bg-cape-cod-700" : "bg-gray-200"} h-4 rounded mb-2`} />
-                <div className={`${isDarkMode ? "bg-cape-cod-700" : "bg-gray-200"} h-3 rounded w-3/4`} />
+                <div className="flex items-center gap-4 mb-4">
+                  <div className={`${isDarkMode ? "bg-cape-cod-700" : "bg-gray-200"} w-16 h-16 rounded-full`} />
+                  <div className="flex-1">
+                    <div className={`${isDarkMode ? "bg-cape-cod-700" : "bg-gray-200"} h-4 rounded mb-2`} />
+                    <div className={`${isDarkMode ? "bg-cape-cod-700" : "bg-gray-200"} h-3 rounded w-3/4`} />
+                  </div>
+                </div>
+                <div className={`${isDarkMode ? "bg-cape-cod-800" : "bg-gray-200"} h-3 rounded mb-2`} />
+                <div className={`${isDarkMode ? "bg-cape-cod-800" : "bg-gray-200"} h-3 rounded w-2/3`} />
               </div>
+              <div className={`w-80 hidden lg:block rounded-xl ${isDarkMode ? "bg-cape-cod-700" : "bg-gray-100"}`} />
             </div>
-            <div className={`${isDarkMode ? "bg-cape-cod-800" : "bg-gray-200"} h-3 rounded mb-2`} />
-            <div className={`${isDarkMode ? "bg-cape-cod-800" : "bg-gray-200"} h-3 rounded w-2/3`} />
           </div>
         ))}
       </div>
@@ -47,7 +52,7 @@ const MentorGrid = ({ mentors, loading, clearFilters }: MentorGridProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="flex flex-col gap-6">
       {mentors.map((mentor) => (
         <MentorCard key={mentor.id} {...mentor} />
       ))}

@@ -6,6 +6,7 @@ import { MentorshipPackage, PackageStats, TrialSessionStats } from '../../../typ
 import { packageService, statsService } from '../../../Services/MentorshipPackageService';
 import CreatePackageWizard from './CreatePackageWizard';
 import PackageCard from './PackageCard';
+import HorizontalPackageCard from './HorizontalPackageCard';
 import PackageStatsCard from './PackageStatsCard';
 import TrialSessionManager from './TrialSessionManager';
 import { Button, Card, Container, Group, Stack, Text, Title, Tabs, Badge, ActionIcon, Menu } from '@mantine/core';
@@ -235,9 +236,9 @@ const MentorPackageDashboard: React.FC<MentorPackageDashboardProps> = ({ mentorI
                 </Stack>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Stack gap="xl">
                 {packages.map((pkg) => (
-                  <PackageCard
+                  <HorizontalPackageCard
                     key={pkg.id}
                     package={pkg}
                     onEdit={(id: number) => {
@@ -250,7 +251,7 @@ const MentorPackageDashboard: React.FC<MentorPackageDashboardProps> = ({ mentorI
                     showMentorActions={true}
                   />
                 ))}
-              </div>
+              </Stack>
             )}
           </Tabs.Panel>
 

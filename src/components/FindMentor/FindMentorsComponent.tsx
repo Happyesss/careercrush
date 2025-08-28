@@ -18,10 +18,11 @@ const FindMentorsComponent = () => {
   const [filters, setFilters] = useState({
     expertise: "",
     location: "",
-    maxRate: 5000,
     availableOnly: false,
     experience: "",
     skills: [] as string[],
+    offering: "",
+    expRange: [0, 15] as [number, number],
   });
 
   useEffect(() => {
@@ -69,10 +70,6 @@ const FindMentorsComponent = () => {
       filtered = filtered.filter((m) => m.isAvailable);
     }
 
-    if (filters.maxRate < 5000) {
-      filtered = filtered.filter((m) => !m.hourlyRate || (m.hourlyRate as number) <= filters.maxRate);
-    }
-
     if (filters.skills.length > 0) {
       const skillsLower = filters.skills.map((s) => s.toLowerCase());
       filtered = filtered.filter((m) =>
@@ -80,41 +77,55 @@ const FindMentorsComponent = () => {
       );
     }
 
+    if (filters.expRange) {
+      const [minY, maxY] = filters.expRange;
+      filtered = filtered.filter((m) => {
+        const years = Number(m.totalExp ?? 0);
+        return years >= minY && years <= maxY;
+      });
+    }
+
     setFilteredMentors(filtered);
   };
 
   const clearFilters = () => {
-    setFilters({ expertise: "", location: "", maxRate: 5000, availableOnly: false, experience: "", skills: [] });
+    setFilters({
+      expertise: "",
+      location: "",
+      availableOnly: false,
+      experience: "",
+      skills: [],
+      offering: "",
+      expRange: [0, 15],
+    });
     setSearchQuery("");
   };
 
   return (
     <div className={`min-h-screen py-8 ${isDarkMode ? "bg-cape-cod-950 text-gray-200" : "bg-gray-50 text-gray-900"}`}>
       <div className="container mx-auto px-4">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-4">Find Your Perfect Mentor</h1>
-          <p className={`text-lg ${isDarkMode ? "text-cape-cod-300" : "text-gray-600"} max-w-2xl mx-auto`}>
-            Connect with experienced professionals who can guide your career journey
-          </p>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left sidebar */}
+          <aside className="lg:col-span-4 xl:col-span-3">
+            <div className="sticky top-6">
+              <MentorFilters
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                showFilters={showFilters}
+                setShowFilters={setShowFilters}
+                filters={filters}
+                setFilters={setFilters}
+                clearFilters={clearFilters}
+              />
+            </div>
+          </aside>
+
+          {/* Right content */}
+          <main className="lg:col-span-8 xl:col-span-9">
+            <MentorGrid mentors={filteredMentors} loading={loading} clearFilters={clearFilters} />
+          </main>
         </div>
-
-        <MentorFilters
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          showFilters={showFilters}
-          setShowFilters={setShowFilters}
-          filters={filters}
-          setFilters={setFilters}
-          clearFilters={clearFilters}
-        />
-
-        <div className="mb-6">
-          <p className={`text-lg ${isDarkMode ? "text-cape-cod-300" : "text-gray-600"}`}>
-            Found {filteredMentors.length} mentors
-          </p>
-        </div>
-
-        <MentorGrid mentors={filteredMentors} loading={loading} clearFilters={clearFilters} />
       </div>
     </div>
   );

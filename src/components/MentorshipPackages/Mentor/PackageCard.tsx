@@ -198,6 +198,59 @@ const PackageCard: React.FC<PackageCardProps> = ({
           </div>
         )}
 
+        {/* Package Inclusions (as per Preplaced documentation) */}
+        <div className="mb-md">
+          <Text size="sm" fw={500} mb="xs">Package Inclusions</Text>
+          <Stack gap="xs">
+            <Group justify="space-between" align="center">
+              <Text size="sm">1:1 Live Sessions</Text>
+              <Badge color="green" variant="light" size="sm">Included</Badge>
+            </Group>
+            
+            {pkg.hasUnlimitedChat && (
+              <Group justify="space-between" align="center">
+                <Text size="sm">Unlimited Chat with Mentor</Text>
+                <Badge color="green" variant="light" size="sm">Included</Badge>
+              </Group>
+            )}
+            
+            {pkg.hasCuratedTasks && (
+              <Group justify="space-between" align="center">
+                <Text size="sm">Task & Curated Resources</Text>
+                <Badge color="green" variant="light" size="sm">Included</Badge>
+              </Group>
+            )}
+            
+            {pkg.hasRegularFollowups && (
+              <Group justify="space-between" align="center">
+                <Text size="sm">Regular Follow-ups</Text>
+                <Badge color="green" variant="light" size="sm">Included</Badge>
+              </Group>
+            )}
+            
+            {pkg.hasJobReferrals && (
+              <Group justify="space-between" align="center">
+                <Text size="sm">Job Referrals</Text>
+                <Badge color="green" variant="light" size="sm">Included</Badge>
+              </Group>
+            )}
+            
+            {pkg.hasCertification && (
+              <Group justify="space-between" align="center">
+                <Text size="sm">Certification</Text>
+                <Badge color="green" variant="light" size="sm">Included</Badge>
+              </Group>
+            )}
+            
+            {pkg.hasRescheduling && (
+              <Group justify="space-between" align="center">
+                <Text size="sm">Reschedule Anytime</Text>
+                <Badge color="green" variant="light" size="sm">Included</Badge>
+              </Group>
+            )}
+          </Stack>
+        </div>
+
         {/* Package Features */}
         <Stack gap="xs" mb="md">
           <Group justify="space-between" align="center">
