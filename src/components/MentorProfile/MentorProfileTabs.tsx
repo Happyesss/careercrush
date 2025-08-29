@@ -104,10 +104,23 @@ const MentorProfileTabs = ({ mentor, activeTab, setActiveTab }: MentorProfileTab
                 <div key={index} className={`p-4 rounded-lg border ${isDarkMode ? 'border-cape-cod-700 bg-cape-cod-800' : 'border-gray-200 bg-gray-50'}`}>
                   <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-lg">{exp.title}</h4>
-                      <p className={`${isDarkMode ? 'text-cape-cod-300' : 'text-gray-600'} font-medium`}>
-                        {exp.company} {exp.location && `• ${exp.location}`}
-                      </p>
+                      <div className="flex items-center gap-3 mb-2">
+                        {exp.companyLogo && (
+                          <div className={`p-2 rounded-md ${isDarkMode ? 'bg-cape-cod-700' : 'bg-white'}`}>
+                            <img 
+                              className="h-8 w-8 object-cover rounded" 
+                              src={`data:image/jpeg;base64,${exp.companyLogo}`} 
+                              alt={`${exp.company} logo`} 
+                            />
+                          </div>
+                        )}
+                        <div>
+                          <h4 className="font-semibold text-lg">{exp.title}</h4>
+                          <p className={`${isDarkMode ? 'text-cape-cod-300' : 'text-gray-600'} font-medium`}>
+                            {exp.company} {exp.location && `• ${exp.location}`}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     <div className="text-right">
                       <p className={`text-sm ${isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'}`}>
@@ -158,10 +171,23 @@ const MentorProfileTabs = ({ mentor, activeTab, setActiveTab }: MentorProfileTab
                 <div key={index} className={`p-4 rounded-lg border ${isDarkMode ? 'border-cape-cod-700 bg-cape-cod-800' : 'border-gray-200 bg-gray-50'}`}>
                   <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-lg">{cert.name}</h4>
-                      <p className={`${isDarkMode ? 'text-cape-cod-300' : 'text-gray-600'} font-medium`}>
-                        {cert.issuer}
-                      </p>
+                      <div className="flex items-center gap-3 mb-2">
+                        {cert.certificateImage && (
+                          <div className={`p-2 rounded-md ${isDarkMode ? 'bg-cape-cod-700' : 'bg-white'}`}>
+                            <img 
+                              className="h-8 w-8 object-cover rounded" 
+                              src={`data:image/jpeg;base64,${cert.certificateImage}`} 
+                              alt={`${cert.name} certificate`} 
+                            />
+                          </div>
+                        )}
+                        <div>
+                          <h4 className="font-semibold text-lg">{cert.name}</h4>
+                          <p className={`${isDarkMode ? 'text-cape-cod-300' : 'text-gray-600'} font-medium`}>
+                            {cert.issuer}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     <div className="text-right">
                       <p className={`text-sm ${isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'}`}>

@@ -75,6 +75,7 @@ const MentorSetup = () => {
           company: profile.company || "",
           location: profile.location || "",
           bio: profile.about || "",
+          profileBackground: profile.profileBackground || "",
         }));
       }
     } catch (error: any) {
@@ -91,6 +92,7 @@ const MentorSetup = () => {
           company: profile.company || "",
           location: profile.location || "",
           bio: profile.about || "",
+          profileBackground: profile.profileBackground || "",
         }));
       } else {
         console.error("Error fetching mentor profile:", error);

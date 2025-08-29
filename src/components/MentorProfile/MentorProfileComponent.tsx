@@ -8,8 +8,10 @@ import { getMentor, requestMentorshipSession } from "../../Services/MentorServic
 import { useSelector } from "react-redux";
 import { Mentor } from "../../types/mentor";
 import MentorProfileHeader from "./MentorProfileHeader";
+import PublicMentorProfileHeader from "./PublicMentorProfileHeader";
 import MentorProfileTabs from "./MentorProfileTabs";
 import PricingCard from "./PricingCard";
+import BookingTrial from "./BookingTrial";
 import { packageService } from "../../Services/MentorshipPackageService";
 import MentorshipRequestModal from "./MentorshipRequestModal";
 
@@ -42,6 +44,18 @@ const MentorProfileComponent = () => {
     }
   }, [params.id]);
 
+  // Listen for public header request event to open the modal when header's Request is clicked
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const custom = e as CustomEvent;
+      if (custom?.detail?.mentorId === mentor?.id) {
+        setRequestModalOpen(true);
+      }
+    };
+    window.addEventListener('request-mentorship', handler as EventListener);
+    return () => window.removeEventListener('request-mentorship', handler as EventListener);
+  }, [mentor]);
+
   const fetchMentor = async () => {
     try {
       setLoading(true);
@@ -63,6 +77,22 @@ const MentorProfileComponent = () => {
       console.error("Error fetching mentor:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleBookTrial = async (selectedDate: string, selectedTime: string) => {
+    try {
+      // You can integrate with your booking API here
+      console.log("Booking trial session:", { mentorId: mentor?.id, date: selectedDate, time: selectedTime });
+      
+      // For now, just show an alert - replace with actual booking logic
+      alert(`Trial session booked with ${mentor?.name} for ${selectedDate} at ${selectedTime}!`);
+      
+      // Optional: Navigate to booking confirmation or calendar
+      // router.push(`/booking-confirmation?mentor=${mentor?.id}&date=${selectedDate}&time=${selectedTime}`);
+    } catch (error) {
+      console.error("Error booking trial session:", error);
+      alert("Failed to book trial session. Please try again.");
     }
   };
 
@@ -108,53 +138,34 @@ const MentorProfileComponent = () => {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'} font-['poppins']`}>
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-7xl mx-auto">
-          <div className={`${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'} rounded-xl overflow-hidden shadow-lg`}>
-            {mentor.profileBackground && (
-              <div className="h-48 sm:h-64 bg-gradient-to-r from-blue-500 to-purple-600 relative">
-                <img
-                  src={`data:image/png;base64,${mentor.profileBackground}`}
-                  alt="Profile background"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
-            
-            <div className="p-6 sm:p-8 lg:p-10">
-              <div className="flex flex-col xl:flex-row gap-6 lg:gap-8 xl:items-start">
-                <MentorProfileHeader mentor={mentor} />
-                
-                <div className="xl:w-2/3 w-full flex flex-col">
-                  <div className="flex flex-col gap-3 w-full max-w-sm mb-6 xl:self-end">
-                    <Button
-                      size="lg"
-                      disabled={!mentor.isAvailable}
-                      onClick={() => setRequestModalOpen(true)}
-                      className="w-full"
-                    >
-                      {mentor.isAvailable ? "Request Mentorship" : "Currently Unavailable"}
-                    </Button>
-                  </div>
-                  
-                  {activePackageId && (
-                    <div className="mb-6">
-                      <PricingCard mentorId={Number(params.id)} packageId={activePackageId} basePricePerMonth={basePrice} />
-                    </div>
-                  )}
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-10">
+        <div className="max-w-5xl mx-auto space-y-6">
+          {/* Public-facing profile header matching the provided layout */}
+          <PublicMentorProfileHeader mentor={mentor} />
 
-                  <MentorProfileTabs 
-                    mentor={mentor} 
-                    activeTab={activeTab} 
-                    setActiveTab={setActiveTab} 
-                  />
-                </div>
-              </div>
+          {/* Booking Trial Component - positioned between header and tabs */}
+          <BookingTrial mentor={mentor} onBookTrial={handleBookTrial} />
+
+          {/* Availability and CTA are handled inside the header to form a single combined card */}
+
+          {/* Optional pricing card if package exists */}
+          {activePackageId && (
+            <div>
+              <PricingCard mentorId={Number(params.id)} packageId={activePackageId} basePricePerMonth={basePrice} />
             </div>
+          )}
+
+          {/* Keep tabs section below if you still want details on the same page */}
+          <div className={`${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'} rounded-xl shadow-sm p-4 sm:p-6`}>
+            <MentorProfileTabs 
+              mentor={mentor} 
+              activeTab={activeTab} 
+              setActiveTab={setActiveTab} 
+            />
           </div>
         </div>
       </div>
-      
+
       <MentorshipRequestModal
         opened={requestModalOpen}
         onClose={() => setRequestModalOpen(false)}

@@ -60,6 +60,7 @@ const MentorInfo = () => {
             location: profile.location || mentor.location,
             bio: profile.about || mentor.bio,
             picture: profile.picture || mentor.picture || "",
+            profileBackground: profile.profileBackground || mentor.profileBackground || "",
             skills: profile.skills || mentor.skills || [],
             totalExp: profile.totalExp || mentor.totalExp || 0,
             // Add experiences and certifications sync
@@ -70,6 +71,7 @@ const MentorInfo = () => {
           // Only update if there are actual changes
           const hasChanges = 
             mentor.picture !== updatedMentorData.picture ||
+            mentor.profileBackground !== updatedMentorData.profileBackground ||
             JSON.stringify(mentor.skills) !== JSON.stringify(updatedMentorData.skills) ||
             JSON.stringify(mentor.experiences) !== JSON.stringify(updatedMentorData.experiences) ||
             JSON.stringify(mentor.certifications) !== JSON.stringify(updatedMentorData.certifications) ||
@@ -92,7 +94,7 @@ const MentorInfo = () => {
       
       syncMentorWithProfile();
     }
-  }, [profile.picture, profile.skills, profile.experiences, profile.certifications, profile.totalExp, profile.name, profile.jobTitle, profile.company, profile.location, profile.about]);
+  }, [profile.picture, profile.profileBackground, profile.skills, profile.experiences, profile.certifications, profile.totalExp, profile.name, profile.jobTitle, profile.company, profile.location, profile.about]);
 
   const fetchMentorData = async () => {
     if (!user?.email) return;
@@ -137,6 +139,7 @@ const MentorInfo = () => {
           bio: profile.about || "",
           // Sync profile data
           picture: profile.picture || "",
+          profileBackground: profile.profileBackground || "",
           skills: profile.skills || [],
           experiences: profile.experiences || [],
           certifications: profile.certifications || [],
@@ -159,6 +162,7 @@ const MentorInfo = () => {
           bio: profile.about || "",
           // Sync profile data
           picture: profile.picture || "",
+          profileBackground: profile.profileBackground || "",
           skills: profile.skills || [],
           experiences: profile.experiences || [],
           certifications: profile.certifications || [],
@@ -194,6 +198,7 @@ const MentorInfo = () => {
         location: profile.location || mentorForm.location,
         bio: profile.about || mentorForm.bio,
         picture: profile.picture || "",
+        profileBackground: profile.profileBackground || "",
         skills: profile.skills || [],
         experiences: profile.experiences || [],
         certifications: profile.certifications || [],
