@@ -317,64 +317,7 @@ const MentorInfo = () => {
         </div>
       ) : (
         <div className="space-y-4">
-          {/* Mentor Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-cape-cod-900' : 'bg-gray-50'}`}>
-              <div className="flex items-center gap-2">
-                <IconUsers size={20} className="text-blue-500" />
-                <div>
-                  <Text size="sm" className={isDarkMode ? 'text-cape-cod-400' : 'text-gray-600'}>
-                    Active Mentees
-                  </Text>
-                  <Text size="lg" fw={700}>
-                    {mentor.currentMentees || 0}
-                  </Text>
-                </div>
-              </div>
-            </div>
-            
-            <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-cape-cod-900' : 'bg-gray-50'}`}>
-              <div className="flex items-center gap-2">
-                <IconStar size={20} className="text-yellow-500" />
-                <div>
-                  <Text size="sm" className={isDarkMode ? 'text-cape-cod-400' : 'text-gray-600'}>
-                    Rating
-                  </Text>
-                  <Text size="lg" fw={700}>
-                    4.8
-                  </Text>
-                </div>
-              </div>
-            </div>
-
-            <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-cape-cod-900' : 'bg-gray-50'}`}>
-              <div className="flex items-center gap-2">
-                <IconClock size={20} className="text-green-500" />
-                <div>
-                  <Text size="sm" className={isDarkMode ? 'text-cape-cod-400' : 'text-gray-600'}>
-                    Rate
-                  </Text>
-                  <Text size="lg" fw={700}>
-                    ₹{mentor.hourlyRate || 0}/hr
-                  </Text>
-                </div>
-              </div>
-            </div>
-
-            <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-cape-cod-900' : 'bg-gray-50'}`}>
-              <div className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${mentor.isAvailable ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                <div>
-                  <Text size="sm" className={isDarkMode ? 'text-cape-cod-400' : 'text-gray-600'}>
-                    Status
-                  </Text>
-                  <Text size="lg" fw={700}>
-                    {mentor.isAvailable ? 'Available' : 'Busy'}
-                  </Text>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Mentor Stats removed as per request */}
 
           {/* Mentor Details */}
           <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-cape-cod-900' : 'bg-gray-50'}`}>

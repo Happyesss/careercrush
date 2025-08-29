@@ -29,14 +29,15 @@ const ExpInput = (props: any) => {
             company: isNotEmpty('This field is required'),
             location: isNotEmpty('This field is required'),
             description: isNotEmpty('This field is required'),
+            companyLogo: isNotEmpty('Company logo is required'),
         }
     });
 
     const handleCompanyLogoChange = async (image: File | null) => {
         if (!image) return;
         
-        if (image.size > 2 * 1024 * 1024) { // 2MB limit
-            successNotification('Company logo must be less than 2MB', 'Error');
+        if (image.size > 1 * 1024 * 1024) {
+            successNotification('Company logo must be less than 1MB', 'Error');
             return;
         }
 
@@ -93,9 +94,10 @@ const ExpInput = (props: any) => {
             />
             <div className={`${isDarkMode ? ' text-cape-cod-100 ' : 'text-cape-cod-900'}`}>
                 <FileInput
-                    label="Company Logo (Optional)"
+                    label="Company Logo"
                     placeholder="Upload company logo"
                     accept="image/*"
+                    withAsterisk
                     onChange={handleCompanyLogoChange}
                     leftSection={<IconUpload size={16} />}
                     styles={() => ({
@@ -107,7 +109,7 @@ const ExpInput = (props: any) => {
                     })}
                 />
                 {form.getValues().companyLogo && (
-                    <div className="mt-2">
+                    <div className={`mt-2 ${isDarkMode ? '' : 'bg-white p-1 rounded'}`}>
                         <img
                             src={`data:image/jpeg;base64,${form.getValues().companyLogo}`}
                             alt="Company logo preview"

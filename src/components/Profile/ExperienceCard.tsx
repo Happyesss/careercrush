@@ -6,11 +6,13 @@ import { formatDate } from "../../Services/Utilities";
 import { useDispatch, useSelector } from "react-redux";
 import { successNotification } from "../../Services/NotificationService";
 import { changeProfile } from "../../Slices/ProfileSlice";
+import { useTheme } from "../../ThemeContext";
 
 const ExperienceCard = (props:any) => {
   const dispatch = useDispatch();
   const [edit, setEdit] = useState(false);
   const profile = useSelector((state: any) => state.profile);
+  const { isDarkMode } = useTheme();
   const handleDelete = () => {
     let exp = [...profile.experiences];
     exp.splice(props.index, 1);
@@ -23,7 +25,7 @@ const ExperienceCard = (props:any) => {
     !edit?<div className="flex flex-col gap-2">
         <div className="flex justify-between">
           <div className="flex gap-2 items-center">
-            <div className="p-2 bg-cape-cod-800 rounded-md">
+            <div className={`p-2 rounded-md ${isDarkMode ? 'bg-cape-cod-800' : 'bg-gray-100'}`}>
               {props.companyLogo ? (
                 <img 
                   className="h-7 w-7 object-cover rounded" 

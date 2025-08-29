@@ -25,23 +25,24 @@ const CertificateInput = (props: any) => {
       name: isNotEmpty('This field is required'),
       issuer: isNotEmpty('This field is required'),
       certificateID: isNotEmpty('This field is required'),
+      certificateImage: isNotEmpty('Certificate badge is required'),
     }
   });
 
   const handleCertificateImageChange = async (image: File | null) => {
     if (!image) return;
     
-    if (image.size > 2 * 1024 * 1024) { // 2MB limit
-      successNotification('Certificate image must be less than 2MB', 'Error');
+    if (image.size > 1 * 1024 * 1024) { // 1MB limit
+      successNotification('Certificate badge must be less than 1MB', 'Error');
       return;
     }
 
     try {
       let certificateImage: any = await getBase64(image);
       form.setFieldValue('certificateImage', certificateImage.split(',')[1]);
-      successNotification('Certificate image uploaded successfully', 'Success');
+      successNotification('Certificate badge uploaded successfully', 'Success');
     } catch (error) {
-      successNotification('Failed to upload certificate image', 'Error');
+      successNotification('Failed to upload certificate badge', 'Error');
     }
   };
 
@@ -88,9 +89,10 @@ const CertificateInput = (props: any) => {
       </div>
       <div className={`${isDarkMode ? ' text-cape-cod-100 ' : 'text-cape-cod-900'}`}>
         <FileInput
-          label="Certificate Image (Optional)"
-          placeholder="Upload certificate image"
+          label="Certificate Badge"
+          placeholder="Upload certificate Badge"
           accept="image/*"
+          withAsterisk
           onChange={handleCertificateImageChange}
           leftSection={<IconUpload size={16} />}
           styles={() => ({
@@ -102,7 +104,7 @@ const CertificateInput = (props: any) => {
           })}
         />
         {form.getValues().certificateImage && (
-          <div className="mt-2">
+          <div className={`mt-2 ${isDarkMode ? '' : 'bg-white p-1 rounded'}`}>
             <img
               src={`data:image/jpeg;base64,${form.getValues().certificateImage}`}
               alt="Certificate preview"

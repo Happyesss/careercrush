@@ -458,46 +458,7 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
   return (
     <Container size="xl" className={styles.container}>
       <Stack gap="xl">
-        {/* Header */}
-        <Paper p="xl" radius="lg" className={styles.headerSection} withBorder>
-          <Group justify="space-between">
-            <div>
-              <Group gap="sm" mb="xs">
-                <ThemeIcon variant="gradient" gradient={{ from: 'blue', to: 'cyan' }} size="lg">
-                  <IconCalendarTime size={24} />
-                </ThemeIcon>
-                <Title order={2} className={styles.title}>Trial Session Management</Title>
-              </Group>
-              <Text c="dimmed" size="lg">
-                Manage your trial session availability and bookings
-              </Text>
-            </div>
-            
-            <Group gap="md">
-              <Button
-                variant="gradient"
-                gradient={{ from: 'blue', to: 'cyan' }}
-                leftSection={<IconPlus size={16} />}
-                onClick={() => setBatchCreateModalOpen(true)}
-                radius="md"
-                size="md"
-                className={styles.primaryButton}
-              >
-                Batch Create Slots
-              </Button>
-              <Button
-                variant="outline"
-                color="blue"
-                onClick={fetchSessions}
-                radius="md"
-                size="md"
-                loading={loading}
-              >
-                Refresh
-              </Button>
-            </Group>
-          </Group>
-        </Paper>
+        {/* Header removed - title moved into filters area */}
 
         {/* Filters */}
         <Paper p="lg" radius="lg" withBorder className={styles.filtersSection}>
@@ -544,14 +505,30 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
               </Button>
             </div>
             </div>
-            <Badge
-              variant="gradient"
-              gradient={{ from: 'blue', to: 'cyan' }}
-              size="lg"
-              className={styles.sessionsBadge}
-            >
-              {filteredSessions.length} {filteredSessions.length === 1 ? 'session' : 'sessions'}
-            </Badge>
+            <Group align="center" gap="sm">
+              <Badge
+                variant="gradient"
+                gradient={{ from: 'blue', to: 'cyan' }}
+                size="lg"
+                className={styles.sessionsBadge}
+              >
+                {filteredSessions.length} {filteredSessions.length === 1 ? 'session' : 'sessions'}
+              </Badge>
+
+              <Group>
+                <Button
+                  variant="gradient"
+                  gradient={{ from: 'blue', to: 'cyan' }}
+                  leftSection={<IconPlus size={16} />}
+                  onClick={() => setBatchCreateModalOpen(true)}
+                  radius="md"
+                  size="md"
+                  className={styles.primaryButton}
+                >
+                  Batch Create Slots
+                </Button>
+              </Group>
+            </Group>
           </Group>
         </Paper>
 
