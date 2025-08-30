@@ -4,24 +4,10 @@ import { useState, useEffect } from "react";
 import { useTheme } from "../../ThemeContext";
 import { Mentor } from "../../types/mentor";
 import { IconClock, IconUser, IconCalendar } from "@tabler/icons-react";
-import axiosInstance from "../../Interceptor/AxiosInterceptor";
+import trialSessionService from "../../Services/TrialSessionService";
+import { TrialSession } from "../../types/mentorshipPackages";
 
-// TrialSessionDTO interface
-interface TrialSessionDTO {
-  id?: number;
-  mentorId: number;
-  scheduledDateTime: string;
-  durationMinutes: number;
-  status: 'AVAILABLE' | 'BOOKED' | 'COMPLETED' | 'CANCELLED';
-  sessionType?: string;
-  menteeEmail?: string;
-  menteeName?: string;
-  menteePhone?: string;
-  notes?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
+// Use TrialSession interface from types
 type Props = {
   mentor: Mentor;
   onBookTrial?: (selectedDate: string, selectedTime: string) => void;
@@ -32,7 +18,7 @@ interface AvailableSlot {
   dayName: string;
   day: number;
   month: string;
-  slots: TrialSessionDTO[];
+  slots: TrialSession[];
   times: string[];
 }
 
@@ -61,14 +47,13 @@ export default function BookingTrial({ mentor, onBookTrial }: Props) {
       // Convert mentor.id to number if it's a string
       const mentorId = typeof mentor.id === 'string' ? parseInt(mentor.id) : mentor.id;
       
-      // Get available sessions from API
-      const response = await axiosInstance.get(`/trial-sessions/mentor/${mentorId}/available`);
-      const sessions: TrialSessionDTO[] = response.data;
+      // 🌐 Get available sessions using the public endpoint
+      const sessions: TrialSession[] = await trialSessionService.getAvailableSessionsByMentor(mentorId);
       
       // Group sessions by date
       const slotsMap = new Map<string, AvailableSlot>();
       
-      sessions.forEach((session: TrialSessionDTO) => {
+      sessions.forEach((session: TrialSession) => {
         const sessionDate = new Date(session.scheduledDateTime);
         const dateString = sessionDate.toISOString().split('T')[0];
         const timeString = sessionDate.toLocaleTimeString('en-US', { 
@@ -126,15 +111,13 @@ export default function BookingTrial({ mentor, onBookTrial }: Props) {
       if (onBookTrial) {
         onBookTrial(selectedDate, selectedTime);
       } else {
-        // Call the actual booking API
-        const params = new URLSearchParams({
+        // 🌐 Call the booking API using the service
+        const bookedSession = await trialSessionService.bookTrialSession({
+          sessionId: selectedSessionId,
           menteeEmail,
-          menteeName
+          menteeName,
+          menteePhone
         });
-        if (menteePhone) params.append('menteePhone', menteePhone);
-        
-        const response = await axiosInstance.post(`/trial-sessions/book/${selectedSessionId}?${params}`);
-        const bookedSession = response.data;
         
         alert(`Trial session booked successfully! Session ID: ${bookedSession.id}`);
         

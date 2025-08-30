@@ -48,11 +48,11 @@ export interface MentorshipPackage {
 
 export enum TrialSessionStatus {
   AVAILABLE = 'AVAILABLE',
-  SCHEDULED = 'SCHEDULED',
   BOOKED = 'BOOKED',
   COMPLETED = 'COMPLETED',
   CANCELLED = 'CANCELLED',
-  NO_SHOW = 'NO_SHOW'
+  NO_SHOW = 'NO_SHOW',
+  RESCHEDULED = 'RESCHEDULED'
 }
 
 export interface TrialSession {
@@ -60,19 +60,20 @@ export interface TrialSession {
   mentorId: number;
   menteeId?: number;
   packageId?: number;
-  scheduledDateTime: Date;
+  scheduledDateTime: Date | string; // Accept both Date and string format
   durationMinutes: number;
   status: TrialSessionStatus;
-  sessionType: 'video' | 'audio' | 'chat';
+  sessionType: string; // Changed to string to match backend
   meetingLink?: string;
+  meetingId?: string;
+  meetingPassword?: string;
   notes?: string;
   menteeEmail?: string;
   menteeName?: string;
   menteePhone?: string;
-  menteeMessage?: string;
-  availableTimeSlots?: string[];
   createdAt?: string;
   updatedAt?: string;
+  completedAt?: string;
 }
 
 export interface PackageFilters {
@@ -125,7 +126,7 @@ export interface CreatePackageRequest {
 }
 
 export interface CreateTrialSlotRequest {
-  mentorId: number;
+  // mentorId is automatically set from JWT token in backend
   packageId?: number;
   scheduledDateTime: string;
   durationMinutes: number;

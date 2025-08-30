@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { Card, Group, Text, Button, Stack, Title, Badge, ActionIcon, Menu, Select, Grid, Modal, NumberInput, Container, Paper, Box, Divider, ThemeIcon, Flex } from '@mantine/core';
 import { IconPlus, IconCalendarTime, IconDots, IconEdit, IconTrash, IconClock, IconUser, IconMail, IconPhone, IconCalendar, IconFilter, IconCheck, IconX, IconEye } from '@tabler/icons-react';
 import { TrialSession, TrialSessionStatus } from '../../../types/mentorshipPackages';
-import { trialSessionService, packageUtils } from '../../../Services/MentorshipPackageService';
+import trialSessionService from '../../../Services/TrialSessionService';
+import { packageUtils } from '../../../Services/MentorshipPackageService';
 import { notifications } from '@mantine/notifications';
 import CustomCalendar from './CustomCalendar';
 import styles from './TrialSessionManager.module.css';
@@ -35,7 +36,8 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
   const fetchSessions = async () => {
     try {
       setLoading(true);
-      const data = await trialSessionService.getTrialSessionsByMentor(mentorId);
+      // 🔒 Use secure endpoint that gets sessions for authenticated mentor only
+      const data = await trialSessionService.getMyTrialSessions();
       setSessions(data || []);
     } catch (error) {
       console.error('Error fetching trial sessions:', error);
@@ -70,8 +72,8 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
 
   const handleCreateSlot = async (dateTime: Date, duration: number = 30) => {
     try {
+      // 🔒 No need to pass mentorId - backend gets it from JWT token
       await trialSessionService.createAvailableSlot({
-        mentorId,
         scheduledDateTime: dateTime.toISOString(),
         durationMinutes: duration,
         sessionType: 'Video Call',
@@ -97,7 +99,8 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
   const handleBatchCreateSlots = async (slots: Date[], duration: number = 30) => {
     try {
       const dateTimeStrings = slots.map(slot => slot.toISOString());
-      await trialSessionService.createMultipleAvailableSlots(mentorId, dateTimeStrings, duration);
+      // 🔒 No need to pass mentorId - backend gets it from JWT token
+      await trialSessionService.createMultipleAvailableSlots(dateTimeStrings, duration);
       
       notifications.show({
         title: 'Success',
@@ -109,13 +112,26 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
       setSelectedSlots([]);
       // Refetch sessions to show the newly created ones
       await fetchSessions();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating trial slots:', error);
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to create trial slots',
-        color: 'red',
-      });
+      
+      // Handle specific mentor profile error
+      if (error.response?.status === 404 || 
+          error.response?.data?.includes?.('MENTOR_PROFILE_NOT_FOUND') ||
+          error.response?.data?.includes?.('does not have a mentor profile')) {
+        notifications.show({
+          title: 'Mentor Profile Required',
+          message: 'You need to create a mentor profile before creating trial sessions. Please complete your mentor profile setup first.',
+          color: 'orange',
+          autoClose: 8000,
+        });
+      } else {
+        notifications.show({
+          title: 'Error',
+          message: 'Failed to create trial slots. Please try again.',
+          color: 'red',
+        });
+      }
     }
   };
 

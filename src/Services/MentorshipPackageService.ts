@@ -120,15 +120,14 @@ export const packageService = {
 
 // Trial Session API endpoints
 export const trialSessionService = {
-  // Create available trial session slot
+  // 🔒 SECURE: Create available trial session slot (requires JWT)
   createAvailableSlot: async (slotData: CreateTrialSlotRequest): Promise<TrialSession> => {
     const response = await axios.post(`${API_BASE_URL}/trial-sessions/create-slot`, slotData);
     return response.data;
   },
 
-  // Create multiple available slots for a mentor
+  // 🔒 SECURE: Create multiple available slots for authenticated mentor (requires JWT)
   createMultipleAvailableSlots: async (
-    mentorId: number,
     dateTimeSlots: string[],
     durationMinutes: number = 30
   ): Promise<TrialSession[]> => {
@@ -136,13 +135,36 @@ export const trialSessionService = {
       `${API_BASE_URL}/trial-sessions/create-multiple-slots`,
       dateTimeSlots,
       {
-        params: { mentorId, durationMinutes }
+        params: { durationMinutes }
       }
     );
     return response.data;
   },
 
-  // Book a trial session
+  // 🔒 SECURE: Get my trial sessions (requires JWT)
+  getMyTrialSessions: async (): Promise<TrialSession[]> => {
+    const response = await axios.get(`${API_BASE_URL}/trial-sessions/mentor/my-sessions`);
+    return response.data;
+  },
+
+  // 🔒 SECURE: Get my available sessions (requires JWT)
+  getMyAvailableSessions: async (): Promise<TrialSession[]> => {
+    const response = await axios.get(`${API_BASE_URL}/trial-sessions/mentor/my-available`);
+    return response.data;
+  },
+
+  // 🔒 SECURE: Update trial session (requires JWT + ownership validation)
+  updateTrialSession: async (id: number, sessionData: Partial<TrialSession>): Promise<TrialSession> => {
+    const response = await axios.put(`${API_BASE_URL}/trial-sessions/update/${id}`, sessionData);
+    return response.data;
+  },
+
+  // 🔒 SECURE: Delete trial session (requires JWT + ownership validation)
+  deleteTrialSession: async (id: number): Promise<void> => {
+    await axios.delete(`${API_BASE_URL}/trial-sessions/delete/${id}`);
+  },
+
+  // 🌐 PUBLIC: Book a trial session (no auth required - for mentees)
   bookTrialSession: async (bookingData: TrialBookingRequest): Promise<TrialSession> => {
     const { sessionId, ...params } = bookingData;
     const response = await axios.post(
@@ -153,19 +175,19 @@ export const trialSessionService = {
     return response.data;
   },
 
-  // Get trial session by ID
+  // 🌐 PUBLIC: Get trial session by ID
   getTrialSessionById: async (id: number): Promise<TrialSession> => {
     const response = await axios.get(`${API_BASE_URL}/trial-sessions/get/${id}`);
     return response.data;
   },
 
-  // Get available trial sessions for a mentor
+  // 🌐 PUBLIC: Get available trial sessions for a mentor (for booking by mentees)
   getAvailableSessionsByMentor: async (mentorId: number): Promise<TrialSession[]> => {
     const response = await axios.get(`${API_BASE_URL}/trial-sessions/mentor/${mentorId}/available`);
     return response.data;
   },
 
-  // Get all trial sessions for a mentor
+  // 🌐 PUBLIC: Get all trial sessions for a mentor (public profile view)
   getTrialSessionsByMentor: async (mentorId: number): Promise<TrialSession[]> => {
     const response = await axios.get(`${API_BASE_URL}/trial-sessions/mentor/${mentorId}`);
     return response.data;
@@ -199,12 +221,6 @@ export const trialSessionService = {
     return response.data;
   },
 
-  // Create a trial session (for booking)
-  createTrialSession: async (sessionData: Partial<TrialSession>): Promise<TrialSession> => {
-    const response = await axios.post(`${API_BASE_URL}/trial-sessions/create`, sessionData);
-    return response.data;
-  },
-
   // Update trial session status
   updateTrialSessionStatus: async (id: number, status: string): Promise<TrialSession> => {
     const response = await axios.put(`${API_BASE_URL}/trial-sessions/update-status/${id}`, {}, {
@@ -225,11 +241,6 @@ export const trialSessionService = {
       params: { notes }
     });
     return response.data;
-  },
-
-  // Delete trial session
-  deleteTrialSession: async (id: number): Promise<void> => {
-    await axios.delete(`${API_BASE_URL}/trial-sessions/delete/${id}`);
   },
 };
 
