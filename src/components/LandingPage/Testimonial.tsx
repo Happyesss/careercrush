@@ -1,4 +1,6 @@
 import { useTheme } from "../../ThemeContext";
+import Dot from "./Dot";
+import Heading from "./Heading";
 
 interface UserTestimonial {
   id: number;
@@ -41,41 +43,34 @@ export default function AppTestimonials() {
 
   return (
     <section
-      className={`relative py-24 px-4 sm:px-6 lg:px-8 ${
+      className={`relative py-10 pb-28 px-4 sm:px-6 lg:px-8 ${
         isDarkMode ? "text-white" : " text-black"
       }`}
     >
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold sm:text-4xl">
-            Loved by 
-            <span className="text-red-400"> 25,000+ </span>
-             Users
-          </h2>
-          <p className="mt-4 text-lg">
-            See what people say about our web app
-          </p>
+
+      <div className="max-w-7xl flex items-center flex-col  mx-auto">
+
+        <div className="flex items-center justify-center">
+                <Dot name="Testimonial"/>
+
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {testimonials.map((testimonial) => (
+
+       <Heading heading={"Loved by 25,000+ Users"} subheading={"See what people say about our web app"}/>
+
+        <div className="grid gap-8 items-center w-[85%] md:grid-cols-2 mt-20 lg:grid-cols-3">
+          {testimonials.map((testimonial, index) => (
             <div
               key={testimonial.id}
-              className={`relative rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border ${
-                isDarkMode
+              className={`relative flex  flex-col justify-between  rounded-xl p-6 h-[350px]  hover:shadow-2xl transition-all duration-300 border ${
+                index === 1
+                  ? "bg-primary dark:bg-third text-white border-transparent"
+                  : isDarkMode
                   ? "bg-cape-cod-800 border-gray-700"
                   : "bg-white border-gray-100"
               }`}
             >
-              <div className="absolute top-0 right-0 -mt-4 mr-6">
-                <span
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    isDarkMode ? "bg-blue-600 text-gray-200" : "bg-blue-500 text-white"
-                  }`}
-                >
-                  {testimonial.rating}/5
-                </span>
-              </div>
+             
               <div className="flex items-center mb-6">
                 <img
                   className={`w-12 h-12 rounded-full object-cover border-2 ${
@@ -85,46 +80,22 @@ export default function AppTestimonials() {
                   alt={testimonial.name}
                 />
                 <div className="ml-4">
-                  <h3 className="text-lg font-semibold">{testimonial.name}</h3>
-                  <p className="text-sm">
+                  <h3 className="text-lg font-semibold tracking-tight">{testimonial.name}</h3>
+                  <p className="text-sm tracking-tight">
                     {testimonial.role}
                   </p>
                 </div>
               </div>
-              <p className="mb-6 relative">
-                <span
-                  className={`absolute -left-4 text-3xl ${
-                    isDarkMode ? "text-gray-500" : "text-gray-300"
-                  }`}
-                >
-                  “
-                </span>
-                {testimonial.text}
-                <span
-                  className={`absolute -right-4 bottom-0 text-3xl ${
-                    isDarkMode ? "text-gray-500" : "text-gray-300"
-                  }`}
-                >
-                  ”
-                </span>
-              </p>
-              <div className="flex items-center text-sm">
-                <svg
-                  className={`w-5 h-5 mr-1 ${
-                    isDarkMode ? "text-indigo-400" : "text-indigo-500"
-                  }`}
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path
-                    fillRule="evenodd"
-                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Verified User
+
+              <div>
+                   <p className="tracking-tight font-medium relative ">
+               
+                      {testimonial.text}
+                  
+                     </p>
               </div>
+             
+           
             </div>
           ))}
         </div>

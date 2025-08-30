@@ -5,6 +5,8 @@ import webdevImage from '../../assets/images/webdevimg.png'
 import hackathonImage from '../../assets/images/hackathon.png'
 import { useTheme } from "../../ThemeContext";
 import { Loder } from "./Loder";
+import Dot from "./Dot";
+import Heading from './Heading'
 
 const quickItems = [
     {
@@ -54,48 +56,86 @@ const quickItems = [
 const QuickSection = () => {
     const { isDarkMode } = useTheme();
     return (
-        <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 gap-10 px-4 py-16 rounded-xl">
-        {/* Left Section: Text */}
-        <div className="flex flex-col justify-center space-y-6">
-          <h1 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold text-center sm:text-left ${isDarkMode ? 'text-cape-cod-100' : 'text-cape-cod-900'}`}>
-            Top Categories &
-            <span className="relative inline-block before:absolute before:-inset-1 before:block before:-skew-y-3 text-cape-cod-900 before:bg-blue-300">
-                        <span className="relative">Companies </span>
-                    </span>
-                    Searched
-          </h1>
-          <p className={`text-sm sm:text-base md:text-lg text-center sm:text-left ${isDarkMode ? 'text-cape-cod-300' : 'text-cape-cod-700'}`}>
-            Explore a wide range of categories and find your perfect fit. Whether you&apos;re looking for a career in design, development, or marketing, we have something for everyone.
-            <br /> Discover the latest trends and opportunities in your field of interest.
-          </p>
-          <div className="flex justify-center sm:justify-start">
-           <Loder />
-          </div>
-        </div>
+      //   <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 gap-10 px-4 py-16 rounded-xl">
+      //   {/* Left Section: Text */}
+      //   <div className="flex flex-col justify-center space-y-6">
+      //     <h1 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold text-center sm:text-left ${isDarkMode ? 'text-cape-cod-100' : 'text-cape-cod-900'}`}>
+      //       Top Categories &
+      //       <span className="relative inline-block before:absolute before:-inset-1 before:block before:-skew-y-3 text-cape-cod-900 before:bg-blue-300">
+      //                   <span className="relative">Companies </span>
+      //               </span>
+      //               Searched
+      //     </h1>
+      //     <p className={`text-sm sm:text-base md:text-lg text-center sm:text-left ${isDarkMode ? 'text-cape-cod-300' : 'text-cape-cod-700'}`}>
+      //       Explore a wide range of categories and find your perfect fit. Whether you&apos;re looking for a career in design, development, or marketing, we have something for everyone.
+      //       <br /> Discover the latest trends and opportunities in your field of interest.
+      //     </p>
+      //     <div className="flex justify-center sm:justify-start">
+      //      <Loder />
+      //     </div>
+      //   </div>
       
-        {/* Right Section: Always Two Columns */}
-        <div className="grid grid-cols-2 gap-4 sm:gap-6">
-          {quickItems.map((item, index) => (
+      //   {/* Right Section: Always Two Columns */}
+      //   <div className="grid grid-cols-2 gap-4 sm:gap-6">
+      //     {quickItems.map((item, index) => (
+      //       <div
+      //         key={index}
+      //         className="relative p-3 sm:p-4 rounded-xl shadow-md hover:shadow-lg transition-transform duration-300 hover:-translate-y-1 min-h-[120px] sm:min-h-[140px] flex flex-col justify-between"
+      //         style={{ background: item.bg }}
+      //       >
+      //         <div>
+      //           <span className="text-cape-cod-700 text-lg sm:text-2xl mb-2 inline-block">
+      //             {item.icon}
+      //           </span>
+      //           <h5 className="text-cape-cod-900 text-sm sm:text-base font-semibold">{item.title}</h5>
+      //           <p className="text-cape-cod-800 text-xs sm:text-sm">{item.description}</p>
+      //         </div>
+      //         <img
+      //           src={typeof item.image === 'string' ? item.image : (item.image as any)?.src ?? (item.image as any)?.default ?? ''}
+      //           alt={item.title}
+      //           className="absolute top-2 right-2 w-12 h-12 sm:w-14 sm:h-14 object-cover rounded-lg border border-white shadow"
+      //         />
+      //       </div>
+      //     ))}
+      //   </div>
+      // </div>
+
+
+      <div className="flex flex-col items-center mt-20">
+
+            <Dot name="About us"/>
+
+            <Heading heading={"Empowering Ambitions. Transforming Careers"} subheading={"We believe that everyone deserves the chance to land their dream job, role, and company"}/>
+
+
+
+            <div className="grid w-[75%] mt-10 grid-cols-1 md:grid-cols-3  gap-8 sm:gap-6">
+           {quickItems.map((item, index) => (
             <div
               key={index}
-              className="relative p-3 sm:p-4 rounded-xl shadow-md hover:shadow-lg transition-transform duration-300 hover:-translate-y-1 min-h-[120px] sm:min-h-[140px] flex flex-col justify-between"
-              style={{ background: item.bg }}
+              className="relative h-[250px] bg-white dark:bg-third  p-5 rounded-xl  hover:shadow-lg transition-transform duration-300 hover:-translate-y-1  flex flex-col justify-between"
+            
             >
-              <div>
-                <span className="text-cape-cod-700 text-lg sm:text-2xl mb-2 inline-block">
+              <div className="flex flex-col justify-between h-full ">
+
+                <span className="text-primary ">
                   {item.icon}
                 </span>
-                <h5 className="text-cape-cod-900 text-sm sm:text-base font-semibold">{item.title}</h5>
-                <p className="text-cape-cod-800 text-xs sm:text-sm">{item.description}</p>
+                <div>
+                       <h5 className="text-black text-2xl font-medium tracking-tighter mb-2">{item.title}</h5>
+                       <p className="text-lightBlack text-xs sm:text-sm">{item.description}</p>  
+                </div>
+             
               </div>
-              <img
-                src={typeof item.image === 'string' ? item.image : (item.image as any)?.src ?? (item.image as any)?.default ?? ''}
-                alt={item.title}
-                className="absolute top-2 right-2 w-12 h-12 sm:w-14 sm:h-14 object-cover rounded-lg border border-white shadow"
-              />
+              
             </div>
           ))}
         </div>
+
+
+
+            
+
       </div>
     );
 };

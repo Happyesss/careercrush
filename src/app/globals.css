@@ -3,18 +3,31 @@
 @tailwind utilities;
 
 :root {
+  --color-primary: #fc743e; /* Claude primary */
+  --color-secondary: #faf9f5; /* Claude secondary */
+  --color-blackk: #000;
+  --color-lightBlack : #585d60d5;
+
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.dark {
+  --color-primary: #d67757; /* darker orange for dark mode */
+  --color-secondary: #262624; /* muted dark background */
+  --color-blackk: #fff;
+  --color-lightBlack : #d5daded5;
+  --color-third:#201e1c;
+
+  
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
 }
+
+
+
 
 body {
   color: rgb(var(--foreground-rgb));
@@ -31,3 +44,4 @@ body {
     text-wrap: balance;
   }
 }
+

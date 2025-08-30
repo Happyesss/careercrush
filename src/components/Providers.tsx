@@ -19,7 +19,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   const theme = createTheme({
     focusRing: "never",
-    fontFamily: 'Poppins, sans-serif',
+    fontFamily: 'var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+    headings: {
+      fontFamily: 'var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+    },
     primaryColor: 'blue',
     primaryShade: 4, 
     colors: {

@@ -23,10 +23,10 @@ const ProfileMenu = () => {
   };
 
   return (
-    <Menu shadow="md" width={200} opened={opened} onChange={setOpened}>
+    <Menu shadow="md" width={220} opened={opened} onChange={setOpened}>
       <Menu.Target>
         <div className="flex gap-2 items-center cursor-pointer">
-          <div className='xs-mx:hidden'>{profile.name}</div>
+          <div className='xs-mx:hidden text-black dark:text-primary text-sm'>{profile.name}</div>
           <Avatar
             src={profile.picture ? `data:image/jpeg;base64,${profile.picture}` : ((): string => { const mod = require(`../../assets/images/avatar.png`); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()}
             alt=""
@@ -34,22 +34,21 @@ const ProfileMenu = () => {
         </div>
       </Menu.Target>
 
-      <Menu.Dropdown onChange={() => setOpened(true)} bg="blue.1" >
+      <Menu.Dropdown onChange={() => setOpened(true)} className="bg-white dark:bg-third text-primary  dark:text-primary border border-black/10 dark:border-white/10 rounded-md">
         <Link href="/profile">
-          <Menu.Item leftSection={<IconUserCircle size={14} />}>
+          <Menu.Item leftSection={<IconUserCircle size={16} />} className="hover:bg-primary/10 dark:text-primary dark:hover:bg-secondary">
             Profile
           </Menu.Item>
         </Link>
-
         <Link href="/job-gallery">
-          <Menu.Item leftSection={<IconBrandAppgallery size={14} />}>
+          <Menu.Item leftSection={<IconBrandAppgallery size={16} />} className="hover:bg-primary/10 dark:text-primary dark:hover:bg-secondary">
             Gallery
           </Menu.Item>
         </Link>
 
         {/* Dark Mode Toggle */}
         <Menu.Item
-          leftSection={<IconSun size={14} />}
+          leftSection={<IconSun size={16} className="text-primary" />}
           rightSection={
             <Switch
               checked={isDarkMode}
@@ -57,27 +56,19 @@ const ProfileMenu = () => {
               size="md"
               color="dark.4"
               onLabel={
-                <IconSun
-                  style={{ width: rem(16), height: rem(16) }}
-                  stroke={2.5}
-                  color="var(--mantine-color-yellow-4)"
-                />
+                <IconSun style={{ width: rem(16), height: rem(16) }} stroke={2.5} className="text-primary" />
               }
               offLabel={
-                <IconMoonStars
-                  size={16}
-                  stroke={2.5}
-                  color="var(--mantine-color-blue-6)"
-                />
+                <IconMoonStars size={16} stroke={2.5} className="text-primary" />
               }
             />
           }
+          className="hover:bg-primary/1 dark:text-primary dark:hover:bg-secondary"
         >
-          Dark Mode
+          Theme
         </Menu.Item>
 
-        <Menu.Divider />
-        <Menu.Item onClick={handleLogout} color="red" leftSection={<IconLogout size={14} />}>
+        <Menu.Item onClick={handleLogout} leftSection={<IconLogout size={16} />} className="text-red-500 dark:text-primary hover:bg-red-500/10">
           Logout
         </Menu.Item>
       </Menu.Dropdown>

@@ -35,10 +35,10 @@ const FAQs = () => {
   };
 
   return (
-    <div className={`mt-20 pb-20 ${isDarkMode ? 'bg-cape-cod-950 text-white' : 'bg-transparent text-black'}`}>
+    <div className={`mt-20 pb-20 ${isDarkMode ? 'bg-secondary text-primary' : 'bg-transparent text-black'}`}>
       <div className="text-center mb-16">
         <h1 className={`text-4xl font-semibold ${isDarkMode ? 'text-white' : 'text-cape-cod-900'}`}>
-          Frequently Asked <span className="text-blue-400">Questions</span>
+          Frequently Asked <span className="text-primary">Questions</span>
         </h1>
         <p className={`text-lg mt-4 ${isDarkMode ? 'text-cape-cod-200' : 'text-cape-cod-300'} max-w-2xl mx-auto`}>
           Find answers to common questions about our platform.
@@ -48,10 +48,10 @@ const FAQs = () => {
         {faqs.map((faq, index) => (
           <div key={index} className="mb-6">
             <button
-              className={`w-full text-left p-4 rounded-lg ${isDarkMode ? 'bg-cape-cod-800 text-white' : 'bg-white text-cape-cod-900'} focus:outline-none`}
+              className={`w-full text-left p-4 rounded-lg  ${isDarkMode ? 'bg-third text-white' : 'bg-white text-cape-cod-900'} focus:outline-none`}
               onClick={() => toggleFAQ(index)}
             >
-              <h2 className="text-xl font-semibold">{faq.question}</h2>
+              <h2 className="text-md font-semibold ">{faq.question}</h2>
             </button>
             {activeIndex === index && (
               <div className={`p-4 ${isDarkMode ? 'bg-cape-cod-900 text-cape-cod-200' : 'bg-cape-cod-50 text-cape-cod-700'}`}>

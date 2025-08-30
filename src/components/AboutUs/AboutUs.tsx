@@ -14,97 +14,88 @@ export function AboutUs() {
 
   return (
     <div
-      className={`min-h-screen ${
-        isDarkMode
-          ? "bg-cape-cod-950 text-white"
-          : "bg-gradient-to-b from-indigo-50 to-purple-50 text-black"
+      className={`min-h-screen pt-28 relative overflow-hidden ${
+        isDarkMode ? "bg-secondary text-white" : "bg-secondary text-black"
       }`}
     >
+      {/* Decorative blobs */}
+      <div className="pointer-events-none absolute -top-24 -right-20 w-[420px] h-[420px] rounded-full blur-3xl opacity-30 bg-primary/40 animate-pulse" />
+      <div className="pointer-events-none absolute -bottom-24 -left-20 w-[380px] h-[380px] rounded-full blur-3xl opacity-30 bg-primary/30 animate-pulse" />
+
       {/* Hero Section */}
-      <div className="py-16 px-4 text-center sm:px-6 md:px-10">
-        <div className="max-w-4xl mx-auto">
-          <IconPlant size={48} className="mb-6 text-green-600 mx-auto" />
-          <h1
-            className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-6 ${
-              isDarkMode ? "text-white" : "text-gray-800"
-            }`}
-          >
-            Growing Together in the Digital Soil
+      <div className="py-16 px-4 sm:px-6 md:px-10 relative">
+        <div className="max-w-5xl mx-auto text-center">
+          <span className="inline-flex items-center gap-2 bg-primary/10 text-primary rounded-full px-3 py-1 text-xs font-medium">Rooted in growth</span>
+          <h1 className="mt-5 text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight">
+            Growing together in the digital soil
           </h1>
-          <p
-            className={`text-base sm:text-lg md:text-xl mb-8 ${
-              isDarkMode ? "text-cape-cod-200" : "text-gray-600"
-            }`}
-          >
-            At Stemlen, we&apos;re cultivating an ecosystem where minds connect,
-            collaborate, and climb new heights together. Like the stem of a
-            plant, we support growth in every direction.
+          <p className={`mt-4 text-base sm:text-lg md:text-xl ${isDarkMode ? 'text-white/70' : 'text-lightBlack'}`}>
+            At CareerCrush, we cultivate a thriving ecosystem where talent, opportunity, and collaboration meet.
           </p>
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <button className="bg-primary text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:opacity-90 transition">Join community</button>
+            <button className={`px-5 py-2.5 rounded-md text-sm font-semibold border ${isDarkMode ? 'border-white/20 text-white hover:bg-white/5' : 'border-black/10 text-black hover:bg-black/5'} transition`}>Learn more</button>
+          </div>
         </div>
       </div>
 
-      {/* Core Values */}
-      <div
-        className={`py-16 px-4 sm:px-6 md:px-10 ${
-          isDarkMode ? "bg-cape-cod-900" : "bg-white"
-        }`}
-      >
+      {/* Stats Row */}
+      <div className="px-4 sm:px-6 md:px-10">
+        <div className={`max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 rounded-2xl ${isDarkMode ? 'bg-white/5' : 'bg-white'} p-6 border ${isDarkMode ? 'border-white/10' : 'border-black/5'}`}>
+          {[
+            { label: 'Active members', value: '25k+' },
+            { label: 'Hackathons', value: '300+' },
+            { label: 'Hiring partners', value: '120+' },
+            { label: 'Projects shipped', value: '4k+' },
+          ].map((s, i) => (
+            <div key={i} className="text-center">
+              <div className="text-2xl sm:text-3xl font-bold">{s.value}</div>
+              <div className={`text-xs mt-1 ${isDarkMode ? 'text-white/60' : 'text-lightBlack'}`}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Core Values - refreshed cards */}
+      <div className="py-16 px-4 sm:px-6 md:px-10">
         <div className="max-w-7xl mx-auto">
-          <h2
-            className={`text-2xl sm:text-3xl font-bold text-center mb-12 ${
-              isDarkMode ? "text-white" : "text-gray-800"
-            }`}
-          >
-            Our Core Values
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12">Our core values</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {[
-              {
-                title: "Connect",
-                icon: <IconUsers size={36} className="text-indigo-600" />,
-                desc: "Bridge brilliant minds across disciplines. Find mentors, collaborators, and friends who share your passion.",
-                bg: "bg-indigo-100",
-              },
-              {
-                title: "Collaborate",
-                icon: <IconCode size={36} className="text-green-600" />,
-                desc: "Build amazing projects through hackathons, team challenges, and open-source initiatives.",
-                bg: "bg-green-100",
-              },
-              {
-                title: "Grow",
-                icon: <IconTrendingUp size={36} className="text-purple-600" />,
-                desc: "Access curated opportunities, resources, and mentorship to accelerate your career growth.",
-                bg: "bg-purple-100",
-              },
-            ].map((val, i) => (
-              <div
-                key={i}
-                className={`rounded-lg shadow-sm p-6 hover:shadow-lg transition-shadow ${
-                  isDarkMode ? "bg-cape-cod-800" : "bg-cape-cod-10"
-                }`}
-              >
-                <div className="text-center">
-                  <div
-                    className={`${val.bg} w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-6`}
-                  >
-                    {val.icon}
+              { title: 'Connect', Icon: IconUsers, color: 'text-indigo-500', desc: 'Bridge brilliant minds across disciplines to spark meaningful collaboration.' },
+              { title: 'Collaborate', Icon: IconCode, color: 'text-green-500', desc: 'Build ambitious projects through events, challenges, and open source.' },
+              { title: 'Grow', Icon: IconTrendingUp, color: 'text-purple-500', desc: 'Accelerate your career with curated opportunities and mentorship.' },
+            ].map(({ title, Icon, color, desc }, i) => (
+              <div key={i} className={`rounded-xl p-6 border h-full hover:-translate-y-1 hover:shadow-lg transition ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white border-black/5'}`}>
+                <div className="flex items-start gap-4">
+                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center bg-primary/10 ${color}`}>
+                    <Icon size={26} />
                   </div>
-                  <h3
-                    className={`mb-3 text-lg sm:text-xl font-semibold ${
-                      isDarkMode ? "text-white" : ""
-                    }`}
-                  >
-                    {val.title}
-                  </h3>
-                  <p
-                    className={`text-sm sm:text-base ${
-                      isDarkMode ? "text-cape-cod-200" : "text-gray-600"
-                    }`}
-                  >
-                    {val.desc}
-                  </p>
+                  <div>
+                    <h3 className="text-lg font-semibold">{title}</h3>
+                    <p className={`mt-1 text-sm ${isDarkMode ? 'text-white/70' : 'text-lightBlack'}`}>{desc}</p>
+                  </div>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Mission timeline */}
+      <div className={`py-16 px-4 sm:px-6 md:px-10 ${isDarkMode ? 'bg-white/5' : 'bg-white'}`}>
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12">Our mission</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { title: 'Discover', desc: 'Surface the best jobs, hackathons, and people for you.' },
+              { title: 'Build', desc: 'Give you tools and a network to build remarkable things.' },
+              { title: 'Launch', desc: 'Help you showcase work and get hired faster.' },
+            ].map((m, i) => (
+              <div key={i} className={`rounded-xl p-6 border relative overflow-hidden ${isDarkMode ? 'border-white/10' : 'border-black/5'}`}>
+                <span className="absolute -top-6 -right-2 text-7xl font-extrabold text-primary/10 select-none">0{i+1}</span>
+                <h3 className="text-lg font-semibold">{m.title}</h3>
+                <p className={`mt-2 text-sm ${isDarkMode ? 'text-white/70' : 'text-lightBlack'}`}>{m.desc}</p>
               </div>
             ))}
           </div>
@@ -115,32 +106,15 @@ export function AboutUs() {
       <FAQs />
 
       {/* CTA Section */}
-      <div
-        className={`py-20 px-4 sm:px-6 md:px-10 text-center ${
-          isDarkMode
-            ? "bg-cape-cod-900"
-            : "bg-gradient-to-r from-indigo-400 to-purple-400"
-        }`}
-      >
-        <div className="max-w-4xl mx-auto">
-          <h2
-            className={`text-3xl sm:text-4xl font-bold mb-6 ${
-              isDarkMode ? "text-white" : ""
-            }`}
-          >
-            Ready to Grow With Us?
-          </h2>
-          <p
-            className={`text-base sm:text-lg md:text-xl mb-8 ${
-              isDarkMode ? "text-cape-cod-200" : "text-indigo-100"
-            }`}
-          >
-            Join our growing community of innovators, creators, and
-            problem-solvers.
+      <div className="py-20 px-4 sm:px-6 md:px-10 text-center">
+        <div className={`max-w-4xl mx-auto rounded-2xl p-10 border ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white border-black/5'}`}>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to grow with us?</h2>
+          <p className={`text-base sm:text-lg md:text-xl mb-8 ${isDarkMode ? 'text-white/70' : 'text-lightBlack'}`}>
+            Join our community of innovators, creators, and problem‑solvers.
           </p>
-          <button className="bg-green-500 hover:bg-green-600 text-white font-semibold text-sm sm:text-base py-3 px-5 sm:px-6 rounded-lg transition-colors flex items-center justify-center mx-auto gap-2">
+          <button className="bg-primary hover:opacity-90 text-white font-semibold text-sm sm:text-base py-3 px-6 rounded-md transition inline-flex items-center gap-2">
             <span>Start Growing Today</span>
-            <IconPlant size={22} />
+            <IconPlant size={20} />
           </button>
         </div>
       </div>
