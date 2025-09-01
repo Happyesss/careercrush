@@ -9,10 +9,10 @@ const Companies = () => {
   const { isDarkMode } = useTheme();
 
   return (
-    <div className={`mt-[450px] flex items-center flex-col pb-5 ${isDarkMode ? ' text-white' : ' text-black'}`}>
+    <div className="w-full flex items-center justify-center">
+ <div className={`mt-[360px] mb-10  max-w-6xl flex items-center flex-col pb-5 ${isDarkMode ? ' text-white' : ' text-black'}`}>
 
 
-     <Dot name="Archivements" />
 
       <div className={`text-3xl tracking-tight text-center font-medium mb-10 ${isDarkMode ? 'text-cape-cod-100' : 'text-cape-cod-900'}`}>
 
@@ -30,6 +30,8 @@ const Companies = () => {
         })}
       </Marquee>
     </div>
+    </div>
+   
   );
 }
 

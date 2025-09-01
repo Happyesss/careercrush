@@ -79,14 +79,18 @@ const MultiInput = (props: any) => {
             onClick={() => combobox.openDropdown()}
             leftSection={
               <div
-                className={`p-1 rounded-full mr-2 ${
-                  isDarkMode ? 'text-blue-400 bg-cape-cod-900' : 'text-blue-600 bg-gray-200'
+                className={`p-1.5 rounded-full mr-2 transition-colors duration-300 ${
+                  isDarkMode ? 'text-primary bg-cape-cod-800 hover:bg-cape-cod-700' : 'text-primary bg-gray-100 hover:bg-gray-200'
                 }`}
               >
-                <props.icon />
+                <props.icon size={16} />
               </div>
             }
-            className={isDarkMode ? 'bg-cape-cod-900' : 'bg-white'} // Added background control
+            className={`transition-all duration-300 rounded-lg border ${
+              isDarkMode 
+                ? 'bg-cape-cod-900 border-cape-cod-700 hover:border-cape-cod-600' 
+                : 'bg-white border-gray-200 hover:border-gray-300'
+            }`}
           >
             <Pill.Group>
               {values}
@@ -94,9 +98,9 @@ const MultiInput = (props: any) => {
                 <PillsInput.Field
                   className={`${
                     isDarkMode 
-                      ? '!text-white placeholder-cape-cod-400'  // Force white text in dark mode
+                      ? '!text-white placeholder-cape-cod-400'
                       : 'text-black placeholder-gray-500'
-                  } ml-2 flex-1 bg-transparent`} // Added bg-transparent
+                  } ml-2 flex-1 bg-transparent focus:outline-none`}
                   placeholder={props.title}
                   value={search}
                   onChange={(event) => {
@@ -113,11 +117,11 @@ const MultiInput = (props: any) => {
         </Combobox.DropdownTarget>
   
         <Combobox.Dropdown
-          className={
+          className={`shadow-xl border-0 rounded-xl ${
             isDarkMode
-              ? '!bg-cape-cod-900 !text-cape-cod-100 !border-cape-cod-700' // Improved text contrast
-              : 'bg-white text-black border-gray-300'
-          }
+              ? '!bg-cape-cod-800 !text-cape-cod-100 !border-cape-cod-600'
+              : 'bg-white text-black border-gray-200'
+          }`}
         >
           <Combobox.Options>
             {options}
@@ -125,14 +129,18 @@ const MultiInput = (props: any) => {
             {!exactOptionMatch && search.trim().length > 0 && (
               <Combobox.Option 
                 value="$create"
-                className={isDarkMode ? 'hover:!bg-cape-cod-800' : ''}
+                className={`${
+                  isDarkMode 
+                    ? 'hover:!bg-cape-cod-700 text-primary' 
+                    : 'hover:!bg-gray-50 text-primary'
+                } font-medium`}
               >
-                + Create {search}
+                + Create "{search}"
               </Combobox.Option>
             )}
   
             {exactOptionMatch && search.trim().length > 0 && options.length === 0 && (
-              <Combobox.Empty className={isDarkMode ? '!text-cape-cod-300' : ''}>
+              <Combobox.Empty className={isDarkMode ? '!text-cape-cod-300' : 'text-gray-500'}>
                 Nothing found
               </Combobox.Empty>
             )}

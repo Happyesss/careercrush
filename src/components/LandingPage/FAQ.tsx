@@ -22,7 +22,7 @@ const FAQ = () => {
   return (
     <section className="py-16">
       <div className='flex items-center justify-center mb-10 flex-col'>
-               <Dot name="FAQ's"/>
+               {/* <Dot name="FAQ's"/> */}
 
 
           <Heading heading={"Frequently asked quesions from our users"} subheading={""}/>
