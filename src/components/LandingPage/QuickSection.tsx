@@ -101,9 +101,9 @@ const QuickSection = () => {
       // </div>
 
 
-      <div className="flex flex-col items-center mt-20">
+      <div className="flex flex-col items-center ">
 
-            <Dot name="About us"/>
+            {/* <Dot name="About us"/> */}
 
             <Heading heading={"Empowering Ambitions. Transforming Careers"} subheading={"We believe that everyone deserves the chance to land their dream job, role, and company"}/>
 
@@ -113,7 +113,7 @@ const QuickSection = () => {
            {quickItems.map((item, index) => (
             <div
               key={index}
-              className="relative h-[250px] bg-white dark:bg-third  p-5 rounded-xl  hover:shadow-lg transition-transform duration-300 hover:-translate-y-1  flex flex-col justify-between"
+              className="relative h-[200px] bg-white dark:bg-third  p-5 rounded-xl  hover:shadow-lg transition-transform duration-300 hover:-translate-y-1  flex flex-col justify-between"
             
             >
               <div className="flex flex-col justify-between h-full ">
@@ -122,7 +122,7 @@ const QuickSection = () => {
                   {item.icon}
                 </span>
                 <div>
-                       <h5 className="text-black text-2xl font-medium tracking-tighter mb-2">{item.title}</h5>
+                       <h5 className="text-black text-xl font-medium tracking-tighter mb-2">{item.title}</h5>
                        <p className="text-lightBlack text-xs sm:text-sm">{item.description}</p>  
                 </div>
              

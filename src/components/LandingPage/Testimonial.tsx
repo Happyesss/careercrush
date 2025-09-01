@@ -50,10 +50,7 @@ export default function AppTestimonials() {
 
       <div className="max-w-7xl flex items-center flex-col  mx-auto">
 
-        <div className="flex items-center justify-center">
-                <Dot name="Testimonial"/>
-
-        </div>
+      
 
 
        <Heading heading={"Loved by 25,000+ Users"} subheading={"See what people say about our web app"}/>
@@ -64,7 +61,7 @@ export default function AppTestimonials() {
               key={testimonial.id}
               className={`relative flex  flex-col justify-between  rounded-xl p-6 h-[350px]  hover:shadow-2xl transition-all duration-300 border ${
                 index === 1
-                  ? "bg-primary dark:bg-third text-white border-transparent"
+                  ? "bg-[#ffe5c2] dark:bg-third text-black border-transparent"
                   : isDarkMode
                   ? "bg-cape-cod-800 border-gray-700"
                   : "bg-white border-gray-100"
