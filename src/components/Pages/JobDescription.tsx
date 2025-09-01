@@ -29,7 +29,7 @@ const JobDescription = () => {
     <div className={`min-h-[100vh] ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'} font-['poppins'] p-4`}>
       <Divider size="xs" color={isDarkMode ? 'dark' : 'transparent'} />
   <Link className="my-4 inline-block" href="/find-jobs">
-        <Button leftSection={<IconArrowLeft size={20} />} color="blue.4" variant="light">Back</Button>
+        <Button leftSection={<IconArrowLeft size={20} />} color="orange.4" variant="light">Back</Button>
       </Link>
       <div className="flex flex-col lg:flex-row gap-5 justify-around">
         <JobDesc {...job} />
