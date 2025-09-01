@@ -227,6 +227,19 @@ const SignUp = () => {
                   />
                   <span className={isDarkMode ? 'text-white' : 'text-black'}>Applicant</span>
                 </label>
+
+                <label className="inline-flex items-center gap-2 text-sm">
+                  <input
+                    type="radio"
+                    name="accountType"
+                    value="MENTOR"
+                    checked={formData.accountType === 'MENTOR'}
+                    onChange={handleChange}
+                    className="accent-[var(--color-primary)]"
+                  />
+                  <span className={isDarkMode ? 'text-white' : 'text-black'}>Mentor</span>
+                </label>
+
                 <label className="inline-flex items-center gap-2 text-sm">
                   <input
                     type="radio"
