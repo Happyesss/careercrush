@@ -1,9 +1,10 @@
 'use client'
 
-import { IconBrandFacebook, IconBrandLinkedin, IconBrandTwitter } from "@tabler/icons-react";
+import { IconBrandFacebook, IconBrandInstagram, IconBrandLinkedin, IconBrandTwitter } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "@/ThemeContext";
+
 
 const Footer = () => {
   const pathname = usePathname();
@@ -21,6 +22,26 @@ const Footer = () => {
           <div className="pointer-events-none select-none absolute -bottom-10 left-0 right-0 text-white/10 font-extrabold tracking-tight text-[140px] leading-none hidden md:block">
             CareerCrush
           </div>
+
+    <div className="flex items-center  justify-between mb-10">
+
+      <div className="flex items-center gap-3">
+ <img src="/cc.jpg" alt="CareerCrush logo" className="h-18 w-16 rounded-2xl object-contain " />
+      </div>
+
+      <div className="ml-auto flex items-center gap-3">
+        <Link href="https://twitter.com" target="_blank" aria-label="Twitter" className="h-10 w-10 rounded-full border border-white/30 bg-white/10 backdrop-blur flex items-center justify-center hover:bg-white/20 transition">
+          <IconBrandTwitter size={18} />
+        </Link>
+        <Link href="https://instagram.com" target="_blank" aria-label="Instagram" className="h-10 w-10 rounded-full border border-white/30 bg-white/10 backdrop-blur flex items-center justify-center hover:bg-white/20 transition">
+          <IconBrandInstagram size={18} />
+        </Link>
+        <Link href="https://linkedin.com" target="_blank" aria-label="LinkedIn" className="h-10 w-10 rounded-full border border-white/30 bg-white/10 backdrop-blur flex items-center justify-center hover:bg-white/20 transition">
+          <IconBrandLinkedin size={18} />
+        </Link>
+      </div>
+     
+    </div>
 
           <div className="grid grid-cols-1 pb-20 md:grid-cols-3 gap-10 relative z-10">
             {/* Quick Links */}
