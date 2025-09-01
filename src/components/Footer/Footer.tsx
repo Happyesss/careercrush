@@ -14,15 +14,15 @@ const Footer = () => {
   }
 
   return (
-    <footer className="py-12 bg-secondary">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-[28px] bg-primary text-white overflow-hidden p-8 sm:p-12">
+    <footer className={`w-full p-8 px-12 pb-0 tracking-tight ${isDarkMode ? 'bg-primary text-white' : 'bg-primary text-white'}  mt-auto`}>
+      <div className=" ">
+        <div className="relative rounded-[28px]   overflow-hidden p-4 ">
           {/* Watermark word */}
-          <div className="pointer-events-none select-none absolute -bottom-10 left-0 right-0 text-white/20 font-extrabold tracking-tight text-[140px] leading-none hidden md:block">
+          <div className="pointer-events-none select-none absolute -bottom-10 left-0 right-0 text-white/10 font-extrabold tracking-tight text-[140px] leading-none hidden md:block">
             CareerCrush
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
+          <div className="grid grid-cols-1 pb-20 md:grid-cols-3 gap-10 relative z-10">
             {/* Quick Links */}
             <div>
               <h3 className="text-2xl font-semibold mb-6">Quick Links</h3>
@@ -65,13 +65,13 @@ const Footer = () => {
         </div>
 
         {/* Bottom legal row */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6 px-2 text-sm text-lightBlack">
+        {/* <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6 px-2 text-sm text-lightBlack">
           <p>© {new Date().getFullYear()} CareerCrush. All rights reserved.</p>
           <div className="flex gap-6">
             <Link href="/privacy-policy" className="hover:underline">Privacy Policy</Link>
             <Link href="/terms-of-service" className="hover:underline">Terms of Service</Link>
           </div>
-        </div>
+        </div> */}
       </div>
     </footer>
   );

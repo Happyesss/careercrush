@@ -77,21 +77,21 @@ const Header = () => {
 
   return (
     <div
-      className="w-full rounded-lg bg-white dark:bg-third px-6 py-3 sm-mx:px-3 sm-mx:py-2 text-black dark:text-secondary flex justify-between items-center transition-colors duration-300 shadow-sm dark:shadow-gray-800/20"
+      className={`w-full px-8 tracking-normal ${isDarkMode ? "bg-third text-white" : "bg-white text-black"}  py-4 flex justify-between items-center transition-colors duration-300`}
     >
       {/* Logo */}
       <div className="flex gap-3 items-center">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2  transition-transform duration-300">
           <Image
             src={CcLogo}
             alt="cc"
             width={40}
             height={34}
-            className="h-10 w-11"
+            className="h-10 w-11 rounded-lg"
             priority
           />
          <div>
-            <h1 className="font-bold text-lg text-black dark:text-primary hidden md:block">CareerCrush</h1>
+            <h1 className="font-semibold text-lg text-black dark:text-primary hidden md:block">CareerCrush</h1>
          </div>
         </Link>
       </div>
@@ -132,7 +132,7 @@ const Header = () => {
           <>
             <Link href="/login">
               <button
-                className="font-semibold text-black dark:text-primary text-sm mx-3 hover:text-primary  transition-colors duration-300"
+                className="font-medium text-black dark:text-primary text-sm mx-3 hover:text-primary  transition-colors duration-300"
               >
                 Login
               </button>

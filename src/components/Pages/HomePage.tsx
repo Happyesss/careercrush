@@ -13,7 +13,7 @@ const HomePage = () => {
   const { isDarkMode } = useTheme();
 
   return (
-    <div className={`min-h-[100vh] mt-[-80px] bg-secondary ${isDarkMode ? 'dark' : ''}`}>
+    <div className={`min-h-screen bg-secondary ${isDarkMode ? 'dark' : ''}`}>
       <DreamJob />
       <Companies />
       <QuickSection />
@@ -21,7 +21,6 @@ const HomePage = () => {
       <Working />
       <Testimonials />
       <FAQ/>
-      <Divider mx="md" size="xs" color={isDarkMode ? 'dark' : 'gray'} />
     </div>
   );
 };

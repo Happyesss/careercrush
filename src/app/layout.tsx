@@ -8,13 +8,12 @@ import '@mantine/notifications/styles.css'
 import { Providers } from '@/components/Providers'
 import Header from '@/components/Header/Header'
 import Footer from '@/components/Footer/Footer'
-import { Divider } from '@mantine/core'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'CareerCrush',
-  description: 'Find your dream job or hire the best talent',
+  title: 'CareerCrush - Kickstart Your Dream Career',
+  description: 'Find your dream job, connect with expert mentors, and accelerate your career growth with CareerCrush. 10K+ jobs placed successfully.',
 }
 
 export default function RootLayout({
@@ -24,15 +23,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="font-sans bg-secondary">
+      <body className="font-sans bg-secondary min-h-screen flex flex-col">
         <Providers>
-          <div className="sticky top-4 z-50 flex justify-center px-4">
-            <div className="w-full max-w-6xl mx-auto rounded-lg border border-cape-cod-100/60 dark:border-secondary  dark:bg-cape-cod-900/60 backdrop-blur shadow-sm">
+          {/* Full-width sticky header */}
+          <div className="sticky top-0 z-50 w-full  backdrop-blur-md border-b border-cape-cod-100/20 dark:border-third shadow-sm">
+            
               <Header />
-            </div>
           </div>
-          {children}
-          <Divider mx="md" size="xs"/>
+
+          {/* Main content with flex-grow to push footer down */}
+          <main className="flex-grow">
+            {children}
+          </main>
+
+          {/* Full-width footer */}
           <Footer />
         </Providers>
       </body>
