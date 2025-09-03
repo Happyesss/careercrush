@@ -58,7 +58,7 @@ const JobCard = (props: any) => {
   return (
     <Link
       href={`/jobs/${props.id}`}
-      className={`flex flex-col rounded-2xl border p-5 w-[330px] max-w-sm transition-shadow ${
+      className={`flex flex-col rounded-2xl border p-5 w-[360px] max-w-sm transition-shadow ${
         isDarkMode
           ? 'bg-third border-none shadow-sm hover:shadow-md'
           : 'bg-white border-gray-200 shadow-sm hover:shadow-md'
@@ -70,7 +70,7 @@ const JobCard = (props: any) => {
 
           {/* logo */}
 
-          <div className={`h-10 w-10 rounded-full p-2 ring-1 overflow-hidden flex items-center justify-center ${isDarkMode ? 'ring-[#ee8f2a55] bg-secondary' : 'ring-primary '}`}
+          <div className={`h-10 w-10 rounded-full p-2 ring-1 overflow-hidden flex items-center justify-center ${isDarkMode ? 'ring-[#ee8f2a55] bg-secondary' : 'ring-gray-200 '}`}
                aria-hidden>
             {props.iconImage ? (
               <img
@@ -100,8 +100,8 @@ const JobCard = (props: any) => {
       </div>
 
       {/* Company + time */}
-      <div className=" flex items-center gap-2  mt-16">
-        <span className={`${isDarkMode ? 'text-gray-100' : 'text-primary'} font-semibold text-[13px]`}>{props.company}</span>
+      <div className=" flex items-center gap-2  mt-6">
+        <span className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} font-semibold text-[13px]`}>{props.company}</span>
         <span className={`${isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'} text-[12px]`}>· {timeAgo(props.postTime)}</span>
       </div>
 
@@ -113,7 +113,7 @@ const JobCard = (props: any) => {
       {/* Badges */}
       <div className=" flex flex-wrap gap-2">
         {props.jobType && (
-          <span className={`px-3 py-1 rounded-md text-[11px] font-medium tracking-normal ${isDarkMode ? 'bg-[#ee8f2a67] text-gray-200 ' : 'bg-primary text-white '}`}>
+          <span className={`px-3 py-1 rounded-md text-[11px] font-medium tracking-normal ${isDarkMode ? 'bg-[#ee8f2a67] text-gray-200 ' : 'bg-[#eaeaea] text-gray-800 border border-gray-200'}`}>
             {props.jobType}
           </span>
         )}
@@ -137,7 +137,7 @@ const JobCard = (props: any) => {
         </div>
         <button
           onClick={handleApply}
-          className={`px-4 py-2 rounded-md text-[12px] font-medium ${isDarkMode ? 'bg-[#ee8f2a67] text-black' : 'bg-primary text-white'} hover:opacity-95 active:scale-[0.99]`}
+          className={`px-4 py-2 rounded-md text-[12px] font-medium ${isDarkMode ? 'bg-[#ee8f2a67] text-black' : 'bg-black text-white'} hover:opacity-95 active:scale-[0.99]`}
         >
           Apply now
         </button>
