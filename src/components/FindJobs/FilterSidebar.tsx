@@ -382,7 +382,7 @@ const removeLocation = (location: string) => {
     <div
       className={`custom-scrollbar w-full lg:w-80 flex flex-col gap-6 tracking-tight p-6 shadow-lg rounded-xl border overflow-y-auto sticky top-6 max-h-[calc(100vh-6rem)] ${
         isDarkMode
-          ? "bg-cape-cod-900 text-white border-cape-cod-700"
+          ? "bg-third text-white border-none"
           : "bg-white text-black border-gray-200"
       }`}
     >
@@ -420,10 +420,20 @@ const removeLocation = (location: string) => {
             placeholder="Type job title and press Enter..."
             className={`w-full px-3 py-2 rounded-lg border text-sm transition-colors ${
               isDarkMode 
-                ? "bg-cape-cod-800 border-cape-cod-600 text-white placeholder-gray-400 focus:border-primary focus:bg-cape-cod-700" 
+                ? "                 !bg-secondary  !placeholder-gray-500  focus:!bg-secondary" 
+
                 : "bg-white border-gray-300 text-black placeholder-gray-500 focus:border-primary"
             } focus:outline-none focus:ring-2 focus:ring-primary/20`}
-            style={isDarkMode ? { backgroundColor: '#2a3436', borderColor: '#3f4950' } : {}}
+style={
+  isDarkMode
+    ? {
+        backgroundColor: '#201e1c',
+        borderColor: '#201e1c',
+        outline: 'none',
+        boxShadow: 'none', // removes the ring
+      }
+    : {}
+}
           />
           {/* Job Title Tags */}
           {jobTitles.length > 0 && (
@@ -458,10 +468,19 @@ const removeLocation = (location: string) => {
             placeholder="Type location and press Enter..."
             className={`w-full px-3 py-2 rounded-lg border text-sm transition-colors ${
               isDarkMode 
-                ? "bg-cape-cod-800 border-cape-cod-600 text-white placeholder-gray-400 focus:border-primary focus:bg-cape-cod-700" 
+                ? "!bg-secondary  !placeholder-gray-500  focus:!bg-secondary" 
                 : "bg-white border-gray-300 text-black placeholder-gray-500 focus:border-primary"
             } focus:outline-none focus:ring-2 focus:ring-primary/20`}
-            style={isDarkMode ? { backgroundColor: '#2a3436', borderColor: '#3f4950' } : {}}
+style={
+  isDarkMode
+    ? {
+        backgroundColor: '#201e1c',
+        borderColor: '#201e1c',
+        outline: 'none',
+        boxShadow: 'none', // removes the ring
+      }
+    : {}
+}
           />
           {/* Location Tags */}
           {locations.length > 0 && (
@@ -493,9 +512,9 @@ const removeLocation = (location: string) => {
           <h4 className={`text-sm font-medium mb-3 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
             {section.title}
           </h4>
-          <div className="max-h-28 overflow-y-auto space-y-2 mb-4 pr-1 custom-scrollbar">
+      <div className="max-h-28 overflow-y-auto grid grid-cols-2 gap-2 mb-4 pr-1 custom-scrollbar">
             {section.options.map((option, i) => (
-              <label key={i} className="flex items-center gap-2 text-sm cursor-pointer hover:bg-opacity-10 hover:bg-primary rounded p-1 transition-colors">
+        <label key={i} className="flex items-center gap-2 text-sm cursor-pointer rounded p-1 transition-colors">
                 <input
                   type="checkbox"
                   checked={selectedFilters[section.title]?.includes(option) || false}
