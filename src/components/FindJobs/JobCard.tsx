@@ -58,7 +58,7 @@ const JobCard = (props: any) => {
   return (
     <Link
       href={`/jobs/${props.id}`}
-      className={`flex flex-col rounded-2xl border p-5 w-[360px] max-w-sm transition-shadow ${
+      className={`flex flex-col rounded-2xl border p-5  transition-shadow ${
         isDarkMode
           ? 'bg-third border-none shadow-sm hover:shadow-md'
           : 'bg-white border-gray-200 shadow-sm hover:shadow-md'
@@ -122,6 +122,17 @@ const JobCard = (props: any) => {
             {props.experience}
           </span>
         )}
+
+        {props.location && 
+(
+        <span className={`px-3 py-1 rounded-md text-[11px] font-medium tracking-normal ${isDarkMode ? 'bg-[#ee8f2a67] text-gray-200 ' : 'bg-[#eaeaea] text-gray-800 border border-gray-200'}`}>{props.location}</span>
+)
+         }
+
+        
+
+
+
       </div>
 
       {/* Divider */}
@@ -131,8 +142,8 @@ const JobCard = (props: any) => {
       <div className="flex mt-4 items-end justify-between gap-3">
         <div>
           <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-sm tracking-tight font-medium`}>{salaryLabel}</div>
-          {props.location && (
-            <div className={`${isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'} mt-1 tracking-tight text-sm`}>{props.location}</div>
+          {props.applyUrl && (
+            <div className={`${isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'} mt-1.5 tracking-tight text-[12px]`}>{props.applicants ? props.applicants.length : 0} Applicants</div>
           )}
         </div>
         <button

@@ -109,7 +109,7 @@ const Jobs = () => {
         <div className={`text-2xl font-semibold  bs-mx:text-lg ${isDarkMode ? 'text-white' : 'text-black'}`}>Recommended Jobs</div>
         <Sort sort="job" />
       </div>
-      <div className='flex flex-wrap gap-5 mt-10 justify-center'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6 justify-center'>
         {filteredJobs.map((job: any, index: any) => (
           <JobCard key={index} {...job} />
         ))}
