@@ -19,10 +19,6 @@ const faqs = [
   {
     question: "What is Stemlen?",
     answer: "Stemlen is a platform that helps you grow in your career, skills, and opportunities. Connect with a community of like-minded individuals."
-  },
-  {
-    question: "What are hackathons?",
-    answer: "Participate in exciting hackathons by top leading companies and showcase your talent to the world."
   }
 ];
 

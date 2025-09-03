@@ -27,7 +27,7 @@ export default function AppTestimonials() {
       id: 2,
       name: "Shanky",
       role: "Web Developer",
-      text: "I'm a college student and was searching for Hackathons. This app has been a game-changer for me. The Hackathon listings are diverse, and this app helped me win my first hackathon, but I'm giving 4 stars because the site needs some improvement.",
+      text: "I'm a college student and was searching for internships. This app has been a game-changer for me. The job listings are diverse, and this app helped me land my first internship, but I'm giving 4 stars because the site needs some improvement.",
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_AOJvj0-O1jCA1beOWZmyaNMHMnoDSM_KdQ&s",
       rating: 4,
     },

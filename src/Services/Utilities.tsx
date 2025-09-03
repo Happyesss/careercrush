@@ -80,18 +80,4 @@ const formatDate = (dateString: string): string => {
     return diffDays;
 };
 
-
-  const deleteHackathon = async (hackathonId: string) => {
-    try {
-      const response = await fetch(`/api/hackathons/${hackathonId}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete hackathon');
-      }
-    } catch (error) {
-      console.error('Error deleting hackathon:', error);
-    }
-  };
-
-  export { formatDate , timeAgo , getBase64 , foramtInterviewTime, openBase64, calculateDaysLeft, deleteHackathon };
+  export { formatDate , timeAgo , getBase64 , foramtInterviewTime, openBase64, calculateDaysLeft };

@@ -330,9 +330,11 @@ export const packageUtils = {
   },
 };
 
-export default {
+const MentorshipPackageService = {
   packageService,
   trialSessionService,
   statsService,
   packageUtils,
 };
+
+export default MentorshipPackageService;

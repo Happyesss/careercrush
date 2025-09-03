@@ -42,8 +42,6 @@ const footerLinks = [
       title: "Product",
       links: [
         { name: "Find Job", url: "/find-jobs" },
-        { name: "Find Hackathon", url: "/find-hackathon" },
-        { name: "Post Hackathon", url: "/post-hackathon" },
         { name: "Posted Job", url: "/posted-job/0" }
       ]
     },

@@ -41,10 +41,9 @@ export function AboutUs() {
 
       {/* Stats Row */}
       <div className="px-4 sm:px-6 md:px-10">
-        <div className={`max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 rounded-2xl ${isDarkMode ? 'bg-white/5' : 'bg-white'} p-6 border ${isDarkMode ? 'border-white/10' : 'border-black/5'}`}>
+        <div className={`max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 gap-6 rounded-2xl ${isDarkMode ? 'bg-white/5' : 'bg-white'} p-6 border ${isDarkMode ? 'border-white/10' : 'border-black/5'}`}>
           {[
             { label: 'Active members', value: '25k+' },
-            { label: 'Hackathons', value: '300+' },
             { label: 'Hiring partners', value: '120+' },
             { label: 'Projects shipped', value: '4k+' },
           ].map((s, i) => (
@@ -88,7 +87,7 @@ export function AboutUs() {
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12">Our mission</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { title: 'Discover', desc: 'Surface the best jobs, hackathons, and people for you.' },
+              { title: 'Discover', desc: 'Surface the best jobs and people for you.' },
               { title: 'Build', desc: 'Give you tools and a network to build remarkable things.' },
               { title: 'Launch', desc: 'Help you showcase work and get hired faster.' },
             ].map((m, i) => (
