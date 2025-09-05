@@ -22,9 +22,9 @@ const ApplyJob = () => {
     })
   }, [id])
   return (
-    <div className={`min-h-[100vh] ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'} font-['poppins'] p-4`}>
+    <div className={`min-h-[100vh] ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'} p-4 sm-mx:p-2`}>
     <Divider size="xs" color={isDarkMode ? 'dark' : 'transparent'} />
-  <Button my="md" leftSection={<IconArrowLeft size={20}/>} onClick={()=>router.back()} color="blue.4" variant='light' >Back</Button> 
+  <Button my="md" leftSection={<IconArrowLeft size={20}/>} onClick={()=>router.back()} color="orange.4" variant='light' >Back</Button> 
     <ApplyJobComp {...job}/>
     </div>
   )

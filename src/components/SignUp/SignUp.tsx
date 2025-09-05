@@ -124,7 +124,7 @@ const SignUp = () => {
           <div className="mb-6 flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-semibold tracking-tight">Create Account</h1>
-              <p className={`mt-2 text-sm ${isDarkMode ? 'text-white/70' : 'text-lightBlack'}`}>Join CareerCrush to find jobs, hackathons and more.</p>
+              <p className={`mt-2 text-sm ${isDarkMode ? 'text-white/70' : 'text-lightBlack'}`}>Join CareerCrush to find jobs and more.</p>
             </div>
             <button
               type="button"

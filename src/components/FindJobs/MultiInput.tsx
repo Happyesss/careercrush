@@ -135,7 +135,7 @@ const MultiInput = (props: any) => {
                     : 'hover:!bg-gray-50 text-primary'
                 } font-medium`}
               >
-                + Create "{search}"
+                + Create &quot;{search}&quot;
               </Combobox.Option>
             )}
   

@@ -19,12 +19,6 @@ const Information = () => {
                     <p className="text-gray-600">Climb higher in your career with access to top jobs, internships, and mentorship programs.</p>
                 </div>
 
-                <div className="bg-green-200 p-6 rounded-lg shadow-lg text-center w-72">
-                    <img className="w-40 h-40 mx-auto mb-4" src={"https://images.credly.com/images/05228e64-dd4b-4840-82fe-c504b2159376/image.png"} alt="Hackathons" />
-                    <h3 className="text-xl font-semibold text-gray-800 mb-2">Hackathons</h3>
-                    <p className="text-gray-600">Participate in exciting hackathons by top leading companies and showcase your talent to the world.</p>
-                </div>
-
                 <div className="bg-orange-200 p-6 rounded-lg shadow-lg text-center w-72">
                     <img className="w-40 h-40s mx-auto mb-4" src={typeof connetingImage === 'string' ? connetingImage : (connetingImage as any)?.src ?? (connetingImage as any)?.default ?? ''} alt="Networking" />
                     <h3 className="text-xl font-semibold text-gray-800 mb-2">Steming</h3>

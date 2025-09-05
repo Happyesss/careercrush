@@ -49,7 +49,7 @@ const TermsService = () => {
         </ul>
 
         <div className={`text-xl font-semibold mt-6 ${isDarkMode ? "text-white" : "text-gray-900"}`}>Platform Usage</div>
-        <div className={isDarkMode ? "text-gray-300" : "text-gray-700"}>Stemlen provides job listings, hackathons, and collaboration opportunities.</div>
+        <div className={isDarkMode ? "text-gray-300" : "text-gray-700"}>Stemlen provides job listings and collaboration opportunities.</div>
         <ul className={isDarkMode ? "text-gray-300 list-disc pl-6" : "text-gray-700 list-disc pl-6"}>
           <li>We may update or modify features at any time without notice.</li>
           <li>We are not responsible for third-party content or services.</li>

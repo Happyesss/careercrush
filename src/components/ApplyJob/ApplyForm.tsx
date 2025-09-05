@@ -2,7 +2,7 @@
 
 import { Button, FileInput, LoadingOverlay, NumberInput, Textarea, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
-import { IconPaperclip } from "@tabler/icons-react";
+import { IconPaperclip, IconMail, IconPhone, IconUser, IconWorld, IconFileDescription, IconSend } from "@tabler/icons-react";
 import { useState } from "react";
 import { getBase64 } from "../../Services/Utilities";
 import { applyJob } from "../../Services/JobService";
@@ -58,7 +58,7 @@ const ApplyForm = () => {
             let applicant = {
                 ...form.getValues(),
                 applicantId: user.id,
-                resume: resumeBase64.split(',')[1], // Remove the Base64 prefix
+                resume: resumeBase64.split(',')[1], 
             };
 
             // Submit application
@@ -70,10 +70,9 @@ const ApplyForm = () => {
             // Success handling
             setSubmit(false);
             successNotification("Application Submitted Successfully", "Success");
-            router.back(); // Navigate back or to a job history page
+            router.back(); 
         } catch (err: any) {
             setSubmit(false);
-            // Handle Axios errors and other errors
             const errorMessage = err.response?.data?.errorMessage || err.message || "Failed to submit application";
             errorNotification(errorMessage, "Error");
         }
@@ -95,37 +94,66 @@ const ApplyForm = () => {
     return (
         <div>
             <LoadingOverlay visible={submit} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
-            <div className="text-xl font-semibold mb-5">Submit Your Application</div>
+            <div className="flex items-start gap-3 mb-3">
+                <div className="mt-1 text-primary"><IconSend size={18} /></div>
+                <div>
+                    <div className="text-2xl md:text-xl font-semibold text-black dark:text-black">Submit Your Application</div>
+                    <div className="text-sm text-lightBlack">Fill out the form below to apply for this position</div>
+                </div>
+            </div>
             <div className="flex flex-col gap-5">
+                <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+                    <div className="flex items-center gap-2 mb-4 text-black">
+                        <span className="text-primary"><IconFileDescription size={16} /></span>
+                        <span className="font-semibold">Personal Information</span>
+                    </div>
                 <div className="flex gap-10 [&>*]:w-1/2 sm-mx:[&>*]:w-full sm-mx:flex-wrap sm-mx:gap-5">
                     <TextInput
                         {...form.getInputProps("name")}
                         readOnly={preview}
                         variant={preview ? "unstyled" : "default"}
-                        className={`${isDarkMode ? 'text-white [&_input]:bg-cape-cod-900 [&_input]:border-cape-cod-900 [&_input]:text-white' : 'text-gray-900 [&_input]:bg-white [&_input]:text-gray-900'} 
-                                ${preview ? "text-gray-400 font-semibold [&_input]:bg-transparent [&_input]:border-transparent" : ""} sm-mx:w-full`}
+                        className={`${isDarkMode ? 'text-black [&_input]:bg-third [&_input]:border-third [&_input]:text-black' : 'text-black [&_input]:bg-secondary [&_input]:text-black'} mb-3
+                                ${preview ? "text-lightBlack font-semibold [&_input]:bg-transparent [&_input]:border-transparent" : ""} sm-mx:w-full`}
                         label="Full Name"
                         withAsterisk
                         description="Enter Name"
+                        leftSection={<IconUser stroke={1.5} size={18} />}
+                        leftSectionPointerEvents="none"
+                        styles={() => ({
+                            input: {
+                                backgroundColor: preview ? "transparent" : isDarkMode ? "rgba(255,255,255,0.04)" : "var(--color-secondary)",
+                                color: "var(--color-blackk)",
+                                borderColor: preview ? "transparent" : isDarkMode ? "#3a3a3a" : "#e5e7eb",
+                            },
+                        })}
                     />
                     <TextInput
                         {...form.getInputProps("email")}
                         readOnly={preview}
                         variant={preview ? "unstyled" : "default"}
-                        className={`${isDarkMode ? 'text-white [&_input]:bg-cape-cod-900 [&_input]:border-cape-cod-900 [&_input]:text-white' : 'text-gray-900 [&_input]:bg-white [&_input]:text-gray-900'} 
-                                ${preview ? "text-gray-400 font-semibold [&_input]:bg-transparent [&_input]:border-transparent" : ""} sm-mx:w-full`}
+                        className={`${isDarkMode ? 'text-black [&_input]:bg-third [&_input]:border-third [&_input]:text-black' : 'text-black [&_input]:bg-secondary [&_input]:text-black'} mb-3
+                                ${preview ? "text-lightBlack font-semibold [&_input]:bg-transparent [&_input]:border-transparent" : ""} sm-mx:w-full`}
                         label="Email"
                         withAsterisk
                         description="Enter Email"
+                        leftSection={<IconMail stroke={1.5} size={18} />}
+                        leftSectionPointerEvents="none"
+                        styles={() => ({
+                            input: {
+                                backgroundColor: preview ? "transparent" : isDarkMode ? "rgba(255,255,255,0.04)" : "var(--color-secondary)",
+                                color: "var(--color-blackk)",
+                                borderColor: preview ? "transparent" : isDarkMode ? "#3a3a3a" : "#e5e7eb",
+                            },
+                        })}
                     />
                 </div>
-                <div className="flex gap-10 [&>*]:w-1/2">
+                <div className="flex gap-10 [&>*]:w-1/2 sm-mx:[&>*]:w-full sm-mx:flex-wrap sm-mx:gap-5">
                     <NumberInput
                         {...form.getInputProps("phone")}
                         readOnly={preview}
                         variant={preview ? "unstyled" : "default"}
-                        className={`${isDarkMode ? 'text-white [&_input]:bg-cape-cod-900 [&_input]:border-cape-cod-900 [&_input]:text-white' : 'text-gray-900 [&_input]:bg-white [&_input]:text-gray-900'} 
-                                ${preview ? "text-gray-400 font-semibold [&_input]:bg-transparent [&_input]:border-transparent" : ""}`}
+                        className={`${isDarkMode ? 'text-black [&_input]:bg-third [&_input]:border-third [&_input]:text-black' : 'text-black [&_input]:bg-secondary [&_input]:text-black'} mb-3
+                                ${preview ? "text-lightBlack font-semibold [&_input]:bg-transparent [&_input]:border-transparent" : ""}`}
                         label="Phone Number"
                         withAsterisk
                         description="Enter Phone Number"
@@ -133,24 +161,48 @@ const ApplyForm = () => {
                         min={0}
                         max={9999999999}
                         clampBehavior="strict"
+                        leftSection={<IconPhone stroke={1.5} size={18} />}
+                        leftSectionPointerEvents="none"
+                        styles={() => ({
+                            input: {
+                                backgroundColor: preview ? "transparent" : isDarkMode ? "rgba(255,255,255,0.04)" : "var(--color-secondary)",
+                                color: "var(--color-blackk)",
+                                borderColor: preview ? "transparent" : isDarkMode ? "#3a3a3a" : "#e5e7eb",
+                            },
+                        })}
                     />
                     <TextInput
                         {...form.getInputProps("website")}
                         readOnly={preview}
                         variant={preview ? "unstyled" : "default"}
-                        className={`${isDarkMode ? 'text-white [&_input]:bg-cape-cod-900 [&_input]:border-cape-cod-900 [&_input]:text-white' : 'text-gray-900 [&_input]:bg-white [&_input]:text-gray-900'} 
-                                ${preview ? "text-gray-400 font-semibold [&_input]:bg-transparent [&_input]:border-transparent" : ""}`}
+                        className={`${isDarkMode ? 'text-black [&_input]:bg-third [&_input]:border-third [&_input]:text-black' : 'text-black [&_input]:bg-secondary [&_input]:text-black'} mb-3
+                                ${preview ? "text-lightBlack font-semibold [&_input]:bg-transparent [&_input]:border-transparent" : ""}`}
                         label="Personal Website"
                         withAsterisk
                         description="Enter URL"
+                        leftSection={<IconWorld stroke={1.5} size={18} />} 
+                        leftSectionPointerEvents="none"
+                        styles={() => ({
+                            input: {
+                                backgroundColor: preview ? "transparent" : isDarkMode ? "rgba(255,255,255,0.04)" : "var(--color-secondary)",
+                                color: "var(--color-blackk)",
+                                borderColor: preview ? "transparent" : isDarkMode ? "#3a3a3a" : "#e5e7eb",
+                            },
+                        })}
                     />
                 </div>
+                </div>
+                <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+                    <div className="flex items-center gap-2 mb-4 text-black">
+                        <span className="text-primary"><IconFileDescription size={16} /></span>
+                        <span className="font-semibold">Documents & Cover Letter</span>
+                    </div>
                 <FileInput
                     {...form.getInputProps("resume")}
                     accept="application/pdf"
                     readOnly={preview}
                     variant={preview ? "unstyled" : "default"}
-                    className={`${preview ? "text-gray-400 font-semibold" : ""}`}
+                    className={`${preview ? "text-lightBlack font-semibold" : "text-black"} mb-3`}
                     label="Attach your CV"
                     placeholder="Your CV"
                     withAsterisk
@@ -158,9 +210,9 @@ const ApplyForm = () => {
                     leftSectionPointerEvents="none"
                     styles={() => ({
                         input: {
-                            backgroundColor: preview ? "transparent" : isDarkMode ? "#2c3534" : "white",
-                            color: isDarkMode ? "white" : "black",
-                            borderColor: preview ? "transparent" : isDarkMode ? "#161d1d" : "#d1d5db",
+                            backgroundColor: preview ? "transparent" : isDarkMode ? "rgba(255,255,255,0.04)" : "var(--color-secondary)",
+                            color: "var(--color-blackk)",
+                            borderColor: preview ? "transparent" : isDarkMode ? "#3a3a3a" : "#e5e7eb",
                         },
                     })}
                 />
@@ -168,7 +220,7 @@ const ApplyForm = () => {
                     {...form.getInputProps("coverLetter")}
                     readOnly={preview}
                     variant={preview ? "unstyled" : "default"}
-                    className={`${preview ? "text-gray-400 font-semibold" : ""} sm-mx:w-full`}
+                    className={`${preview ? "text-lightBlack font-semibold" : "text-black"} sm-mx:w-full mb-3`}
                     placeholder="Write your cover letter..."
                     label="Cover Letter"
                     withAsterisk
@@ -176,17 +228,40 @@ const ApplyForm = () => {
                     minRows={4}
                     styles={() => ({
                         input: {
-                            backgroundColor: preview ? "transparent" : isDarkMode ? "#2c3534" : "white",
-                            color: isDarkMode ? "white" : "black",
-                            borderColor: preview ? "transparent" : isDarkMode ? "#161d1d" : "#d1d5db",
+                            backgroundColor: preview ? "transparent" : isDarkMode ? "rgba(255,255,255,0.04)" : "var(--color-secondary)",
+                            color: "var(--color-blackk)",
+                            borderColor: preview ? "transparent" : isDarkMode ? "#3a3a3a" : "#e5e7eb",
                         },
                     })}
                 />
-                {!preview && <Button onClick={handlePreview} color="blue.4" variant="light">Preview</Button>}
+                </div>
+                {!preview && (
+                    <div className="flex justify-center">
+                        <Button onClick={handlePreview} variant="filled" styles={() => ({
+                            root: {
+                                backgroundColor: 'var(--color-primary)',
+                                color: '#fff',
+                                borderColor: 'var(--color-primary)',
+                            }
+                        })}>Preview Application</Button>
+                    </div>
+                )}
                 {preview && (
-                    <div className="flex gap-10 [&>*]:w-1/2">
-                        <Button onClick={handlePreview} color="blue.4" variant="light">Edit</Button>
-                        <Button onClick={handleSubmit} color="blue.4" variant="light">Submit</Button>
+                    <div className="flex gap-6 [&>*]:w-1/2">
+                        <Button onClick={handlePreview} variant="filled" styles={() => ({
+                            root: {
+                                backgroundColor: 'var(--color-primary)',
+                                color: '#fff',
+                                borderColor: 'var(--color-primary)',
+                            }
+                        })}>Edit</Button>
+                        <Button onClick={handleSubmit} variant="filled" styles={() => ({
+                            root: {
+                                backgroundColor: 'var(--color-primary)',
+                                color: '#fff',
+                                borderColor: 'var(--color-primary)',
+                            }
+                        })}>Submit</Button>
                     </div>
                 )}
             </div>

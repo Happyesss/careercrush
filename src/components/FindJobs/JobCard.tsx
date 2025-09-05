@@ -2,8 +2,7 @@
 
 "use client";
 
-import { Divider, Text } from "@mantine/core";
-import { IconBookmark, IconBookmarkFilled, IconBriefcase, IconClockHour3, IconMapPin, IconTie } from "@tabler/icons-react";
+import { IconBookmark, IconBookmarkFilled, IconClockHour3 } from "@tabler/icons-react";
 import Link from "next/link";
 import { timeAgo } from "../../Services/Utilities";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,67 +36,122 @@ const JobCard = (props: any) => {
     dispatch(changeProfile(updatedProfile));
   };
 
+  const saved = !!profile.savedJobs?.includes(props.id);
+
+  const salaryLabel = (() => {
+    if (props.hourlyRate && props.currency) return `${props.currency}${props.hourlyRate}/hr`;
+    if (props.hourlyRate) return `$${props.hourlyRate}/hr`;
+    if (props.packageOffered > 0) return `₹ ${props.packageOffered}K / month`;
+    return 'Not mentioned';
+  })();
+
+  const handleApply = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (props.applyUrl) {
+      window.open(props.applyUrl, '_blank');
+      return;
+    }
+    router.push(`/jobs/${props.id}`);
+  };
+
   return (
-  <Link href={`/jobs/${props.id}`} className={`flex flex-col gap-3 rounded-xl p-4 w-72 hover:shadow-[0_0_5px_1px_orange] ${isDarkMode ? 'bg-cape-cod-900 !shadow-orange-300' : 'bg-white !shadow-gray-300'}`}>
-      <div className="flex justify-between">
-        <div className="flex gap-2 items-center">
-          <div className={`p-2 rounded-md ${isDarkMode ? 'bg-cape-cod-800' : 'bg-gray-200'}`}>
+    <Link
+      href={`/jobs/${props.id}`}
+      className={`flex flex-col rounded-2xl border p-5  transition-shadow ${
+        isDarkMode
+          ? 'bg-third border-none shadow-sm hover:shadow-md'
+          : 'bg-white border-gray-200 shadow-sm hover:shadow-md'
+      }`}
+    >
+      {/* Top row: avatar + Save pill */}
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-3">
+
+          {/* logo */}
+
+          <div className={`h-10 w-10 rounded-full p-2 ring-1 overflow-hidden flex items-center justify-center ${isDarkMode ? 'ring-[#ee8f2a55] bg-secondary' : 'ring-gray-200 '}`}
+               aria-hidden>
             {props.iconImage ? (
               <img
-                className="h-7 w-7 object-contain"
+                className="h-full w-full object-cover"
                 src={`data:image/png;base64,${props.iconImage}`}
                 alt={`${props.company} logo`}
               />
             ) : (
-              <img
-                className="h-7 w-7 object-contain"
-                src={((): string => { const mod = require("../../assets/images/logo.png"); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()}
-                alt="Default logo"
-              />
-            )}</div>
-          <div>
-            <div className="font-semibold">{props.jobTitle}</div>
-            <div className={`text-sm ${isDarkMode ? 'text-cape-cod-300' : 'text-gray-500'}`}>
-              {props.company}
-              {props.applyUrl ? "" : ` • ${props.applicants ? props.applicants.length : 0} Applicants`}
-            </div>
+              <span className="text-white font-semibold">{(props.company?.[0] ?? 'J').toUpperCase()}</span>
+            )}
           </div>
+          
         </div>
-        {profile.savedJobs?.includes(props.id) ? (
-          <IconBookmarkFilled onClick={handleSaveJob} className="cursor-pointer text-primary" stroke={1.5} />
-        ) : (
-          <IconBookmark onClick={handleSaveJob} className={`cursor-pointer hover:text-primary ${isDarkMode ? 'text-cape-cod-300' : 'text-gray-500'}`} />
+        <button
+          onClick={handleSaveJob}
+          className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[12px] ${
+            isDarkMode ? 'bg-secondary text-gray-200 border-none' : 'bg-white text-gray-700 border border-gray-200'
+          }`}
+        >
+          <span>{saved ? 'Saved' : 'Save'}</span>
+          {saved ? (
+            <IconBookmarkFilled className="h-4 w-4 text-primary" />
+          ) : (
+            <IconBookmark className="h-4 w-4" />
+          )}
+        </button>
+      </div>
+
+      {/* Company + time */}
+      <div className=" flex items-center gap-2  mt-6">
+        <span className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} font-semibold text-[13px]`}>{props.company}</span>
+        <span className={`${isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'} text-[12px]`}>· {timeAgo(props.postTime)}</span>
+      </div>
+
+      {/* Title */}
+      <h3 className={`mt-1 ${isDarkMode ? 'text-white' : 'text-gray-900'} text-2xl font-medium tracking-tight my-3`}>
+        {props.jobTitle}
+      </h3>
+
+      {/* Badges */}
+      <div className=" flex flex-wrap gap-2">
+        {props.jobType && (
+          <span className={`px-3 py-1 rounded-md text-[11px] font-medium tracking-normal ${isDarkMode ? 'bg-[#ee8f2a67] text-gray-200 ' : 'bg-[#eaeaea] text-gray-800 border border-gray-200'}`}>
+            {props.jobType}
+          </span>
         )}
+        {props.experience && (
+          <span className={`px-3 py-1 rounded-md text-[11px] font-medium tracking-normal ${isDarkMode ? 'bg-[#ee8f2a67] text-gray-200 ' : 'bg-[#eaeaea] text-gray-800 border border-gray-200'}`}>
+            {props.experience}
+          </span>
+        )}
+
+        {props.location && 
+(
+        <span className={`px-3 py-1 rounded-md text-[11px] font-medium tracking-normal ${isDarkMode ? 'bg-[#ee8f2a67] text-gray-200 ' : 'bg-[#eaeaea] text-gray-800 border border-gray-200'}`}>{props.location}</span>
+)
+         }
+
+        
+
+
+
       </div>
 
+      {/* Divider */}
+      <div className={`mt-4 h-px ${isDarkMode ? 'bg-cape-cod-700' : 'bg-gray-200'}`} />
 
-      <div className={`flex gap-2 [&>div]:py-1 [&>div]:px-2 [&>div]:rounded-lg text-xs ${isDarkMode ? '[&>div]:bg-cape-cod-800 [&>div]:text-primary' : '[&>div]:bg-gray-200 [&>div]:text-primary'}`}>
-        <div className="inline-flex items-center">
-          <IconTie className="w-3 h-3 mr-1" />
-          <span>{props.experience}</span>
+      {/* Bottom: salary + location and Apply button */}
+      <div className="flex mt-4 items-end justify-between gap-3">
+        <div>
+          <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-sm tracking-tight font-medium`}>{salaryLabel}</div>
+          {props.applyUrl && (
+            <div className={`${isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'} mt-1.5 tracking-tight text-[12px]`}>{props.applicants ? props.applicants.length : 0} Applicants</div>
+          )}
         </div>
-        <div className="inline-flex items-center">
-          <IconBriefcase className="w-3 h-3 mr-1" />
-          <span>{props.jobType}</span>
-        </div>
-        <div className="inline-flex items-center">
-          <IconMapPin className="w-3 h-3 mr-1" />
-          <span>{props.location}</span>
-        </div>
-      </div>
-
-      <Text className={`!text-xs text-justify ${isDarkMode ? '!text-cape-cod-300' : '!text-gray-500'}`} lineClamp={3}>
-        {props.about}
-      </Text>
-      <Divider size="xs" color={isDarkMode ? 'cape-cod.6' : 'gray.6'} />
-
-      <div className="flex justify-between">
-        <div className={`font-semibold ${isDarkMode ? 'text-cape-cod-200' : 'text-gray-700'}`}>
-          {props.packageOffered > 0 ? `₹ ${props.packageOffered} K / month` : "Not mentioned"}
-        </div>
-        <div className={`flex gap-1 text-xs items-center ${isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'}`}>
-          <IconClockHour3 className="h-5 w-5" stroke={1.5} /> {timeAgo(props.postTime)}
-        </div>
+        <button
+          onClick={handleApply}
+          className={`px-4 py-2 rounded-md text-[12px] font-medium ${isDarkMode ? 'bg-[#ee8f2a67] text-black' : 'bg-black text-white'} hover:opacity-95 active:scale-[0.99]`}
+        >
+          Apply now
+        </button>
       </div>
     </Link>
   );

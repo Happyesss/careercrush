@@ -35,7 +35,6 @@ const Header = () => {
   const links = useMemo(() => [
     { name: "Find jobs", url: "find-jobs" },
     { name: "Find mentors", url: "find-mentors" },
-    { name: "Hackathon & Events", url: "find-hackathon" },
     { name: "Post jobs", url: "post-job/0" },
     { name: "About us", url: "about-us" },
   ], []);

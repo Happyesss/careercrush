@@ -44,7 +44,7 @@ const RightSidebar: React.FC = () => {
     <aside className="hidden lg:block w-72 mt-10 mr-6 text-sm">
       <div className={`mb-6 shadow-md rounded-2xl p-6 text-center ${isDarkMode ? 'bg-cape-cod-900 text-white' : 'bg-white text-gray-700'}`}>
         <h4 className="text-lg font-semibold mb-2">Coming soon</h4>
-        <p className="text-sm opacity-80">We're working on profile widgets to enhance your experience. Check back soon for updates.</p>
+        <p className="text-sm opacity-80">We&apos;re working on profile widgets to enhance your experience. Check back soon for updates.</p>
       </div>
     </aside>
   );
