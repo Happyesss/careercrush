@@ -1,10 +1,9 @@
-import { ActionIcon, Button, Divider } from "@mantine/core";
-import { IconBookmark, IconBookmarkFilled,
-  IconMapPin,
-  IconShare,
-  } from "@tabler/icons-react";
+import { ActionIcon, Button, ButtonGroup, Divider, Modal } from "@mantine/core";
+import { IconBookmark, IconBookmarkFilled, IconShare, IconMapPin, IconChartBarPopular, IconCopy, IconBrandWhatsapp, IconBrandTwitter, IconMail, IconBrandLinkedin, IconX } from "@tabler/icons-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Calendar, Clock, Wallet, Timer } from "lucide-react";
+
 import { card } from "../../assets/Data/JobDescData";
 //@ts-ignore
 import DOMPurify from 'dompurify';
@@ -19,11 +18,14 @@ import { useTheme } from "../../ThemeContext";
 const JobDesc = (props: any) => {
   const data = DOMPurify.sanitize(props.description);
   const [applied, setApplied] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   const profile = useSelector((state: any) => state.profile);
   const { isDarkMode } = useTheme();
   const router = useRouter();
+
+  console.log("JobDesc props:", props);
 
   const handleSaveJob = () => {
     let savedJobs = Array.isArray(profile.savedJobs) ? [...profile.savedJobs] : [];
@@ -66,212 +68,324 @@ const JobDesc = (props: any) => {
     window.open(props.applyUrl, "_blank", "noopener,noreferrer");
   };
 
+  const handleShare = () => {
+    setShareModalOpen(true);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(window.location.href);
+    successNotification("Link copied to clipboard!", "Success");
+    setShareModalOpen(false);
+  };
+
+  const shareToWhatsApp = () => {
+    const message = `Check out this job opportunity: ${props.jobTitle} at ${props.company} - ${window.location.href}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+    setShareModalOpen(false);
+  };
+
+  const shareToTwitter = () => {
+    const message = `Check out this job opportunity: ${props.jobTitle} at ${props.company}`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(window.location.href)}`, '_blank');
+    setShareModalOpen(false);
+  };
+
+  const shareToEmail = () => {
+    const subject = `Job Opportunity: ${props.jobTitle} at ${props.company}`;
+    const body = `Hi,\n\nI found this interesting job opportunity that might interest you:\n\n${props.jobTitle} at ${props.company}\n\n${window.location.href}\n\nBest regards`;
+    window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+    setShareModalOpen(false);
+  };
+
+  const shareToLinkedIn = () => {
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, '_blank');
+    setShareModalOpen(false);
+  };
+
   return (
-  //   <div className={`w-2/3 bs-mx:w-full ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'}`}>
-  //     <div className="flex justify-between">
-  //       <div className="flex gap-2 items-center">
-  //         <div className={`p-3 rounded-xl sm-mx:p-1 ${isDarkMode ? 'bg-cape-cod-800' : 'bg-gray-200'}`}>
-  //         {props.iconImage ? (
-  //   <img
-  //     className="h-7 w-7 object-contain"
-  //     src={`data:image/png;base64,${props.iconImage}`}
-  //     alt={`${props.company} logo`}
-  //   />
-  // ) : (
-  //   <img
-  //     className="h-7 w-7 object-contain"
-  // src={((): string => { const mod = require("../../assets/images/logo.png"); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()}
-  //     alt="Default logo"
-  //   />
-  // )}
-  //         </div>
-  //         <div>
-  //           <div className="font-semibold text-2xl sm-mx:text-xl">{props.jobTitle}</div>
-  //           <div className={`text-lg sm-mx:text-base ${isDarkMode ? 'text-cape-cod-300' : 'text-gray-500'}`}>
-  //             {props.company} &bull; {timeAgo(props.postTime)}
-  //             {!props.applyUrl &&  ` • ${props.applicants ? props.applicants.length : 0} Applicants`}
-  //           </div>
-  //         </div>
-  //       </div>
-  //       <div className="flex flex-col gap-2 items-center">
-  //         {(!props.applyUrl && (props.edit || !applied)) && (
-  //           <Link href={props.edit ? `/post-job/${props.id}` : `/apply-job/${props.id}`}>
-  //             <Button color="orange.4" size="sm" variant="light">
-  //               {props.closed ? "Reopen" : props.edit ? "Edit" : "Apply"}
-  //             </Button>
-  //           </Link>
-  //         )}
-  //         {props.applyUrl && (
-  //         <Button 
-  //           color="orange.4" 
-  //           size="sm" 
-  //           variant="light"
-  //           onClick={handleApplyLink}
-  //         >
-  //           Apply Link
-  //         </Button>
-  //       )}
-  //         {
-  //           !props.edit && applied && <Button color="orange.4" size="sm" variant='transparent'>Applied</Button>
-  //         }
-  //         {props.edit && !props.closed ? <Button color="red.4" size="sm" variant='light' onClick={handleClose}>Close</Button> :
+    <div className={`w-2/3 bs-mx:w-full p-4 !pt-2 md:p-8 rounded-lg flex ${isDarkMode ? 'text-white' : 'text-black'} flex-col items-start`}>
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-start justify-between w-full mb-6 gap-4">
 
-  //           profile.savedJobs?.includes(props.id) ? <IconBookmarkFilled onClick={handleSaveJob} className="cursor-pointer text-primary" stroke={1.5} />
-  //             : <IconBookmark onClick={handleSaveJob} className={`cursor-pointer hover:text-primary ${isDarkMode ? 'text-cape-cod-300' : 'text-gray-500'}`} />
-  //         }
-  //       </div>
-  //     </div>
-  //     <Divider my="xl" color='dark' />
-  //     <div className="flex justify-around sm-mx:flex-wrap sm-mx:gap-4">
-  //       {
-  //         card.map((item: any, index: number) => <div key={index} className="flex flex-col items-center gap-1">
-  //           <ActionIcon className="!h-12 !w-12 sm-mx:!h-10 sm-mx:!w-10 xs-mx:!h-8 xs-mx:!w-8" color="orange.4" variant="transparent" radius="xl" aria-label="Settings">
-  //             <item.icon className="h-4/5 w-4/5" stroke={1.5} />
-  //           </ActionIcon>
-  //           <div className={`text-sm ${isDarkMode ? 'text-cape-cod-300' : 'text-gray-500'} sm-mx:text-xs xs-mx:text-[10px]`}>{item.name}</div>
-  //           <div className="font-semibold sm-mx:text-sm xs-mx:text-xs">
-  //             {props ? props[item.id] : "NA"}
-  //             {item.id === "packageOffered" && (props[item.id] > 0 ? <>K</> : <>Not mentioned</>)}
-  //           </div>
-  //         </div>
-  //         )}
-  //     </div>
-  //     <Divider my="xl" color='dark' />
-  //     <div>
-  //       <div className="text-xl font-semibold mb-5 sm-mx:text-lg xs-mx:text-base">Required Skills</div>
-  //       <div className="flex flex-wrap gap-2">{
-  //         props?.skillsRequired?.map((skill: any, index: number) =>
-  //           <ActionIcon key={index} className="!h-fit font-medium !text-sm !w-fit " color="orange.4" p="xs" variant="light" radius="xl" aria-label="Settings">
-  //             {skill}
-  //           </ActionIcon>
-  //         )}
-  //       </div>
-  //     </div>
-  //     <Divider my="xl" color='dark' />
-  //     <div className={`[&_*]:${isDarkMode ? 'text-cape-cod-300' : 'text-gray-500'} [&_h4]:text-xl [&_h4]:my-5 [&_h4]:font-semibold [&_h4]:${isDarkMode ? 'text-cape-cod-200' : 'text-gray-700'} [&_p]:text-justify [&_li]:marker:text-primary [&_li]:mb-1`}
-  //       dangerouslySetInnerHTML={{ __html: data }}>
-
-  //     </div>
-  //   </div>
-
-
-
-
-
-
-
-
-
- <div className="w-2/3 bs-mx:w-full ml-auto ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'}">
-      
-      <div className="flex items-start justify-between mb-8">
-        <h1 className="text-3xl font-medium text-gray-900">UI/UX Designer</h1>
-        <div className="flex items-center space-x-3">
-          <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2">
-            Apply Now
-          </Button>
-          <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-            <IconBookmarkFilled className="w-5 h-5 text-orange-600" />
-          </button>
-          <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-            <IconShare className="w-5 h-5 text-gray-600" />
-          </button>
-        </div>
-      </div>
-
-
-
-<div className="flex items-center space-x-4 mb-8 ml-5">
-        <div className="w-15 h-15 bg-transparent rounded-lg flex">
-           {props.iconImage ? (
-    <img
-      className="h-12 w-12 object-contain"
-      src={`data:image/png;base64,${props.iconImage}`}
-      alt={`${props.company} logo`}
-    />
-  ) : (
-    <img
-      className="h-7 w-7 object-contain"
-  src={((): string => { const mod = require("../../assets/images/logo.png"); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()}
-      alt="Default logo"
-    />
-  )}
-        </div>
-        <div className="flex-1">
-          <div className="flex items-center space-x-2 mb-2">
-            <span className="text-blue-500 text-lg font-medium">Pixelz Studio</span>
-            <IconMapPin className="w-4 h-4 text-gray-500" />
-            <span className="text-gray-600">Yogyakarta, Indonesia</span>
+        <div className="flex tems-start w-full gap-3 md:gap-4 ">
+          {/* Company Logo */}
+          <div className={`p-2 md:p-3 rounded-lg flex-shrink-0`}>
+            {props.iconImage ? (
+              <img
+                className="h-12 w-12 md:h-12 md:w-12 object-contain"
+                src={`data:image/png;base64,${props.iconImage}`}
+                alt={`${props.company} logo`}
+              />
+            ) : (
+              <img
+                className="h-8 w-8 md:h-12 md:w-12 object-contain"
+                src={((): string => { const mod = require("../../assets/images/logo.png"); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()}
+                alt="Default logo"
+              />
+            )}
           </div>
-          <div className="flex items-center space-x-6">
-            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Fulltime</span>
-            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">Remote</span>
-            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">2-4 Years</span>
+
+          {/* Job Info */}
+          <div className="flex-1 min-w-0">
+            <h1 className="text-xl md:text-3xl font-semibold tracking-tight mb-1 leading-tight">{props.jobTitle}</h1>
+
+
+            <div className="flex  sm:flex-row sm:items-center gap-1 sm:gap-2 text-sm md:text-base text-gray-600 dark:text-gray-400 mb-3">
+              <span className="font-medium text-primary text-[16px]">{props.company}</span>
+              <span className=" sm:inline">•</span>
+              <span className="text-sm">{props.location || "Remote"}</span>
+              <span className=" sm:inline">•</span>
+              <span className="text-sm">{timeAgo(props.postTime)}</span>
+            </div>
+            
+            {/* Job Details Tags */}
+            <div className="flex flex-wrap  gap-2 text-xs mb-4">
+              <span className={`px-2 md:px-3 py-1 rounded-md !text-xs md:text-sm ${isDarkMode ? 'bg-[#201e1c] text-white' : 'bg-gray-100 text-gray-700'}`}>
+                {props.jobType || "Full time"}
+              </span>
+
+              <span className={`px-2 md:px-3 py-1 rounded-md !text-xs md:text-sm ${isDarkMode ? 'bg-[#201e1c] text-white' : 'bg-gray-100 text-gray-700'}`}>
+                {props.experience || "2-4 Years"}
+              </span>
+
+               <span className={`px-2 md:px-3 py-1 rounded-md !text-xs md:text-sm ${isDarkMode ? 'bg-[#201e1c] text-white' : 'bg-gray-100 text-gray-700'}`}>
+                {props.applicants?.length || "0"} - Applicant
+              </span>
+
+               <span className={`px-2 md:px-3 py-1 rounded-md !text-xs md:text-sm ${isDarkMode ? 'bg-[#201e1c] text-white' : 'bg-gray-100 text-gray-700'}`}>
+₹{props.packageOffered}K - ₹{props.packageOffered + 50}K       
+       </span>
+            </div>
           </div>
         </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-row md:flex-col lg:flex-row items-center gap-2 md:gap-3 justify-start md:justify-end">
+          {/* Apply Button */}
+          {(!props.applyUrl && (props.edit || !applied)) && (
+            <Link href={props.edit ? `/post-job/${props.id}` : `/apply-job/${props.id}`}>
+              <button 
+                className="bg-primary  text-white px-4 md:px-6 py-2 rounded-md font-semibold text-[12px]  whitespace-nowrap"
+              >
+                {props.closed ? "Reopen" : props.edit ? "Edit" : "Apply Now"}
+              </button>
+            </Link>
+          )}
+          
+          {props.applyUrl && (
+            <button 
+                className="bg-primary  text-white px-4 md:px-6 py-2 rounded-md font-semibold text-[12px]  whitespace-nowrap"
+              onClick={handleApplyLink}
+            >
+              Apply Now
+            </button>
+          )}
+
+          {!props.edit && applied && (
+            <button 
+                className="bg-primary  text-white px-4 md:px-6 py-2 rounded-md font-semibold text-[12px]  whitespace-nowrap"
+              disabled
+            >
+              Applied
+            </button>
+          )}
+
+          {/* Bookmark Button */}
+
+
+
+ {props.edit && !props.closed ? <Button color="red.4" size="sm" variant='light' onClick={handleClose}>Close</Button> :
+
+            profile.savedJobs?.includes(props.id) ? <IconBookmarkFilled onClick={handleSaveJob} className="cursor-pointer text-primary" stroke={1.5} />
+              : <IconBookmark onClick={handleSaveJob} className={`cursor-pointer hover:text-primary ${isDarkMode ? 'text-cape-cod-300' : 'text-gray-500'}`} />
+          }
+
+
+          {/* Close Button for Editors */}
+          {props.edit && !props.closed && (
+            <Button 
+              size="sm"
+              variant="outline"
+              className="px-3 md:px-4 py-2 rounded-lg font-medium border-red-500 text-red-500 hover:bg-red-50 text-sm whitespace-nowrap"
+              onClick={handleClose}
+            >
+              Close
+            </Button>
+          )}
+
+
+          <button onClick={handleShare} className={`p-2 rounded-lg transition-colors `}>
+               <IconShare className={`cursor-pointer h-5 w-5  ${isDarkMode ? 'text-cape-cod-300' : 'text-gray-500'}`} />
+          </button>
+
+        </div>
       </div>
 
-
-<section className="mb-8">
-        <h2 className="text-xl font-medium text-gray-900 mb-4">About this role</h2>
-        <p className="text-gray-600 leading-relaxed">
-          As an UI/UX Designer on Pixelz Studio, you'll focus on design user-friendly on several platform (web, mobile, 
-          dashboard, etc) to our users needs. Your innovative solution will enhance the user experience on several 
-          platforms. Join us and let's making impact on user engagement at Pixelz Studio.
-        </p>
-      </section>
-
-
-
-            <section className="mb-8">
-        <h2 className="text-xl font-medium text-gray-900 mb-4">Qualification</h2>
-        <ul className="space-y-3 text-gray-600 ml-3">
-          <li className="flex items-start">
-            <span className="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            At least 2-4 years of relevant experience in product design or related roles.
-          </li>
-          <li className="flex items-start">
-            <span className="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Knowledge of design validation, either through quantitative or qualitative research.
-          </li>
-          <li className="flex items-start">
-            <span className="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Have good knowledge using Figma and Figjam
-          </li>
-          <li className="flex items-start">
-            <span className="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Experience with analytics tools to gather data from users.
-          </li>
-        </ul>
-      </section>
-
-
-<section className="mb-8">
-        <h2 className="text-xl font-medium text-gray-900 mb-4">Responsibility</h2>
-        <ul className="space-y-3 text-gray-600 ml-3">
-          <li className="flex items-start">
-            <span className="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Create design and user journey on every features and product/business units across multiples devices (Web+App)
-          </li>
-          <li className="flex items-start">
-            <span className="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Identifying design problems through user journey and devising elegant solutions
-          </li>
-          <li className="flex items-start">
-            <span className="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Develop low and hi fidelity designs, user experience flow, & prototype, translate it into highly-polished visual composites following style and brand guidelines.
-          </li>
-          <li className="flex items-start">
-            <span className="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Brainstorm and works together with Design Lead, UX Engineers, and PMs to execute a design sprint on specific story or task
-          </li>
-        </ul>
-      </section>
-
-
-
+      {/* Share Modal */}
+      {shareModalOpen && (
+<div className="fixed inset-0 flex items-center justify-center z-50 bg-black/40 backdrop-blur-sm">
+    {/* Modal box */}
+    <div
+      className={`w-[90%] sm:w-full max-w-sm rounded-lg shadow-lg 
+        ${isDarkMode ? 'bg-third' : 'bg-white'}
+      `}
+    >
+      {/* Header */}
+      <div
+        className={`flex items-center justify-between px-4 py-3 border-b 
+          ${isDarkMode ? 'border-[#373a40]' : 'border-[#e9ecef]'}
+        `}
+      >
+        <div className="flex items-center gap-2">
+          <IconShare size={20} className="text-primary" />
+          <span
+            className={`font-semibold ${isDarkMode ? 'text-white' : 'text-black'}`}
+          >
+            Share this job
+          </span>
+        </div>
+        <button
+          onClick={() => setShareModalOpen(false)}
+          className={`text-lg font-bold ${
+            isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'
+          }`}
+        >
+          ✕
+        </button>
       </div>
-  ) 
+
+      {/* Body */}
+      <div className="p-6 space-y-3">
+        {/* Copy Link */}
+        <button
+          onClick={copyToClipboard}
+          className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors 
+            hover:bg-gray-50 dark:hover:bg-secondary 
+            ${isDarkMode ? 'text-white' : 'text-gray-700'}
+          `}
+        >
+          <div className="p-2 bg-gray-100 dark:bg-gray-700 rounded-lg">
+            <IconCopy size={20} className="text-gray-600 dark:text-gray-400" />
+          </div>
+          <div className="text-left">
+            <div className="font-medium">Copy link</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">Copy job link to clipboard</div>
+          </div>
+        </button>
+
+        {/* WhatsApp */}
+        <button
+          onClick={shareToWhatsApp}
+          className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors 
+            hover:bg-gray-50 dark:hover:bg-secondary  
+            ${isDarkMode ? 'text-white' : 'text-gray-700'}
+          `}
+        >
+          <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
+            <IconBrandWhatsapp size={20} className="text-green-600" />
+          </div>
+          <div className="text-left">
+            <div className="font-medium">WhatsApp</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">Share via WhatsApp</div>
+          </div>
+        </button>
+
+        {/* Twitter/X */}
+        <button
+          onClick={shareToTwitter}
+          className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors 
+            hover:bg-gray-50 dark:hover:bg-secondary 
+            ${isDarkMode ? 'text-white' : 'text-gray-700'}
+          `}
+        >
+          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+            <IconBrandTwitter size={20} className="text-blue-600" />
+          </div>
+          <div className="text-left">
+            <div className="font-medium">Twitter/X</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">Share on Twitter</div>
+          </div>
+        </button>
+
+        {/* Email */}
+        <button
+          onClick={shareToEmail}
+          className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors 
+            hover:bg-gray-50 dark:hover:bg-secondary  
+            ${isDarkMode ? 'text-white' : 'text-gray-700'}
+          `}
+        >
+          <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
+            <IconMail size={20} className="text-red-600" />
+          </div>
+          <div className="text-left">
+            <div className="font-medium">Email</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">Share via email</div>
+          </div>
+        </button>
+
+        {/* LinkedIn */}
+        <button
+          onClick={shareToLinkedIn}
+          className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors 
+            hover:bg-gray-50 dark:hover:bg-secondary 
+            ${isDarkMode ? 'text-white' : 'text-gray-700'}
+          `}
+        >
+          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+            <IconBrandLinkedin size={20} className="text-blue-700" />
+          </div>
+          <div className="text-left">
+            <div className="font-medium">LinkedIn</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">Share on LinkedIn</div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+     
+
+
+       {/* Required Skills */}
+      {props?.skillsRequired && props.skillsRequired.length > 0 && (
+        <>
+        <Divider className="mt-2"/>
+          <div className="mb-6 md:mb-8  w-full">
+            <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Required Skills</h2>
+            <div className="flex flex-wrap gap-2 md:gap-3">
+              {props.skillsRequired.map((skill: any, index: number) => (
+                <span
+                  key={index}
+                  className={`px-2 md:px-3 py-1.5 md:py-2 rounded-md text-xs md:text-xs font-medium ${
+                    isDarkMode 
+                      ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' 
+                      : 'bg-orange-50 text-orange-600 border border-orange-200'
+                  }`}
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
+
+      {/* About this role */}
+      <div className="mb-6 md:mb-8 ">
+        <div className={`text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed ${isDarkMode ? '[&_*]:text-cape-cod-300' : '[&_*]:text-gray-600'} [&_h4]:text-lg [&_h4]:md:text-xl [&_h4]:my-3 [&_h4]:md:my-5 [&_h4]:font-semibold [&_h4]:${isDarkMode ? 'text-cape-cod-200' : 'text-gray-700'} [&_p]:text-justify [&_li]:marker:text-primary [&_li]:mb-1 [&_ul]:pl-4 [&_ol]:pl-4`}>
+<div
+      className="prose max-w-none"
+      dangerouslySetInnerHTML={{ __html: data }}
+    />        </div>
+      </div>
+
+     
+    </div>
+  )
 }
 
 export default JobDesc;

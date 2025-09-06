@@ -97,24 +97,25 @@ const ApplyForm = () => {
             <div className="flex items-start gap-3 mb-3">
                 <div className="mt-1 text-primary"><IconSend size={18} /></div>
                 <div>
-                    <div className="text-2xl md:text-xl font-semibold text-black dark:text-black">Submit Your Application</div>
-                    <div className="text-sm text-lightBlack">Fill out the form below to apply for this position</div>
+                    <div className="text-2xl md:text-xl font-medium tracking-tight text-black dark:text-black">Submit Your Application</div>
+                    <div className="text-sm text-lightBlack tracking-tight">Fill out the form below to apply for this position</div>
                 </div>
             </div>
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-5 mt-5">
                 <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
                     <div className="flex items-center gap-2 mb-4 text-black">
                         <span className="text-primary"><IconFileDescription size={16} /></span>
-                        <span className="font-semibold">Personal Information</span>
+                        <span className="font-medium tracking-tight">Personal Information</span>
                     </div>
-                <div className="flex gap-10 [&>*]:w-1/2 sm-mx:[&>*]:w-full sm-mx:flex-wrap sm-mx:gap-5">
+                <div className="flex gap-10 !font-medium !tracking-tight mt-4 [&>*]:w-1/2 sm-mx:[&>*]:w-full sm-mx:flex-wrap sm-mx:gap-5">
                     <TextInput
                         {...form.getInputProps("name")}
                         readOnly={preview}
                         variant={preview ? "unstyled" : "default"}
-                        className={`${isDarkMode ? 'text-black [&_input]:bg-third [&_input]:border-third [&_input]:text-black' : 'text-black [&_input]:bg-secondary [&_input]:text-black'} mb-3
+                        className={`${isDarkMode ? ' text-black [&_input]:bg-third [&_input]:border-third [&_input]:text-black' : 'text-black [&_input]:bg-secondary [&_input]:text-black'} mb-3
                                 ${preview ? "text-lightBlack font-semibold [&_input]:bg-transparent [&_input]:border-transparent" : ""} sm-mx:w-full`}
                         label="Full Name"
+                        placeholder="Your Name"
                         withAsterisk
                         description="Enter Name"
                         leftSection={<IconUser stroke={1.5} size={18} />}
@@ -138,6 +139,7 @@ const ApplyForm = () => {
                         description="Enter Email"
                         leftSection={<IconMail stroke={1.5} size={18} />}
                         leftSectionPointerEvents="none"
+                        placeholder="Your Email"
                         styles={() => ({
                             input: {
                                 backgroundColor: preview ? "transparent" : isDarkMode ? "rgba(255,255,255,0.04)" : "var(--color-secondary)",
@@ -157,6 +159,7 @@ const ApplyForm = () => {
                         label="Phone Number"
                         withAsterisk
                         description="Enter Phone Number"
+                        placeholder="Your Phone Number"
                         hideControls
                         min={0}
                         max={9999999999}
@@ -179,6 +182,7 @@ const ApplyForm = () => {
                                 ${preview ? "text-lightBlack font-semibold [&_input]:bg-transparent [&_input]:border-transparent" : ""}`}
                         label="Personal Website"
                         withAsterisk
+                        placeholder="Your Website"
                         description="Enter URL"
                         leftSection={<IconWorld stroke={1.5} size={18} />} 
                         leftSectionPointerEvents="none"
@@ -192,10 +196,10 @@ const ApplyForm = () => {
                     />
                 </div>
                 </div>
-                <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+                <div className="rounded-lg border border-gray-200 !tracking-tight !font-medium dark:border-gray-700 p-4">
                     <div className="flex items-center gap-2 mb-4 text-black">
                         <span className="text-primary"><IconFileDescription size={16} /></span>
-                        <span className="font-semibold">Documents & Cover Letter</span>
+                        <span className="font-medium tracking-tight">Documents & Cover Letter</span>
                     </div>
                 <FileInput
                     {...form.getInputProps("resume")}

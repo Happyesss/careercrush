@@ -125,3 +125,24 @@ html {
   scroll-behavior: smooth;
 }
 
+
+
+.prose h4 {
+  @apply text-[18px] font-medium tracking-tight text-black dark:text-white;
+}
+
+.prose p {
+  @apply text-[14px] leading-relaxed text-gray-700 dark:text-gray-300;
+}
+
+.prose ul {
+  @apply list-none pl-6 mt-2 mb-4;
+}
+
+.prose li {
+  @apply text-[14px] mb-1 text-gray-700 dark:text-gray-300;
+}
+
+.prose h4:not(:first-child) {
+  @apply mt-8; 
+}
