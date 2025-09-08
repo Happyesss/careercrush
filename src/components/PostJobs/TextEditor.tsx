@@ -33,7 +33,11 @@ const TextEditor=(props:any)=> {
 
   return (
     <RichTextEditor editor={editor}>
-      <RichTextEditor.Toolbar sticky stickyOffset={60} bg="#f4f2ee">
+      <RichTextEditor.Toolbar
+        sticky
+        stickyOffset={60}
+        style={{ backgroundColor: 'var(--color-secondary)', color: 'var(--color-blackk)', fontFamily: 'inherit' }}
+      >
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
           <RichTextEditor.Italic />
@@ -75,7 +79,7 @@ const TextEditor=(props:any)=> {
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 
-      <RichTextEditor.Content bg="transparent" />
+  <RichTextEditor.Content style={{ backgroundColor: 'var(--color-secondary)', color: 'var(--color-blackk)', fontFamily: 'inherit' }} />
     </RichTextEditor>
   );
 }

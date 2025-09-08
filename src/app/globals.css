@@ -8,6 +8,9 @@
   --color-blackk: #000;
   --color-lightBlack : #585d60d5;
 
+  /* input border used inside post-job inputs */
+  --input-border-color: #e5e7eb;
+
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -20,6 +23,9 @@
   --color-lightBlack : #d5daded5;
   --color-third:#201e1c;
 
+  /* input border color for dark mode */
+  --input-border-color: #3a3a3a;
+
   
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 0, 0, 0;
@@ -31,12 +37,8 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  /* use a solid background color (no gradient) so pages render like the Apply Job layout */
+  background-color: rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
@@ -146,3 +148,81 @@ html {
 .prose h4:not(:first-child) {
   @apply mt-8; 
 }
+
+/* Ensure RichTextEditor and Mantine inputs match the PostJobs card background
+   so they visually separate from surrounding content in both light and dark mode */
+.post-job-root :where(.mantine-RichTextEditor-toolbar, .mantine-RichTextEditor-content) {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-blackk) !important;
+  font-family: inherit !important;
+  border-radius: 6px;
+}
+
+/* Mantine input override when used inside PostJobs layout */
+.post-job-root :where(input, textarea, .mantine-NumberInput-input, .mantine-FileInput-input, .mantine-Textarea-input) {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-blackk) !important;
+  border-color: var(--input-border-color) !important;
+  font-family: inherit !important;
+  border-radius: 6px;
+}
+
+/* wrapper used in PostJobs to standardize input spacing and label color */
+.post-job-input-wrapper {
+  color: inherit;
+}
+.post-job-input-wrapper .mantine-TextInput-label,
+.post-job-input-wrapper .mantine-Textarea-label,
+.post-job-input-wrapper label {
+  color: inherit !important;
+}
+
+/* Slightly darker border when in dark mode is handled by --input-border-color */
+
+/* Ensure Combobox/Select dropdowns and scroll areas inside PostJobs match the navbar/card background
+   Light mode: white; Dark mode: navbar color (--color-third) */
+.post-job-root :where(
+  .mantine-Combobox-dropdown,
+  .mantine-Select-dropdown,
+  .mantine-Popper,
+  .mantine-Menu-dropdown,
+  [role="listbox"],
+  .mantine-ScrollArea-root,
+  .mantine-ScrollArea-scrollContainer
+) {
+  background-color: #ffffff !important;
+  color: var(--color-blackk) !important;
+  border-color: var(--input-border-color) !important;
+  box-shadow: none !important;
+}
+
+.dark .post-job-root :where(
+  .mantine-Combobox-dropdown,
+  .mantine-Select-dropdown,
+  .mantine-Popper,
+  .mantine-Menu-dropdown,
+  [role="listbox"],
+  .mantine-ScrollArea-root,
+  .mantine-ScrollArea-scrollContainer
+) {
+  background-color: var(--color-third) !important;
+  color: var(--color-blackk) !important;
+  border-color: var(--input-border-color) !important;
+}
+
+/* Options inside dropdowns */
+.post-job-root :where(.mantine-Combobox-option, .mantine-Select-item, [role="option"]) {
+  background-color: transparent !important;
+  color: var(--color-blackk) !important;
+}
+
+/* Job gallery tabs: remove the thin bottom border in dark mode so the open tab looks the same as light mode */
+.dark .job-gallery-tabs :where(.mantine-Tabs-list, .mantine-Tabs-root) {
+  border-bottom: none !important;
+}
+
+.dark .job-gallery-tabs :where(.mantine-Tabs-list button[data-active='true']) {
+  box-shadow: none !important;
+}
+
+
