@@ -3,7 +3,7 @@ import Talents from "../FindTalent/Talents"
 
 const FindTalent = () => {
   return (
-    <div className="min-h-[100vh] bg-cape-cod-950 font-['poppins']" >
+  <div className="min-h-[100vh] bg-cape-cod-950" >
         <Divider mx="md" size="xs"/>
         {/* <SearchBar/>
         <Divider mx="md" size="xs"/> */}

@@ -20,7 +20,7 @@ const TalentProfile = () => {
   });
 }, [])
   return (
-    <div className="min-h-[100vh] bg-cape-cod-950 font-['poppins'] p-4" >
+  <div className="min-h-[100vh] bg-cape-cod-950 p-4" >
     <Divider size="xs"/>
     
   <Button onClick={()=>router.back()} my="sm" leftSection={<IconArrowLeft size={20}/>} color="blue.4" variant='light' >Back</Button> 

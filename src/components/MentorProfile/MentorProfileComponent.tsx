@@ -137,7 +137,7 @@ const MentorProfileComponent = () => {
   }
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'} font-['poppins']`}>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'}`}>
       <div className="w-full px-4 sm:px-6 lg:px-8 py-10">
         <div className="max-w-5xl mx-auto space-y-6">
           {/* Public-facing profile header matching the provided layout */}
