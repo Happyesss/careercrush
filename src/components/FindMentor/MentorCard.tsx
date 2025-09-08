@@ -25,8 +25,14 @@ const MentorCard = (props: any) => {
 
   // Use package-based prices if provided from parent, otherwise use default pricing
   const mappedPlanPrices = props.planPriceMap as Record<string, number> | undefined;
+  const mappedDiscounts = props.discountMap as Record<string, number> | undefined;
+  const mappedOriginalPrices = props.originalPriceMap as Record<string, number> | undefined;
+  const hasRealPackages = props.mentorshipPackages && props.mentorshipPackages.length > 0;
+  
+  // If we have real packages, use those prices, otherwise fall back to defaults
   const basePriceFromPackage = mappedPlanPrices?.["1"];
   const basePrice = basePriceFromPackage ?? 7000; // Default base price
+  
   const planPrices = {
     "1": mappedPlanPrices?.["1"] ?? basePrice,
     "3": mappedPlanPrices?.["3"] ?? Math.round(basePrice * 0.85), // 15% off default
@@ -34,16 +40,23 @@ const MentorCard = (props: any) => {
   } as const;
   
   const planDiscounts = {
-    "6": 30,
-    "3": 15,
-    "1": 0
+    "1": mappedDiscounts?.["1"] ?? 0,
+    "3": mappedDiscounts?.["3"] ?? 15,
+    "6": mappedDiscounts?.["6"] ?? 30,
+  };
+
+  const planOriginalPrices = {
+    "1": mappedOriginalPrices?.["1"] ?? basePrice,
+    "3": mappedOriginalPrices?.["3"] ?? basePrice,
+    "6": mappedOriginalPrices?.["6"] ?? basePrice,
   };
 
   const currentPrice = planPrices[selectedPlan as keyof typeof planPrices];
   const currentDiscount = planDiscounts[selectedPlan as keyof typeof planDiscounts];
+  const currentOriginalPrice = planOriginalPrices[selectedPlan as keyof typeof planOriginalPrices];
   
-  // Check if trial is available
-  const hasTrialSlots = props.hasTrialSlots !== false; // Default to true if not specified
+  // Check if trial is available - use real package data if available
+  const hasTrialSlots = props.hasTrialSlots ?? props.hasTrialSlots !== false; // Default to true if not specified
   const nextAvailableDate = props.nextAvailableDate || "Sun Aug 31 2025";
 
   return (
@@ -243,14 +256,34 @@ const MentorCard = (props: any) => {
           <Divider className="my-4" />
 
           <div className="flex items-end gap-2">
-            <div className="text-3xl font-bold">₹{currentPrice.toLocaleString()}</div>
-            <div className="text-sm mb-1">/Month</div>
-            {currentDiscount > 0 && (
-              <Badge color="yellow" variant="light" className="ml-auto">
-                Extra {currentDiscount}% OFF
-              </Badge>
+            {currentDiscount > 0 && currentOriginalPrice > currentPrice ? (
+              <>
+                <div className="text-3xl font-bold">₹{currentPrice.toLocaleString()}</div>
+                <div className="text-sm mb-1">/Month</div>
+                <div className="text-lg text-gray-500 line-through mb-1">₹{currentOriginalPrice.toLocaleString()}</div>
+                <Badge color="yellow" variant="light" className="ml-auto">
+                  {currentDiscount}% OFF
+                </Badge>
+              </>
+            ) : (
+              <>
+                <div className="text-3xl font-bold">₹{currentPrice.toLocaleString()}</div>
+                <div className="text-sm mb-1">/Month</div>
+                {currentDiscount > 0 && (
+                  <Badge color="yellow" variant="light" className="ml-auto">
+                    {currentDiscount}% OFF
+                  </Badge>
+                )}
+              </>
             )}
           </div>
+          
+          {/* Show package source indicator */}
+          {!hasRealPackages && (
+            <div className={`text-xs mt-1 ${isDarkMode ? "text-cape-cod-400" : "text-gray-500"}`}>
+              * Estimated pricing - View profile for exact packages
+            </div>
+          )}
 
           <div className="mt-4 grid grid-cols-1 gap-3">
             <Link href={`/mentor/${props.id}`} className="w-full">

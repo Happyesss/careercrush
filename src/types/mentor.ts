@@ -22,6 +22,12 @@ export interface Mentor {
   linkedinUrl?: string;
   portfolioUrl?: string;
   mentorshipRequests?: MentorshipRequest[];
+  // New fields for mentorship packages
+  mentorshipPackages?: any[]; // Will contain MentorshipPackage[]
+  planPriceMap?: Record<string, number>;
+  hasTrialSlots?: boolean;
+  discountMap?: Record<string, number>; // Discount percentages for each duration
+  originalPriceMap?: Record<string, number>; // Original prices before discount
 }
 
 export interface Experience {

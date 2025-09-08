@@ -9,9 +9,11 @@ interface MentorProfileTabsProps {
   mentor: Mentor;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  mentorshipPackages?: any[];
+  packageLoading?: boolean;
 }
 
-const MentorProfileTabs = ({ mentor, activeTab, setActiveTab }: MentorProfileTabsProps) => {
+const MentorProfileTabs = ({ mentor, activeTab, setActiveTab, mentorshipPackages = [], packageLoading = false }: MentorProfileTabsProps) => {
   const { isDarkMode } = useTheme();
 
   return (

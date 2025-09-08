@@ -64,8 +64,29 @@ const PackageCard: React.FC<PackageCardProps> = ({
           <div>
             <Text size="xs" c="dimmed">Price</Text>
             <Text size="sm" fw={500}>{packageUtils.formatPrice(pkg.pricePerMonth)}/mo</Text>
+            {pkg.originalPricePerMonth && pkg.originalPricePerMonth !== pkg.pricePerMonth && (
+              <Text size="xs" c="dimmed" td="line-through">
+                {packageUtils.formatPrice(pkg.originalPricePerMonth)}/mo
+              </Text>
+            )}
           </div>
         </Group>
+
+        {/* Discount badges for compact view */}
+        {((pkg.threeMonthDiscount && pkg.threeMonthDiscount > 0) || (pkg.sixMonthDiscount && pkg.sixMonthDiscount > 0)) && (
+          <Group gap="xs" mt="xs">
+            {pkg.threeMonthDiscount && pkg.threeMonthDiscount > 0 && (
+              <Badge size="xs" color="orange" variant="light">
+                3M: {pkg.threeMonthDiscount}% OFF
+              </Badge>
+            )}
+            {pkg.sixMonthDiscount && pkg.sixMonthDiscount > 0 && (
+              <Badge size="xs" color="red" variant="light">
+                6M: {pkg.sixMonthDiscount}% OFF
+              </Badge>
+            )}
+          </Group>
+        )}
 
         {showBookingActions && (
           <Button 
@@ -167,6 +188,11 @@ const PackageCard: React.FC<PackageCardProps> = ({
             <div>
               <Text size="xs" c="dimmed">Monthly</Text>
               <Text size="sm" fw={500}>{packageUtils.formatPrice(pkg.pricePerMonth)}</Text>
+              {pkg.originalPricePerMonth && pkg.originalPricePerMonth !== pkg.pricePerMonth && (
+                <Text size="xs" c="dimmed" td="line-through">
+                  {packageUtils.formatPrice(pkg.originalPricePerMonth)}
+                </Text>
+              )}
             </div>
           </div>
           
@@ -178,6 +204,25 @@ const PackageCard: React.FC<PackageCardProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Discount Information */}
+        {((pkg.threeMonthDiscount && pkg.threeMonthDiscount > 0) || (pkg.sixMonthDiscount && pkg.sixMonthDiscount > 0)) && (
+          <div className="mb-md">
+            <Text size="sm" fw={500} mb="xs">Available Discounts</Text>
+            <Group gap="xs">
+              {pkg.threeMonthDiscount && pkg.threeMonthDiscount > 0 && (
+                <Badge color="orange" variant="light" size="sm">
+                  3 Months: {pkg.threeMonthDiscount}% OFF
+                </Badge>
+              )}
+              {pkg.sixMonthDiscount && pkg.sixMonthDiscount > 0 && (
+                <Badge color="red" variant="light" size="sm">
+                  6 Months: {pkg.sixMonthDiscount}% OFF
+                </Badge>
+              )}
+            </Group>
+          </div>
+        )}
 
         {/* Topics Covered */}
         {pkg.topicsCovered && pkg.topicsCovered.length > 0 && (
