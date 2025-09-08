@@ -55,24 +55,38 @@ const MentorPackageDashboard: React.FC<MentorPackageDashboardProps> = ({ mentorI
     }
   };
 
-  const handleCreatePackage = async (packageData: any) => {
+  const handleCreateOrUpdatePackage = async (packageData: any) => {
     try {
-      await packageService.createPackage({
-        ...packageData,
-        mentorId,
-      });
-      notifications.show({
-        title: 'Success',
-        message: 'Package created successfully',
-        color: 'green',
-      });
+      if (packageData.id) {
+        // Update flow
+        await packageService.updatePackage({
+          ...packageData,
+          mentorId,
+        });
+        notifications.show({
+          title: 'Success',
+          message: 'Package updated successfully',
+          color: 'green',
+        });
+      } else {
+        // Create flow
+        await packageService.createPackage({
+          ...packageData,
+          mentorId,
+        });
+        notifications.show({
+          title: 'Success',
+          message: 'Package created successfully',
+          color: 'green',
+        });
+      }
       setCreateModalOpen(false);
       fetchData();
     } catch (error) {
-      console.error('Error creating package:', error);
+      console.error('Error saving package:', error);
       notifications.show({
         title: 'Error',
-        message: 'Failed to create package',
+        message: 'Failed to save package',
         color: 'red',
       });
     }
@@ -298,7 +312,7 @@ const MentorPackageDashboard: React.FC<MentorPackageDashboardProps> = ({ mentorI
             setCreateModalOpen(false);
             setSelectedPackage(null);
           }}
-          onSubmit={handleCreatePackage}
+          onSubmit={handleCreateOrUpdatePackage}
           initialData={selectedPackage}
           mentorId={mentorId}
         />

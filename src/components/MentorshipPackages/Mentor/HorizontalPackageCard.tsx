@@ -36,9 +36,9 @@ const HorizontalPackageCard: React.FC<HorizontalPackageCardProps> = ({
   showMentorActions = false,
 }) => {
   // Calculate pricing for different durations based on package data
-  const baseMonthlyPrice = pkg.pricePerMonth;
+  const baseMonthlyPrice = pkg.originalPricePerMonth || pkg.pricePerMonth;
   
-  // Create different plan options with more realistic discount structure
+  // Create different plan options using actual discount data from package
   const plans: PlanDetails[] = [
     {
       duration: 1,
@@ -50,18 +50,26 @@ const HorizontalPackageCard: React.FC<HorizontalPackageCardProps> = ({
     {
       duration: 3,
       label: '3 Months',
-      monthlyPrice: Math.round(baseMonthlyPrice * 0.85), // 15% discount
-      totalPrice: Math.round(baseMonthlyPrice * 0.85 * 3),
-      discount: 15,
+      monthlyPrice: pkg.threeMonthDiscount ? 
+        Math.round(baseMonthlyPrice * (1 - pkg.threeMonthDiscount / 100)) : 
+        Math.round(baseMonthlyPrice * 0.85), // fallback 15% discount
+      totalPrice: (pkg.threeMonthDiscount ? 
+        Math.round(baseMonthlyPrice * (1 - pkg.threeMonthDiscount / 100)) : 
+        Math.round(baseMonthlyPrice * 0.85)) * 3,
+      discount: pkg.threeMonthDiscount || 15,
       originalPrice: baseMonthlyPrice,
       popular: true,
     },
     {
       duration: 6,
       label: '6 Months',
-      monthlyPrice: Math.round(baseMonthlyPrice * 0.7), // 30% discount  
-      totalPrice: Math.round(baseMonthlyPrice * 0.7 * 6),
-      discount: 30,
+      monthlyPrice: pkg.sixMonthDiscount ? 
+        Math.round(baseMonthlyPrice * (1 - pkg.sixMonthDiscount / 100)) : 
+        Math.round(baseMonthlyPrice * 0.7), // fallback 30% discount
+      totalPrice: (pkg.sixMonthDiscount ? 
+        Math.round(baseMonthlyPrice * (1 - pkg.sixMonthDiscount / 100)) : 
+        Math.round(baseMonthlyPrice * 0.7)) * 6,
+      discount: pkg.sixMonthDiscount || 30,
       originalPrice: baseMonthlyPrice,
       bestValue: true,
     },

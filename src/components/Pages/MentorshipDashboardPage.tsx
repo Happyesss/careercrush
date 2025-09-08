@@ -160,7 +160,7 @@ const MentorshipDashboardPage = () => {
             </div>
             {/* Packages Content */}
             {activeTab === 'packages' && (
-              <MentorPackageDashboard mentorId={user.id || 1} />
+              <MentorPackageDashboard mentorId={Number(user.id)} />
             )}
 
             {/* Analytics Content */}

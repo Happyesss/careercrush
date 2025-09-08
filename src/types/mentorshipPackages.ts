@@ -42,6 +42,11 @@ export interface MentorshipPackage {
   hasCertification?: boolean; // Certification of mentorship completion
   hasRescheduling?: boolean; // Reschedule anytime capability
   
+  // Discount fields for pricing strategy
+  threeMonthDiscount?: number; // Discount percentage for 3-month plan
+  sixMonthDiscount?: number; // Discount percentage for 6-month plan
+  originalPricePerMonth?: number; // Original price before discounts
+  
   createdAt?: string;
   updatedAt?: string;
 }
@@ -123,6 +128,13 @@ export interface CreatePackageRequest {
   hasJobReferrals?: boolean;
   hasCertification?: boolean;
   hasRescheduling?: boolean;
+
+  // Discount fields
+  threeMonthDiscount?: number;
+  sixMonthDiscount?: number;
+  originalPricePerMonth?: number;
+  // If updating existing package
+  id?: number;
 }
 
 export interface CreateTrialSlotRequest {

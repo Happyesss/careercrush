@@ -170,9 +170,9 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
       form.setValues({
         packageName: initialData.packageName,
         description: initialData.description,
-        basePricePerMonth: initialData.pricePerMonth, // Map old field to new
-        threeMonthDiscount: 0, // Default to 0 for existing packages
-        sixMonthDiscount: 0, // Default to 0 for existing packages
+  basePricePerMonth: initialData.originalPricePerMonth || initialData.pricePerMonth, // use original if present
+  threeMonthDiscount: initialData.threeMonthDiscount ?? 0,
+  sixMonthDiscount: initialData.sixMonthDiscount ?? 0,
         sessionsPerMonth: initialData.sessionsPerMonth,
         sessionType: initialData.sessionType,
         sessionDurationMinutes: initialData.sessionDurationMinutes,
@@ -345,7 +345,13 @@ const CreatePackageWizard: React.FC<CreatePackageWizardProps> = ({
         hasRegularFollowups: form.values.hasRegularFollowups,
         hasJobReferrals: form.values.hasJobReferrals,
         hasCertification: form.values.hasCertification,
-        hasRescheduling: form.values.hasRescheduling,
+  hasRescheduling: form.values.hasRescheduling,
+  // Discount Fields
+  threeMonthDiscount: form.values.threeMonthDiscount,
+  sixMonthDiscount: form.values.sixMonthDiscount,
+  originalPricePerMonth: form.values.basePricePerMonth,
+  // If editing existing package include id so dashboard can update
+  id: initialData?.id,
       };
 
       await onSubmit(packageData);
