@@ -11,9 +11,9 @@ import MentorProfileHeader from "./MentorProfileHeader";
 import PublicMentorProfileHeader from "./PublicMentorProfileHeader";
 import MentorProfileTabs from "./MentorProfileTabs";
 import PricingCard from "./PricingCard";
-import BookingTrial from "./BookingTrial";
 import { packageService } from "../../Services/MentorshipPackageService";
 import MentorshipRequestModal from "./MentorshipRequestModal";
+import BookTrial from "./BookTrial";
 
 const MentorProfileComponent = () => {
   const { isDarkMode } = useTheme();
@@ -217,38 +217,44 @@ const MentorProfileComponent = () => {
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'} font-['poppins']`}>
       <div className="w-full px-4 sm:px-6 lg:px-8 py-10">
-        <div className="max-w-5xl mx-auto space-y-6">
-          {/* Public-facing profile header matching the provided layout */}
-          <PublicMentorProfileHeader mentor={mentor} />
+        {/* Main layout with left content and right sidebar */}
+        <div className="flex flex-col lg:flex-row gap-6 justify-around">
+          
+          {/* Left Content - Main mentor profile */}
+          <div className="flex-1 lg:w-3/4">
+            <div className="space-y-6">
+              {/* Public-facing profile header matching the provided layout */}
+              <PublicMentorProfileHeader mentor={mentor} />
 
-          {/* Booking Trial Component - positioned between header and tabs */}
-          <BookingTrial mentor={mentor} onBookTrial={handleBookTrial} />
+              {/* Optional pricing card if package exists */}
+              {activePackageId && (
+                <div>
+                  <PricingCard 
+                    mentorId={Number(params.id)} 
+                    packageId={activePackageId} 
+                    basePricePerMonth={basePrice}
+                    packageData={mentorshipPackages.find(p => p.id === activePackageId)}
+                    packagesList={mentorshipPackages}
+                  />
+                </div>
+              )}
 
-          {/* Availability and CTA are handled inside the header to form a single combined card */}
-
-          {/* Optional pricing card if package exists */}
-          {activePackageId && (
-            <div>
-              <PricingCard 
-                mentorId={Number(params.id)} 
-                packageId={activePackageId} 
-                basePricePerMonth={basePrice}
-                packageData={mentorshipPackages.find(p => p.id === activePackageId)}
-                packagesList={mentorshipPackages}
-              />
+              {/* Tabs section with mentor details */}
+              <div className={`${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'} rounded-xl shadow-sm p-4 sm:p-6`}>
+                <MentorProfileTabs 
+                  mentor={mentor} 
+                  activeTab={activeTab} 
+                  setActiveTab={setActiveTab} 
+                  mentorshipPackages={mentorshipPackages}
+                  packageLoading={packageLoading}
+                />
+              </div>
             </div>
-          )}
-
-          {/* Keep tabs section below if you still want details on the same page */}
-          <div className={`${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'} rounded-xl shadow-sm p-4 sm:p-6`}>
-            <MentorProfileTabs 
-              mentor={mentor} 
-              activeTab={activeTab} 
-              setActiveTab={setActiveTab} 
-              mentorshipPackages={mentorshipPackages}
-              packageLoading={packageLoading}
-            />
           </div>
+
+          {/* Right Sidebar - Book Trial */}
+          <BookTrial mentor={mentor} />
+          
         </div>
       </div>
 
