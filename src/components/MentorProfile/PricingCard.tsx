@@ -7,13 +7,12 @@ import { packageService, packageUtils } from "../../Services/MentorshipPackageSe
 
 interface PricingCardProps {
   mentorId: number;
-  packageId: number; // preferred package id
+  packageId: number;
   basePricePerMonth: number;
-  packageData?: any; // single package reference
-  packagesList?: any[]; // full list to compute maps
+  packageData?: any;
+  packagesList?: any[]; 
 }
 
-// Backwards compatibility alias (some files may still expect Props)
 interface Props extends PricingCardProps {}
 
 export default function PricingCard({ mentorId, packageId, basePricePerMonth, packageData, packagesList }: Props) {
@@ -26,6 +25,7 @@ export default function PricingCard({ mentorId, packageId, basePricePerMonth, pa
   const [planPriceMap, setPlanPriceMap] = useState<Record<string, number>>({});
   const [discountMap, setDiscountMap] = useState<Record<string, number>>({});
   const [originalPriceMap, setOriginalPriceMap] = useState<Record<string, number>>({});
+  const [showAllTopics, setShowAllTopics] = useState(false);
 
   const buildMaps = useCallback((pkgs: any[]) => {
     const p: Record<string, number> = {};
@@ -81,6 +81,13 @@ export default function PricingCard({ mentorId, packageId, basePricePerMonth, pa
   const displayedOriginal = originalPriceMap[selectedPlan];
   const displayedDiscount = discountMap[selectedPlan] || 0;
 
+  // Selected package object matching current plan (fallback to provided packageData)
+  const selectedPkg = useMemo(() => {
+    if (!internalPackages || internalPackages.length === 0) return packageData;
+    const months = Number(selectedPlan);
+    return internalPackages.find((p: any) => p?.durationMonths === months) || packageData || internalPackages[0];
+  }, [internalPackages, packageData, selectedPlan]);
+
   const handleBuy = () => {
     const months = Number(selectedPlan);
     const monthly = displayedMonthly || 0;
@@ -89,7 +96,7 @@ export default function PricingCard({ mentorId, packageId, basePricePerMonth, pa
   };
 
   return (
-    <div className="border rounded-xl p-4 w-full max-w-md">
+    <div className="border rounded-xl p-4 w-full max-w-2xl">
       <div className="flex gap-2 mb-3">
         {planOptions.map(p => {
           const active = selectedPlan === p.key;
@@ -120,6 +127,150 @@ export default function PricingCard({ mentorId, packageId, basePricePerMonth, pa
         </div>
       )}
       <div className="mt-4 text-xs text-gray-500">Prices follow same logic as mentor listing (unified).</div>
+
+      {/* Show detailed package info for the selected plan */}
+      {selectedPkg && (
+        <div className="mt-5 space-y-4">
+          {/* Package Description */}
+          {selectedPkg.description && (
+            <div className="rounded-lg border p-4 bg-blue-50">
+              <div className="text-sm font-medium text-blue-900 mb-2">About this package</div>
+              <p className="text-sm text-blue-800">{selectedPkg.description}</p>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Quick facts */}
+            <div className="rounded-lg border p-3">
+              <div className="text-sm text-gray-500 mb-2">Package details</div>
+              <ul className="space-y-2 text-sm">
+                {typeof selectedPkg.durationMonths === 'number' && (
+                  <li className="flex items-center gap-2"><span>•</span><span>Duration: {packageUtils.formatDuration(selectedPkg.durationMonths)}</span></li>
+                )}
+                {typeof selectedPkg.sessionsPerMonth === 'number' && (
+                  <li className="flex items-center gap-2"><span>•</span><span>Sessions per month: {selectedPkg.sessionsPerMonth}</span></li>
+                )}
+                {typeof selectedPkg.totalSessions === 'number' && (
+                  <li className="flex items-center gap-2"><span>•</span><span>Total sessions: {selectedPkg.totalSessions}</span></li>
+                )}
+                {selectedPkg.sessionDurationMinutes && (
+                  <li className="flex items-center gap-2"><span>•</span><span>Session duration: {selectedPkg.sessionDurationMinutes} min</span></li>
+                )}
+                {selectedPkg.sessionType && (
+                  <li className="flex items-center gap-2"><span>•</span><span>Session type: {selectedPkg.sessionType}</span></li>
+                )}
+                {selectedPkg.isFreeTrialIncluded && (
+                  <li className="flex items-center gap-2 text-green-600 font-medium"><span>✓</span><span>Free trial included</span></li>
+                )}
+              </ul>
+            </div>
+
+            {/* Inclusions */}
+            <div className="rounded-lg border p-3">
+              <div className="text-sm text-gray-500 mb-2">What&apos;s included</div>
+              <ul className="space-y-2 text-sm">
+                <li className="flex items-center gap-2 text-green-600"><span>✓</span><span>1:1 Live Sessions</span></li>
+                {selectedPkg.hasUnlimitedChat && <li className="flex items-center gap-2 text-green-600"><span>✓</span><span>Unlimited chat with mentor</span></li>}
+                {selectedPkg.hasCuratedTasks && <li className="flex items-center gap-2 text-green-600"><span>✓</span><span>Task & curated resources</span></li>}
+                {selectedPkg.hasRegularFollowups && <li className="flex items-center gap-2 text-green-600"><span>✓</span><span>Regular follow-ups (accountability)</span></li>}
+                {selectedPkg.hasJobReferrals && <li className="flex items-center gap-2 text-green-600"><span>✓</span><span>Job referrals</span></li>}
+                {selectedPkg.hasCertification && <li className="flex items-center gap-2 text-green-600"><span>✓</span><span>Certification on completion</span></li>}
+                {selectedPkg.hasRescheduling && <li className="flex items-center gap-2 text-green-600"><span>✓</span><span>Reschedule anytime</span></li>}
+              </ul>
+            </div>
+          </div>
+
+          {/* Topics covered */}
+          {Array.isArray(selectedPkg.topicsCovered) && selectedPkg.topicsCovered.length > 0 && (
+            <div className="rounded-lg border p-3">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm text-gray-500">Topics covered in this package</div>
+                {selectedPkg.topicsCovered.length > 8 && (
+                  <button onClick={() => setShowAllTopics(v => !v)} className="text-xs text-blue-600 hover:text-blue-800">
+                    {showAllTopics ? 'Show less' : `Show all (${selectedPkg.topicsCovered.length})`}
+                  </button>
+                )}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {(showAllTopics ? selectedPkg.topicsCovered : selectedPkg.topicsCovered.slice(0, 8)).map((t: string, idx: number) => (
+                  <span key={idx} className="px-3 py-1 rounded-full text-xs border bg-gray-50 hover:bg-gray-100">{t}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Monthly Breakdown Modules */}
+          {Array.isArray(selectedPkg.modules) && selectedPkg.modules.length > 0 && (
+            <div className="rounded-lg border p-3">
+              <div className="text-sm text-gray-500 mb-3">Monthly learning breakdown</div>
+              <div className="space-y-3">
+                {selectedPkg.modules.slice(0, selectedPkg.durationMonths || 6).map((module: any, idx: number) => (
+                  <div key={idx} className="p-3 rounded-lg bg-gray-50 border">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-gray-900">
+                        {module.moduleTitle || `Month ${module.monthNumber || idx + 1}`}
+                      </h4>
+                      {module.sessionsInMonth && (
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                          {module.sessionsInMonth} sessions
+                        </span>
+                      )}
+                    </div>
+                    
+                    {module.moduleDescription && (
+                      <p className="text-xs text-gray-600 mb-2">{module.moduleDescription}</p>
+                    )}
+
+                    {/* Learning Objectives */}
+                    {Array.isArray(module.learningObjectives) && module.learningObjectives.length > 0 && (
+                      <div className="mb-2">
+                        <div className="text-xs text-gray-500 mb-1">Learning objectives:</div>
+                        <ul className="text-xs text-gray-700 space-y-1">
+                          {module.learningObjectives.map((obj: string, objIdx: number) => (
+                            <li key={objIdx} className="flex items-start gap-1">
+                              <span className="text-blue-500">→</span>
+                              <span>{obj}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Deliverables */}
+                    {Array.isArray(module.deliverables) && module.deliverables.length > 0 && (
+                      <div className="mb-2">
+                        <div className="text-xs text-gray-500 mb-1">Deliverables:</div>
+                        <ul className="text-xs text-gray-700 space-y-1">
+                          {module.deliverables.map((del: string, delIdx: number) => (
+                            <li key={delIdx} className="flex items-start gap-1">
+                              <span className="text-green-500">✓</span>
+                              <span>{del}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Topics in Month */}
+                    {Array.isArray(module.topicsInMonth) && module.topicsInMonth.length > 0 && (
+                      <div>
+                        <div className="text-xs text-gray-500 mb-1">Topics covered:</div>
+                        <div className="flex flex-wrap gap-1">
+                          {module.topicsInMonth.map((topic: string, topicIdx: number) => (
+                            <span key={topicIdx} className="px-2 py-0.5 rounded text-xs bg-white text-gray-600 border">
+                              {topic}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
       {error && <div className="text-sm text-red-600 mt-2">{error}</div>}
       <button onClick={handleBuy} disabled={loading} className="mt-4 w-full py-3 rounded-lg bg-blue-600 text-white disabled:opacity-60">
         {loading ? 'Loading...' : 'Buy 1:1 Long Term Mentorship →'}
