@@ -30,12 +30,12 @@ const PostedJob = () => {
     })
   }, [id])
   return (
-    <div className={`min-h-[100vh] ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'} font-['poppins'] p-4`}>
-    <Divider size="xs" color={isDarkMode ? 'dark' : 'transparent'} />
-    {matches&&<Button onClick={open} my="xs" variant="outline">All Jobs</Button>}
+    <div className={`min-h-[100vh] ${isDarkMode ? 'bg-secondary text-white' : 'bg-secondary text-black'}  p-4`}>
+    {matches&&<Button onClick={open} className={`!text-xs !p-3 ${isDarkMode ? '!bg-[#3b2f23] !text-primary' : '!bg-[#ffeae6] !text-primary'}`}>All Jobs</Button>}
       <Drawer  size="xs" opened={opened} onClose={close} title="All Jobs"  >
       <PostedJobs job={job} jobList={jobList}/>
         </Drawer>
+
       <div className="flex gap-5">
       {!matches&&<PostedJobs job={job} jobList={jobList}/>}
        <PostedJobDesc {...job}/>

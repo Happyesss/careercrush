@@ -15,6 +15,9 @@ const JobCard = (props: any) => {
   const profile = useSelector((state: any) => state.profile);
   const router = useRouter();
   const { isDarkMode } = useTheme();
+const hasApplied = props.applicants?.some(
+  (applicant: any) => applicant.name === profile?.name
+);console.log("hasApplied", hasApplied);
 
   const handleSaveJob = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -55,13 +58,15 @@ const JobCard = (props: any) => {
     router.push(`/jobs/${props.id}`);
   };
 
+  console.log(props)
+
   return (
     <Link
       href={`/jobs/${props.id}`}
-      className={`flex flex-col rounded-2xl border p-5  transition-shadow ${
+      className={`flex flex-col rounded-2xl border p-5 transform transition-all duration-200 ${
         isDarkMode
-          ? 'bg-third border-none shadow-sm hover:shadow-md'
-          : 'bg-white border-gray-200 shadow-sm hover:shadow-md'
+          ? 'bg-third border-none shadow-sm hover:shadow-lg hover:-translate-y-1'
+          : 'bg-white border-gray-200 shadow-sm hover:shadow-lg hover:-translate-y-1'
       }`}
     >
       {/* Top row: avatar + Save pill */}
@@ -110,6 +115,8 @@ const JobCard = (props: any) => {
         {props.jobTitle}
       </h3>
 
+    
+
       {/* Badges */}
       <div className=" flex flex-wrap gap-2">
         {props.jobType && (
@@ -146,12 +153,23 @@ const JobCard = (props: any) => {
             <div className={`${isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'} mt-1.5 tracking-tight text-[12px]`}>{props.applicants ? props.applicants.length : 0} Applicants</div>
           )}
         </div>
-        <button
-          onClick={handleApply}
-          className={`px-4 py-2 rounded-md text-[12px] font-medium ${isDarkMode ? 'bg-[#ee8f2a67] text-black' : 'bg-black text-white'} hover:opacity-95 active:scale-[0.99]`}
-        >
-          Apply now
-        </button>
+      {hasApplied ? (
+  <button
+    className="bg-primary text-white px-4 md:px-6 py-2 rounded-md font-semibold text-[12px] whitespace-nowrap"
+    disabled
+  >
+    Applied
+  </button>
+) : (
+  <button
+    onClick={handleApply}
+    className={`px-4 py-2 rounded-md text-[12px] font-medium ${
+      isDarkMode ? "bg-[#ee8f2a67] text-black" : "bg-black text-white"
+    } hover:opacity-95 active:scale-[0.99]`}
+  >
+    Apply now
+  </button>
+)}
       </div>
     </Link>
   );

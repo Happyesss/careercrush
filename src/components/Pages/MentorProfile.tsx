@@ -4,7 +4,7 @@ import MentorProfileComponent from "../MentorProfile/MentorProfileComponent";
 
 const MentorProfile = () => {
   return (
-    <div className="min-h-[100vh] font-['poppins']">
+  <div className="min-h-[100vh]">
       <MentorProfileComponent />
     </div>
   );

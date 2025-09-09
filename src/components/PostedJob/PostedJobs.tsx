@@ -1,30 +1,78 @@
-import { Tabs } from "@mantine/core";
 import { useEffect, useState } from "react";
 import PostedJobCard from "./PostedJobCard";
 import { useTheme } from "../../ThemeContext";
 
 const PostedJobs = (props: any) => {
-  const [activeTab, setActiveTab] = useState<string | null>('ACTIVE');
+  type TabKey = 'ACTIVE' | 'DRAFT' | 'CLOSED';
+  const [activeTab, setActiveTab] = useState<TabKey>('ACTIVE');
   const { isDarkMode } = useTheme();
 
   useEffect(() => {
-    setActiveTab(props.job?.jobStatus || 'ACTIVE');
+    const status = props.job?.jobStatus as string | undefined;
+    if (status === 'ACTIVE' || status === 'DRAFT' || status === 'CLOSED') {
+      setActiveTab(status);
+    } else {
+      setActiveTab('ACTIVE');
+    }
   }, [props.job]);
+
+  const jobList = props.jobList ?? [];
+  const counts = {
+    ACTIVE: jobList.filter((job: any) => job?.jobStatus === 'ACTIVE').length,
+    DRAFT: jobList.filter((job: any) => job?.jobStatus === 'DRAFT').length,
+    CLOSED: jobList.filter((job: any) => job?.jobStatus === 'CLOSED').length,
+  } as const;
+
+  console.log(jobList);
+
+  const tabBtnClass = (selected: boolean) => {
+    const base = 'px-4 py-2 rounded-lg text-xs font-medium ';
+    const unselectedDark = 'bg-[#3d312e] text-[#d67757] ';
+    const unselectedLight = 'bg-white text-black border border-cape-cod-200 ';
+    const selectedDark = 'bg-primary text-cape-cod-900';
+    const selectedLight = 'bg-primary text-white';
+    return [
+      base,
+      selected ? (isDarkMode ? selectedDark : selectedLight) : (isDarkMode ? unselectedDark : unselectedLight),
+    ].join(' ');
+  };
 
   return (
     <div className="w-1/4.5 mt-5">
-      <div className="text-2xl font-semibold mb-5">Jobs</div>
+      {/* <div className="text-2xl font-semibold mb-5">Jobs</div> */}
       <div>
-        <Tabs autoContrast variant="pills" value={activeTab} onChange={setActiveTab}>
-          <Tabs.List className={`[&_button[aria-selected='false']]:${isDarkMode ? 'bg-cape-cod-900 text-cape-cod-100' : 'bg-white text-cape-cod-900'} font-medium `}>
-            <Tabs.Tab value="ACTIVE">Active [{props.jobList?.filter((job: any) => job?.jobStatus === 'ACTIVE').length}]</Tabs.Tab>
-            <Tabs.Tab value="DRAFT">Drafts [{props.jobList?.filter((job: any) => job?.jobStatus === 'DRAFT').length}]</Tabs.Tab>
-            <Tabs.Tab value="CLOSED">Close [{props.jobList?.filter((job: any) => job?.jobStatus === 'CLOSED').length}]</Tabs.Tab>
-          </Tabs.List>
-        </Tabs>
+        <div role="tablist" aria-label="Posted jobs tabs" className={`flex gap-3 font-medium`}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'ACTIVE'}
+            className={tabBtnClass(activeTab === 'ACTIVE')}
+            onClick={() => setActiveTab('ACTIVE')}
+          >
+            Active [{counts.ACTIVE}]
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'DRAFT'}
+            className={tabBtnClass(activeTab === 'DRAFT')}
+            onClick={() => setActiveTab('DRAFT')}
+          >
+            Drafts [{counts.DRAFT}]
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'CLOSED'}
+            className={tabBtnClass(activeTab === 'CLOSED')}
+            onClick={() => setActiveTab('CLOSED')}
+          >
+            Close [{counts.CLOSED}]
+          </button>
+        </div>
       </div>
       <div className="flex flex-col flex-wrap mt-5 gap-5">
-        {props.jobList?.filter((job: any) => job?.jobStatus === activeTab)
+        {jobList?.filter((job: any) => job?.jobStatus === activeTab)
           .map((item: any, index: any) => <PostedJobCard key={index} {...item} />)}
       </div>
     </div>
