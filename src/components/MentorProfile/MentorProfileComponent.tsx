@@ -215,7 +215,7 @@ const MentorProfileComponent = () => {
   }
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'} font-['poppins']`}>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'}`}>
       <div className="w-full px-4 sm:px-6 lg:px-8 py-10">
         {/* Main layout with left content and right sidebar */}
         <div className="flex flex-col lg:flex-row gap-6 justify-around">
