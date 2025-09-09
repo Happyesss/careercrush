@@ -5,6 +5,10 @@ import type {
   TrialSessionStatus,
   CreateTrialSlotRequest,
   TrialBookingRequest,
+  BulkTrialSessionRequest,
+  AvailabilityTemplate,
+  BulkUpdateRequest,
+  RescheduleRequest,
 } from '../types/mentorshipPackages';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
@@ -27,6 +31,163 @@ export const trialSessionService = {
    */
   createAvailableSlot: async (slotData: CreateTrialSlotRequest): Promise<TrialSession> => {
     const response = await axiosInstance.post(`${API_BASE_URL}/trial-sessions/create-slot`, slotData);
+    return response.data;
+  },
+
+  // 🆕 ENHANCED BULK OPERATIONS
+  
+  /**
+   * Create multiple trial sessions based on bulk configuration
+   */
+  createBulkTrialSessions: async (bulkRequest: BulkTrialSessionRequest): Promise<TrialSession[]> => {
+    const response = await axiosInstance.post(`${API_BASE_URL}/trial-sessions/create-bulk-sessions`, bulkRequest);
+    return response.data;
+  },
+
+  /**
+   * Create recurring trial sessions
+   */
+  createRecurringTrialSessions: async (
+    baseSession: CreateTrialSlotRequest, 
+    recurringPattern: string, 
+    endDate: string
+  ): Promise<TrialSession[]> => {
+    const response = await axiosInstance.post(
+      `${API_BASE_URL}/trial-sessions/create-recurring-sessions`,
+      baseSession,
+      { params: { recurringPattern, endDate } }
+    );
+    return response.data;
+  },
+
+  // 🆕 AVAILABILITY TEMPLATE OPERATIONS
+
+  /**
+   * Save an availability template
+   */
+  saveAvailabilityTemplate: async (template: AvailabilityTemplate): Promise<AvailabilityTemplate> => {
+    const response = await axiosInstance.post(`${API_BASE_URL}/trial-sessions/availability-templates`, template);
+    return response.data;
+  },
+
+  /**
+   * Get all availability templates for the authenticated mentor
+   */
+  getAvailabilityTemplates: async (): Promise<AvailabilityTemplate[]> => {
+    const response = await axiosInstance.get(`${API_BASE_URL}/trial-sessions/availability-templates`);
+    return response.data;
+  },
+
+  /**
+   * Get a specific availability template
+   */
+  getAvailabilityTemplate: async (templateId: number): Promise<AvailabilityTemplate> => {
+    const response = await axiosInstance.get(`${API_BASE_URL}/trial-sessions/availability-templates/${templateId}`);
+    return response.data;
+  },
+
+  /**
+   * Delete an availability template
+   */
+  deleteAvailabilityTemplate: async (templateId: number): Promise<void> => {
+    await axiosInstance.delete(`${API_BASE_URL}/trial-sessions/availability-templates/${templateId}`);
+  },
+
+  /**
+   * Apply an availability template to create sessions for a date range
+   */
+  applyAvailabilityTemplate: async (
+    templateId: number, 
+    startDate: string, 
+    endDate: string
+  ): Promise<TrialSession[]> => {
+    const response = await axiosInstance.post(
+      `${API_BASE_URL}/trial-sessions/apply-template/${templateId}`,
+      {},
+      { params: { startDate, endDate } }
+    );
+    return response.data;
+  },
+
+  // 🆕 ENHANCED QUERY OPERATIONS
+
+  /**
+   * Get trial sessions for a date range
+   */
+  getSessionsByDateRange: async (startDate: string, endDate: string): Promise<TrialSession[]> => {
+    const response = await axiosInstance.get(
+      `${API_BASE_URL}/trial-sessions/date-range`,
+      { params: { startDate, endDate } }
+    );
+    return response.data;
+  },
+
+  /**
+   * Check for conflicting sessions
+   */
+  getConflictingSessions: async (
+    scheduledDateTime: string, 
+    durationMinutes: number, 
+    bufferMinutes?: number
+  ): Promise<TrialSession[]> => {
+    const response = await axiosInstance.get(
+      `${API_BASE_URL}/trial-sessions/conflicts`,
+      { params: { scheduledDateTime, durationMinutes, bufferMinutes } }
+    );
+    return response.data;
+  },
+
+  // 🆕 BULK UPDATE OPERATIONS
+
+  /**
+   * Update multiple trial sessions at once
+   */
+  updateMultipleSessions: async (bulkUpdate: BulkUpdateRequest): Promise<TrialSession[]> => {
+    const response = await axiosInstance.put(
+      `${API_BASE_URL}/trial-sessions/bulk-update`,
+      bulkUpdate.updates,
+      { params: { sessionIds: bulkUpdate.sessionIds } }
+    );
+    return response.data;
+  },
+
+  /**
+   * Delete multiple trial sessions
+   */
+  deleteMultipleSessions: async (sessionIds: number[]): Promise<void> => {
+    await axiosInstance.delete(
+      `${API_BASE_URL}/trial-sessions/bulk-delete`,
+      { params: { sessionIds } }
+    );
+  },
+
+  // 🆕 ENHANCED BOOKING OPERATIONS
+
+  /**
+   * Reschedule a trial session
+   */
+  rescheduleTrialSession: async (rescheduleRequest: RescheduleRequest): Promise<TrialSession> => {
+    const { sessionId, newDateTime, reason } = rescheduleRequest;
+    const response = await axiosInstance.put(
+      `${API_BASE_URL}/trial-sessions/reschedule/${sessionId}`,
+      {},
+      { params: { newDateTime, reason } }
+    );
+    return response.data;
+  },
+
+  /**
+   * Find alternative time slots for a session
+   */
+  findAlternativeSlots: async (
+    sessionId: number, 
+    preferredDateTime: string, 
+    durationHours?: number
+  ): Promise<TrialSession[]> => {
+    const response = await axiosInstance.get(
+      `${API_BASE_URL}/trial-sessions/alternative-slots/${sessionId}`,
+      { params: { preferredDateTime, durationHours } }
+    );
     return response.data;
   },
 

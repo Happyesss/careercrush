@@ -69,6 +69,26 @@ export interface TrialSession {
   durationMinutes: number;
   status: TrialSessionStatus;
   sessionType: string; // Changed to string to match backend
+  
+  // Enhanced scheduling fields
+  timeZone?: string;                 // Time zone for the session
+  bufferTimeMinutes?: number;        // Buffer time between sessions
+  preparationTimeMinutes?: number;   // Preparation time before session
+  recurringPattern?: string;         // DAILY, WEEKLY, MONTHLY, CUSTOM
+  recurringEndDate?: Date | string;  // When recurring pattern ends
+  isRecurring?: boolean;             // Is this part of a recurring series
+  parentSessionId?: number;          // Reference to original session if recurring
+  availabilityTemplate?: string;     // Template name for reusing patterns
+  
+  // Session configuration
+  sessionTitle?: string;             // Custom title for the session
+  sessionDescription?: string;       // Brief description
+  allowRescheduling?: boolean;       // Allow mentees to reschedule
+  maxReschedulingHours?: number;     // Max hours before session to reschedule
+  requireConfirmation?: boolean;     // Require manual confirmation
+  specialInstructions?: string;      // Special instructions for mentees
+  
+  // Meeting details
   meetingLink?: string;
   meetingId?: string;
   meetingPassword?: string;
@@ -143,6 +163,86 @@ export interface CreateTrialSlotRequest {
   scheduledDateTime: string;
   durationMinutes: number;
   sessionType: string;
+  timeZone?: string;
+  bufferTimeMinutes?: number;
+  preparationTimeMinutes?: number;
+  allowRescheduling?: boolean;
+  maxReschedulingHours?: number;
+  requireConfirmation?: boolean;
+  specialInstructions?: string;
+  sessionTitle?: string;
+  sessionDescription?: string;
+}
+
+// 🆕 NEW INTERFACES FOR ENHANCED FUNCTIONALITY
+
+export interface BulkTrialSessionRequest {
+  packageId?: number;
+  startDate: string;
+  endDate: string;
+  timeSlots: TimeSlotRequest[];
+  daysOfWeek?: number[]; // 1=Monday, 7=Sunday
+  sessionType?: string;
+  timeZone?: string;
+  bufferTimeMinutes?: number;
+  preparationTimeMinutes?: number;
+  allowRescheduling?: boolean;
+  maxReschedulingHours?: number;
+  requireConfirmation?: boolean;
+  specialInstructions?: string;
+  availabilityTemplate?: string;
+  createRecurring?: boolean;
+  recurringPattern?: string;
+  recurringWeeks?: number;
+}
+
+export interface TimeSlotRequest {
+  startTime: string; // LocalTime format HH:MM
+  durationMinutes: number;
+  sessionTitle?: string;
+  sessionDescription?: string;
+}
+
+export interface AvailabilityTemplate {
+  id?: number;
+  mentorId?: number;
+  templateName: string;
+  description?: string;
+  dailyAvailabilities: DailyAvailability[];
+  defaultDurationMinutes?: number;
+  defaultSessionType?: string;
+  bufferTimeMinutes?: number;
+  preparationTimeMinutes?: number;
+  allowRescheduling?: boolean;
+  maxReschedulingHours?: number;
+  requireConfirmation?: boolean;
+  isDefault?: boolean;
+  isActive?: boolean;
+}
+
+export interface DailyAvailability {
+  dayOfWeek: number; // 1=Monday, 7=Sunday
+  isAvailable: boolean;
+  timeSlots?: TimeSlotTemplate[];
+}
+
+export interface TimeSlotTemplate {
+  startTime: string; // LocalTime format HH:MM
+  endTime: string;   // LocalTime format HH:MM
+  sessionDurationMinutes?: number;
+  sessionTitle?: string;
+  sessionDescription?: string;
+}
+
+export interface BulkUpdateRequest {
+  sessionIds: number[];
+  updates: Partial<TrialSession>;
+}
+
+export interface RescheduleRequest {
+  sessionId: number;
+  newDateTime: string;
+  reason?: string;
 }
 
 export interface PackageStats {

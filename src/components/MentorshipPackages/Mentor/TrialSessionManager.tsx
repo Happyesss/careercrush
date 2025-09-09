@@ -72,9 +72,20 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
 
   const handleCreateSlot = async (dateTime: Date, duration: number = 30) => {
     try {
-      // 🔒 No need to pass mentorId - backend gets it from JWT token
+      // � Fix timezone issue: Keep the selected time as intended in local timezone
+      // Convert local time to UTC while preserving the selected time values
+      const year = dateTime.getFullYear();
+      const month = dateTime.getMonth();
+      const date = dateTime.getDate();
+      const hours = dateTime.getHours();
+      const minutes = dateTime.getMinutes();
+      
+      // Create UTC date with the same time values (not timezone-converted)
+      const utcDateTime = new Date(Date.UTC(year, month, date, hours, minutes, 0, 0));
+      
+      // �🔒 No need to pass mentorId - backend gets it from JWT token
       await trialSessionService.createAvailableSlot({
-        scheduledDateTime: dateTime.toISOString(),
+        scheduledDateTime: utcDateTime.toISOString(),
         durationMinutes: duration,
         sessionType: 'Video Call',
       });
@@ -219,48 +230,70 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
               </div>
             </Group>
             
-            <Menu shadow="md" width={200}>
-              <Menu.Target>
-                <ActionIcon variant="subtle" color="gray" size="sm" className={styles.menuButton}>
-                  <IconDots size={14} />
-                </ActionIcon>
-              </Menu.Target>
-
-              <Menu.Dropdown>
-                {session.status === TrialSessionStatus.AVAILABLE && (
-                  <Menu.Item 
-                    leftSection={<IconEdit size={14} />}
-                    onClick={() => handleUpdateSessionStatus(session.id!, TrialSessionStatus.BOOKED)}
-                  >
-                    Mark as Booked
-                  </Menu.Item>
-                )}
-                {session.status === TrialSessionStatus.BOOKED && (
-                  <>
-                    <Menu.Item 
-                      leftSection={<IconCheck size={14} />}
-                      onClick={() => handleUpdateSessionStatus(session.id!, TrialSessionStatus.COMPLETED)}
-                    >
-                      Mark as Completed
-                    </Menu.Item>
-                    <Menu.Item 
-                      leftSection={<IconX size={14} />}
-                      onClick={() => handleUpdateSessionStatus(session.id!, TrialSessionStatus.CANCELLED)}
-                    >
-                      Cancel Session
-                    </Menu.Item>
-                  </>
-                )}
-                <Menu.Divider />
-                <Menu.Item 
-                  leftSection={<IconTrash size={14} />} 
-                  color="red"
-                  onClick={() => handleDeleteSession(session.id!)}
+            <Group gap="xs">
+              {/* Quick Action Buttons for Available Sessions */}
+              {session.status === TrialSessionStatus.AVAILABLE && (
+                <Button 
+                  variant="light" 
+                  size="xs" 
+                  color="blue"
+                  leftSection={<IconEdit size={12} />}
+                  onClick={() => {
+                    // TODO: Add edit session modal functionality here
+                    notifications.show({
+                      title: 'Edit Session',
+                      message: 'Edit session functionality coming soon!',
+                      color: 'blue',
+                    });
+                  }}
                 >
-                  Delete Session
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
+                  Edit
+                </Button>
+              )}
+              
+              <Menu shadow="md" width={200}>
+                <Menu.Target>
+                  <ActionIcon variant="subtle" color="gray" size="sm" className={styles.menuButton}>
+                    <IconDots size={14} />
+                  </ActionIcon>
+                </Menu.Target>
+
+                <Menu.Dropdown>
+                  {session.status === TrialSessionStatus.AVAILABLE && (
+                    <Menu.Item 
+                      leftSection={<IconEdit size={14} />}
+                      onClick={() => handleUpdateSessionStatus(session.id!, TrialSessionStatus.BOOKED)}
+                    >
+                      Mark as Booked
+                    </Menu.Item>
+                  )}
+                  {session.status === TrialSessionStatus.BOOKED && (
+                    <>
+                      <Menu.Item 
+                        leftSection={<IconCheck size={14} />}
+                        onClick={() => handleUpdateSessionStatus(session.id!, TrialSessionStatus.COMPLETED)}
+                      >
+                        Mark as Completed
+                      </Menu.Item>
+                      <Menu.Item 
+                        leftSection={<IconX size={14} />}
+                        onClick={() => handleUpdateSessionStatus(session.id!, TrialSessionStatus.CANCELLED)}
+                      >
+                        Cancel Session
+                      </Menu.Item>
+                    </>
+                  )}
+                  <Menu.Divider />
+                  <Menu.Item 
+                    leftSection={<IconTrash size={14} />} 
+                    color="red"
+                    onClick={() => handleDeleteSession(session.id!)}
+                  >
+                    Delete Session
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </Group>
           </Group>
 
           <Divider />
@@ -371,19 +404,58 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
   };
 
   const BatchCreateModal = () => {
-    const [selectedTime, setSelectedTime] = useState('09:00');
-    const [duration, setDuration] = useState(30);
-    const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [timeSlots, setTimeSlots] = useState<Array<{time: string, duration: number}>>([
+      {time: '09:00', duration: 30}
+    ]);
 
     const handleCreateSlots = () => {
-      const [hours, minutes] = selectedTime.split(':').map(Number);
-      const slots = selectedDates.map(date => {
-        const slot = new Date(date);
-        slot.setHours(hours, minutes, 0, 0);
-        return slot;
+      if (!selectedDate || timeSlots.length === 0) {
+        notifications.show({
+          title: 'Error',
+          message: 'Please select a date and at least one time slot',
+          color: 'red',
+        });
+        return;
+      }
+
+      const slots = timeSlots.map(slot => {
+        const [hours, minutes] = slot.time.split(':').map(Number);
+        const slotDateTime = new Date(selectedDate);
+        slotDateTime.setHours(hours, minutes, 0, 0);
+        return slotDateTime;
       });
       
-      handleBatchCreateSlots(slots, duration);
+      // Create slots with different durations
+      const createPromises = timeSlots.map((slot, index) => {
+        return handleCreateSlot(slots[index], slot.duration);
+      });
+
+      Promise.all(createPromises).then(() => {
+        setBatchCreateModalOpen(false);
+        setSelectedDate(null);
+        setTimeSlots([{time: '09:00', duration: 30}]);
+      });
+    };
+
+    const addTimeSlot = () => {
+      setTimeSlots([...timeSlots, {time: '09:00', duration: 30}]);
+    };
+
+    const removeTimeSlot = (index: number) => {
+      if (timeSlots.length > 1) {
+        setTimeSlots(timeSlots.filter((_, i) => i !== index));
+      }
+    };
+
+    const updateTimeSlot = (index: number, field: 'time' | 'duration', value: string | number) => {
+      const newSlots = [...timeSlots];
+      if (field === 'time') {
+        newSlots[index].time = value as string;
+      } else {
+        newSlots[index].duration = value as number;
+      }
+      setTimeSlots(newSlots);
     };
 
     return (
@@ -405,49 +477,84 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
         <Stack gap="lg">
           <Paper p="md" radius="md" bg="gray.0" className={styles.calendarContainer}>
             <CustomCalendar
-              selectedDates={selectedDates}
-              onMultiSelect={setSelectedDates}
+              value={selectedDate}
+              onChange={setSelectedDate}
               minDate={new Date()}
-              multiSelect={true}
+              multiSelect={false}
               size="sm"
               className={styles.batchCalendar}
             />
           </Paper>
 
-          <Group grow>
-            <div>
-              <Text size="sm" fw={500} mb="xs">Time</Text>
-              <Select
-                value={selectedTime}
-                onChange={(value) => setSelectedTime(value || '09:00')}
-                data={[
-                  { value: '09:00', label: '9:00 AM' },
-                  { value: '10:00', label: '10:00 AM' },
-                  { value: '11:00', label: '11:00 AM' },
-                  { value: '14:00', label: '2:00 PM' },
-                  { value: '15:00', label: '3:00 PM' },
-                  { value: '16:00', label: '4:00 PM' },
-                  { value: '17:00', label: '5:00 PM' },
-                  { value: '18:00', label: '6:00 PM' },
-                  { value: '19:00', label: '7:00 PM' },
-                  { value: '20:00', label: '8:00 PM' },
-                  { value: '21:00', label: '9:00 PM' },
-                  { value: '21:30', label: '9:30 PM' },
-                ]}
-                radius="md"
-              />
-            </div>
-            
-            <NumberInput
-              label="Duration (minutes)"
-              value={duration}
-              onChange={(value) => setDuration(Number(value))}
-              min={15}
-              max={120}
-              step={15}
-              radius="md"
-            />
-          </Group>
+          <div>
+            <Group justify="space-between" mb="md">
+              <Text size="sm" fw={500}>Time Slots for Selected Date</Text>
+              <Button 
+                variant="light" 
+                size="xs" 
+                leftSection={<IconPlus size={14} />}
+                onClick={addTimeSlot}
+              >
+                Add Time Slot
+              </Button>
+            </Group>
+
+            <Stack gap="sm">
+              {timeSlots.map((slot, index) => (
+                <Paper key={index} p="sm" radius="md" withBorder>
+                  <Group justify="space-between">
+                    <Group gap="md" style={{ flex: 1 }}>
+                      <div>
+                        <Text size="xs" fw={500} mb="xs">Time</Text>
+                        <Select
+                          value={slot.time}
+                          onChange={(value) => updateTimeSlot(index, 'time', value || '09:00')}
+                          data={[
+                            { value: '09:00', label: '9:00 AM' },
+                            { value: '10:00', label: '10:00 AM' },
+                            { value: '11:00', label: '11:00 AM' },
+                            { value: '12:00', label: '12:00 PM' },
+                            { value: '13:00', label: '1:00 PM' },
+                            { value: '14:00', label: '2:00 PM' },
+                            { value: '15:00', label: '3:00 PM' },
+                            { value: '16:00', label: '4:00 PM' },
+                            { value: '17:00', label: '5:00 PM' },
+                            { value: '18:00', label: '6:00 PM' },
+                            { value: '19:00', label: '7:00 PM' },
+                            { value: '20:00', label: '8:00 PM' },
+                          ]}
+                          size="xs"
+                          w={120}
+                        />
+                      </div>
+                      
+                      <NumberInput
+                        label="Duration (mins)"
+                        value={slot.duration}
+                        onChange={(value) => updateTimeSlot(index, 'duration', Number(value))}
+                        min={15}
+                        max={120}
+                        step={15}
+                        size="xs"
+                        w={100}
+                      />
+                    </Group>
+
+                    {timeSlots.length > 1 && (
+                      <ActionIcon 
+                        color="red" 
+                        variant="light" 
+                        size="sm"
+                        onClick={() => removeTimeSlot(index)}
+                      >
+                        <IconTrash size={14} />
+                      </ActionIcon>
+                    )}
+                  </Group>
+                </Paper>
+              ))}
+            </Stack>
+          </div>
 
           <Group justify="flex-end">
             <Button 
@@ -459,11 +566,11 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
             </Button>
             <Button 
               onClick={handleCreateSlots}
-              disabled={selectedDates.length === 0}
+              disabled={!selectedDate || timeSlots.length === 0}
               leftSection={<IconPlus size={16} />}
               radius="md"
             >
-              Create {selectedDates.length} {selectedDates.length === 1 ? 'Slot' : 'Slots'}
+              Create {timeSlots.length} Time Slot{timeSlots.length !== 1 ? 's' : ''}
             </Button>
           </Group>
         </Stack>

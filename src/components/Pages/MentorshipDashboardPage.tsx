@@ -8,6 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../../ThemeContext';
 import MentorPackageDashboard from '../MentorshipPackages/Mentor/MentorPackageDashboard';
 import MentorAnalyticsComponent from '../MentorAnalytics/MentorAnalyticsComponent';
+import MentorAvailabilityManager from '../MentorProfile/MentorAvailabilityManager';
 
 const MentorshipDashboardPage = () => {
   const { isDarkMode } = useTheme();
@@ -128,14 +129,14 @@ const MentorshipDashboardPage = () => {
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
-                  <span className="font-medium">Sessions</span>
+                  <span className="font-medium">Trial Sessions</span>
                   <Badge 
                     size="sm" 
                     variant={activeTab === 'sessions' ? 'outline' : 'light'} 
                     color={activeTab === 'sessions' ? 'white' : 'orange'}
                     className={activeTab === 'sessions' ? 'border-white text-white' : ''}
                   >
-                    Live
+                    Manage
                   </Badge>
                 </div>
               </Button>
@@ -170,17 +171,17 @@ const MentorshipDashboardPage = () => {
 
             {/* Sessions Content */}
             {activeTab === 'sessions' && (
-              <Card className={`${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'} border shadow-sm`}>
-                <div className="text-center py-12">
-                  <IconCalendarTime size={64} className={`${isDarkMode ? 'text-cape-cod-500' : 'text-gray-400'} mx-auto mb-4`} />
-                  <Title order={3} className={isDarkMode ? 'text-cape-cod-300' : 'text-gray-600'} mb="sm">
-                    Session Management
+              <div>
+                <div className="mb-6">
+                  <Title order={2} className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+                    Trial Session Management
                   </Title>
-                  <Text className={isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'}>
-                    Session management features will be available soon. Manage your upcoming sessions, track attendance, and handle session logistics.
+                  <Text className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} mt="sm">
+                    Create and manage your trial session availability. Set up multiple time slots, edit existing sessions, and use templates for recurring availability.
                   </Text>
                 </div>
-              </Card>
+                <MentorAvailabilityManager mentorId={Number(user.id)} />
+              </div>
             )}
           </Container>
         </div>
