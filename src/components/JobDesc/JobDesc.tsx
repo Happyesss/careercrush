@@ -202,7 +202,7 @@ const JobDesc = (props: any) => {
 
 
           {/* Close Button for Editors */}
-          {props.edit && !props.closed && (
+          {/* {props.edit && !props.closed && (
             <Button 
               size="sm"
               variant="outline"
@@ -211,7 +211,7 @@ const JobDesc = (props: any) => {
             >
               Close
             </Button>
-          )}
+          )} */}
 
 
           <button onClick={handleShare} className={`p-2 rounded-lg transition-colors `}>
