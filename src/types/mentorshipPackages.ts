@@ -78,7 +78,6 @@ export interface TrialSession {
   recurringEndDate?: Date | string;  // When recurring pattern ends
   isRecurring?: boolean;             // Is this part of a recurring series
   parentSessionId?: number;          // Reference to original session if recurring
-  availabilityTemplate?: string;     // Template name for reusing patterns
   
   // Session configuration
   sessionTitle?: string;             // Custom title for the session
@@ -190,7 +189,6 @@ export interface BulkTrialSessionRequest {
   maxReschedulingHours?: number;
   requireConfirmation?: boolean;
   specialInstructions?: string;
-  availabilityTemplate?: string;
   createRecurring?: boolean;
   recurringPattern?: string;
   recurringWeeks?: number;
@@ -199,37 +197,6 @@ export interface BulkTrialSessionRequest {
 export interface TimeSlotRequest {
   startTime: string; // LocalTime format HH:MM
   durationMinutes: number;
-  sessionTitle?: string;
-  sessionDescription?: string;
-}
-
-export interface AvailabilityTemplate {
-  id?: number;
-  mentorId?: number;
-  templateName: string;
-  description?: string;
-  dailyAvailabilities: DailyAvailability[];
-  defaultDurationMinutes?: number;
-  defaultSessionType?: string;
-  bufferTimeMinutes?: number;
-  preparationTimeMinutes?: number;
-  allowRescheduling?: boolean;
-  maxReschedulingHours?: number;
-  requireConfirmation?: boolean;
-  isDefault?: boolean;
-  isActive?: boolean;
-}
-
-export interface DailyAvailability {
-  dayOfWeek: number; // 1=Monday, 7=Sunday
-  isAvailable: boolean;
-  timeSlots?: TimeSlotTemplate[];
-}
-
-export interface TimeSlotTemplate {
-  startTime: string; // LocalTime format HH:MM
-  endTime: string;   // LocalTime format HH:MM
-  sessionDurationMinutes?: number;
   sessionTitle?: string;
   sessionDescription?: string;
 }

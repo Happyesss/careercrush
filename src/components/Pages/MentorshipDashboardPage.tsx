@@ -2,14 +2,12 @@
 
 import { useState } from 'react';
 import { Container, Card, Title, Text, Badge, Button, Stack, Group } from '@mantine/core';
-import { IconPackage, IconChartBar, IconCalendarTime, IconUsers, IconTrendingUp, IconMenu2, IconX } from '@tabler/icons-react';
+import { IconPackage, IconChartBar, IconUsers, IconTrendingUp, IconMenu2, IconX } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../../ThemeContext';
 import MentorPackageDashboard from '../MentorshipPackages/Mentor/MentorPackageDashboard';
 import MentorAnalyticsComponent from '../MentorAnalytics/MentorAnalyticsComponent';
-import MentorAvailabilityManager from '../MentorProfile/MentorAvailabilityManager';
-
 const MentorshipDashboardPage = () => {
   const { isDarkMode } = useTheme();
   const user = useSelector((state: any) => state.user);
@@ -111,35 +109,6 @@ const MentorshipDashboardPage = () => {
                   </Badge>
                 </div>
               </Button>
-
-              {/* Sessions Navigation Item */}
-              <Button
-                variant={activeTab === 'sessions' ? 'filled' : 'subtle'}
-                justify="flex-start"
-                leftSection={<IconCalendarTime size={18} />}
-                fullWidth
-                onClick={() => {
-                  setActiveTab('sessions');
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`h-12 transition-all duration-200 ${
-                  activeTab === 'sessions' 
-                    ? 'bg-blue-500 text-white shadow-md' 
-                    : `${isDarkMode ? 'hover:bg-cape-cod-800' : 'hover:bg-gray-100'}`
-                }`}
-              >
-                <div className="flex items-center justify-between w-full">
-                  <span className="font-medium">Trial Sessions</span>
-                  <Badge 
-                    size="sm" 
-                    variant={activeTab === 'sessions' ? 'outline' : 'light'} 
-                    color={activeTab === 'sessions' ? 'white' : 'orange'}
-                    className={activeTab === 'sessions' ? 'border-white text-white' : ''}
-                  >
-                    Manage
-                  </Badge>
-                </div>
-              </Button>
             </Stack>
           </div>
         </div>
@@ -167,21 +136,6 @@ const MentorshipDashboardPage = () => {
             {/* Analytics Content */}
             {activeTab === 'analytics' && (
               <MentorAnalyticsComponent />
-            )}
-
-            {/* Sessions Content */}
-            {activeTab === 'sessions' && (
-              <div>
-                <div className="mb-6">
-                  <Title order={2} className={isDarkMode ? 'text-white' : 'text-gray-900'}>
-                    Trial Session Management
-                  </Title>
-                  <Text className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} mt="sm">
-                    Create and manage your trial session availability. Set up multiple time slots, edit existing sessions, and use templates for recurring availability.
-                  </Text>
-                </div>
-                <MentorAvailabilityManager mentorId={Number(user.id)} />
-              </div>
             )}
           </Container>
         </div>

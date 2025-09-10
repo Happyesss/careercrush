@@ -6,7 +6,6 @@ import type {
   CreateTrialSlotRequest,
   TrialBookingRequest,
   BulkTrialSessionRequest,
-  AvailabilityTemplate,
   BulkUpdateRequest,
   RescheduleRequest,
 } from '../types/mentorshipPackages';
@@ -56,55 +55,6 @@ export const trialSessionService = {
       `${API_BASE_URL}/trial-sessions/create-recurring-sessions`,
       baseSession,
       { params: { recurringPattern, endDate } }
-    );
-    return response.data;
-  },
-
-  // 🆕 AVAILABILITY TEMPLATE OPERATIONS
-
-  /**
-   * Save an availability template
-   */
-  saveAvailabilityTemplate: async (template: AvailabilityTemplate): Promise<AvailabilityTemplate> => {
-    const response = await axiosInstance.post(`${API_BASE_URL}/trial-sessions/availability-templates`, template);
-    return response.data;
-  },
-
-  /**
-   * Get all availability templates for the authenticated mentor
-   */
-  getAvailabilityTemplates: async (): Promise<AvailabilityTemplate[]> => {
-    const response = await axiosInstance.get(`${API_BASE_URL}/trial-sessions/availability-templates`);
-    return response.data;
-  },
-
-  /**
-   * Get a specific availability template
-   */
-  getAvailabilityTemplate: async (templateId: number): Promise<AvailabilityTemplate> => {
-    const response = await axiosInstance.get(`${API_BASE_URL}/trial-sessions/availability-templates/${templateId}`);
-    return response.data;
-  },
-
-  /**
-   * Delete an availability template
-   */
-  deleteAvailabilityTemplate: async (templateId: number): Promise<void> => {
-    await axiosInstance.delete(`${API_BASE_URL}/trial-sessions/availability-templates/${templateId}`);
-  },
-
-  /**
-   * Apply an availability template to create sessions for a date range
-   */
-  applyAvailabilityTemplate: async (
-    templateId: number, 
-    startDate: string, 
-    endDate: string
-  ): Promise<TrialSession[]> => {
-    const response = await axiosInstance.post(
-      `${API_BASE_URL}/trial-sessions/apply-template/${templateId}`,
-      {},
-      { params: { startDate, endDate } }
     );
     return response.data;
   },
