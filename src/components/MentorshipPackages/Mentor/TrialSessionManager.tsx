@@ -36,7 +36,7 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
   const fetchSessions = async () => {
     try {
       setLoading(true);
-      // 🔒 Use secure endpoint that gets sessions for authenticated mentor only
+      // Use secure endpoint that gets sessions for authenticated mentor only
       const data = await trialSessionService.getMyTrialSessions();
       setSessions(data || []);
     } catch (error) {
@@ -72,7 +72,7 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
 
   const handleCreateSlot = async (dateTime: Date, duration: number = 30) => {
     try {
-      // � Fix timezone issue: Keep the selected time as intended in local timezone
+      // Fix timezone issue: Keep the selected time as intended in local timezone
       // Convert local time to UTC while preserving the selected time values
       const year = dateTime.getFullYear();
       const month = dateTime.getMonth();
@@ -83,7 +83,7 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
       // Create UTC date with the same time values (not timezone-converted)
       const utcDateTime = new Date(Date.UTC(year, month, date, hours, minutes, 0, 0));
       
-      // �🔒 No need to pass mentorId - backend gets it from JWT token
+      // 🔒 No need to pass mentorId - backend gets it from JWT token
       await trialSessionService.createAvailableSlot({
         scheduledDateTime: utcDateTime.toISOString(),
         durationMinutes: duration,
@@ -97,13 +97,33 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
       });
       
       fetchSessions();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating trial slot:', error);
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to create trial slot',
-        color: 'red',
-      });
+      
+      // 🔥 Enhanced error handling for conflicts
+      if (error.response?.data?.includes('TIME_SLOT_CONFLICT')) {
+        notifications.show({
+          title: 'Time Conflict',
+          message: 'A session already exists at this time. Please choose a different time slot.',
+          color: 'orange',
+          autoClose: 6000,
+        });
+      } else if (error.response?.status === 404 || 
+          error.response?.data?.includes?.('MENTOR_PROFILE_NOT_FOUND') ||
+          error.response?.data?.includes?.('does not have a mentor profile')) {
+        notifications.show({
+          title: 'Mentor Profile Required',
+          message: 'You need to create a mentor profile before creating trial sessions.',
+          color: 'orange',
+          autoClose: 8000,
+        });
+      } else {
+        notifications.show({
+          title: 'Error',
+          message: 'Failed to create trial slot',
+          color: 'red',
+        });
+      }
     }
   };
 
@@ -307,7 +327,39 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
               <Text size="sm">{session.durationMinutes} minutes</Text>
             </Group>
             
-            {session.menteeEmail && (
+            {/* 🔥 ENHANCED: Show mentee details prominently for booked sessions */}
+            {session.status === TrialSessionStatus.BOOKED && session.menteeEmail && (
+              <Paper p="md" radius="md" bg="blue.0" style={{ border: '1px solid #e7f5ff' }}>
+                <Group gap="sm" mb="xs">
+                  <ThemeIcon variant="light" size="sm" color="blue">
+                    <IconUser size={12} />
+                  </ThemeIcon>
+                  <Text size="sm" fw={600} c="blue.7">Booked by:</Text>
+                </Group>
+                <Stack gap="xs" pl="md">
+                  <Group gap="sm">
+                    <Text size="sm" fw={500}>{session.menteeName || 'Unknown User'}</Text>
+                  </Group>
+                  <Group gap="sm">
+                    <ThemeIcon variant="light" size="xs" color="indigo">
+                      <IconMail size={10} />
+                    </ThemeIcon>
+                    <Text size="xs" c="dimmed">{session.menteeEmail}</Text>
+                  </Group>
+                  {session.menteePhone && (
+                    <Group gap="sm">
+                      <ThemeIcon variant="light" size="xs" color="teal">
+                        <IconPhone size={10} />
+                      </ThemeIcon>
+                      <Text size="xs" c="dimmed">{session.menteePhone}</Text>
+                    </Group>
+                  )}
+                </Stack>
+              </Paper>
+            )}
+            
+            {/* Show mentee details for other statuses (completed, cancelled, etc.) */}
+            {session.status !== TrialSessionStatus.AVAILABLE && session.status !== TrialSessionStatus.BOOKED && session.menteeEmail && (
               <>
                 <Group gap="sm">
                   <ThemeIcon variant="light" size="sm" color="violet">
@@ -600,7 +652,7 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
                 data={[
                   { value: 'ALL', label: 'All Sessions' },
                   { value: 'AVAILABLE', label: 'Available' },
-                  { value: 'BOOKED', label: 'Booked' },
+                  { value: 'BOOKED', label: '🔥 Booked Sessions' },
                   { value: 'COMPLETED', label: 'Completed' },
                   { value: 'CANCELLED', label: 'Cancelled' },
                 ]}
@@ -629,14 +681,32 @@ const TrialSessionManager: React.FC<TrialSessionManagerProps> = ({ mentorId }) =
             </div>
             </div>
             <Group align="center" gap="sm">
-              <Badge
-                variant="gradient"
-                gradient={{ from: 'blue', to: 'cyan' }}
-                size="lg"
-                className={styles.sessionsBadge}
-              >
-                {filteredSessions.length} {filteredSessions.length === 1 ? 'session' : 'sessions'}
-              </Badge>
+              {/* 🔥 Enhanced Badge with breakdown */}
+              <Group gap="xs">
+                <Badge
+                  variant="gradient"
+                  gradient={{ from: 'blue', to: 'cyan' }}
+                  size="lg"
+                  className={styles.sessionsBadge}
+                >
+                  {filteredSessions.length} {filteredSessions.length === 1 ? 'session' : 'sessions'}
+                </Badge>
+                
+                {/* Show breakdown when not filtering */}
+                {statusFilter === 'ALL' && (
+                  <Group gap="xs">
+                    <Badge color="green" size="sm" variant="light">
+                      {sessions.filter(s => s.status === TrialSessionStatus.AVAILABLE).length} Available
+                    </Badge>
+                    <Badge color="blue" size="sm" variant="light">
+                      {sessions.filter(s => s.status === TrialSessionStatus.BOOKED).length} Booked
+                    </Badge>
+                    <Badge color="teal" size="sm" variant="light">
+                      {sessions.filter(s => s.status === TrialSessionStatus.COMPLETED).length} Completed
+                    </Badge>
+                  </Group>
+                )}
+              </Group>
 
               <Group>
                 <Button

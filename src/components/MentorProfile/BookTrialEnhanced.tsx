@@ -266,14 +266,15 @@ const BookTrialEnhanced = ({ mentor }: BookTrialEnhancedProps) => {
           ${selectedTimeSlot.specialInstructions ? '\nSpecial Instructions: ' + selectedTimeSlot.specialInstructions : ''}`
         );
         
-        // Reset selections and refresh data
+        // 🔄 Reset selections and refresh data after successful booking
         setSelectedDate(null);
         setSelectedTimeSlot(null);
         setSelectedSessionId(null);
         
-        // Refresh sessions
+        // Refresh sessions to show updated availability
         const updatedSessions = await trialSessionService.getAvailableSessionsByMentor(Number(mentor.id));
         setAllSessions(updatedSessions);
+        processSessionsIntoDateSlots(updatedSessions);
         
       } catch (error) {
         console.error('Error booking trial session:', error);

@@ -55,70 +55,70 @@ const BookTrial = ({ mentor }: BookTrialProps) => {
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
 
   // Fetch available trial sessions for the mentor
-  useEffect(() => {
-    const fetchAvailableSessions = async () => {
-      try {
-        setLoading(true);
-        const sessions: TrialSession[] = await trialSessionService.getAvailableSessionsByMentor(Number(mentor.id));
+  const fetchAvailableSessions = async () => {
+    try {
+      setLoading(true);
+      const sessions: TrialSession[] = await trialSessionService.getAvailableSessionsByMentor(Number(mentor.id));
+      
+      // Group sessions by date
+      const dateMap = new Map<string, TrialSession[]>();
+      sessions.forEach(session => {
+        const date = new Date(session.scheduledDateTime).toISOString().split('T')[0];
+        if (!dateMap.has(date)) {
+          dateMap.set(date, []);
+        }
+        dateMap.get(date)!.push(session);
+      });
+
+      // Convert to DateSlot format with enhanced information
+      const dates: DateSlot[] = Array.from(dateMap.entries()).map(([dateStr, sessionsForDate], index) => {
+        const date = new Date(dateStr);
+        const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
         
-        // Group sessions by date
-        const dateMap = new Map<string, TrialSession[]>();
-        sessions.forEach(session => {
-          const date = new Date(session.scheduledDateTime).toISOString().split('T')[0];
-          if (!dateMap.has(date)) {
-            dateMap.set(date, []);
-          }
-          dateMap.get(date)!.push(session);
-        });
-
-        // Convert to DateSlot format with enhanced information
-        const dates: DateSlot[] = Array.from(dateMap.entries()).map(([dateStr, sessionsForDate], index) => {
-          const date = new Date(dateStr);
-          const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-          
-          // Convert sessions to enhanced time slots
-          const enhancedTimeSlots: TimeSlot[] = sessionsForDate
-            .sort((a, b) => new Date(a.scheduledDateTime).getTime() - new Date(b.scheduledDateTime).getTime())
-            .map(session => {
-              const dateTime = new Date(session.scheduledDateTime);
-              const timeString = dateTime.toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true
-              });
-              return {
-                time: timeString,
-                available: session.status === TrialSessionStatus.AVAILABLE,
-                sessionId: session.id,
-                duration: session.durationMinutes,
-                sessionTitle: session.sessionTitle,
-                sessionDescription: session.sessionDescription,
-                allowRescheduling: session.allowRescheduling,
-                requireConfirmation: session.requireConfirmation,
-                specialInstructions: session.specialInstructions,
-                timeZone: session.timeZone
-              };
+        // Convert sessions to enhanced time slots
+        const enhancedTimeSlots: TimeSlot[] = sessionsForDate
+          .sort((a, b) => new Date(a.scheduledDateTime).getTime() - new Date(b.scheduledDateTime).getTime())
+          .map(session => {
+            const dateTime = new Date(session.scheduledDateTime);
+            const timeString = dateTime.toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true
             });
-          
-          return {
-            date: dateStr,
-            day: dayNames[date.getDay()],
-            dayOfMonth: date.getDate().toString(),
-            slots: sessionsForDate.length,
-            timeSlots: enhancedTimeSlots,
-            isRecommended: index === 0 // Mark first available date as recommended
-          };
-        });
+            return {
+              time: timeString,
+              available: session.status === TrialSessionStatus.AVAILABLE,
+              sessionId: session.id,
+              duration: session.durationMinutes,
+              sessionTitle: session.sessionTitle,
+              sessionDescription: session.sessionDescription,
+              allowRescheduling: session.allowRescheduling,
+              requireConfirmation: session.requireConfirmation,
+              specialInstructions: session.specialInstructions,
+              timeZone: session.timeZone
+            };
+          });
+        
+        return {
+          date: dateStr,
+          day: dayNames[date.getDay()],
+          dayOfMonth: date.getDate().toString(),
+          slots: sessionsForDate.length,
+          timeSlots: enhancedTimeSlots,
+          isRecommended: index === 0 // Mark first available date as recommended
+        };
+      });
 
-        setAvailableDates(dates);
-      } catch (error) {
-        console.error('Error fetching available sessions:', error);
-        setAvailableDates([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+      setAvailableDates(dates);
+    } catch (error) {
+      console.error('Error fetching available sessions:', error);
+      setAvailableDates([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     if (mentor.id) {
       fetchAvailableSessions();
     }
@@ -241,12 +241,15 @@ const BookTrial = ({ mentor }: BookTrialProps) => {
         
         alert(successMessage);
         
-        // Reset selections
+        // 🔄 Reset selections and refresh data after successful booking
         setSelectedDate(null);
         setSelectedTime(null);
         setSelectedSessionId(null);
         setSelectedSlot(null);
         setTimeSlots([]);
+        
+        // Refresh available sessions to show updated data
+        fetchAvailableSessions();
         
       } catch (error) {
         console.error('Error booking trial session:', error);

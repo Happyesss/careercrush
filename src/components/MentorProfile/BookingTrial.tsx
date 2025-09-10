@@ -121,8 +121,13 @@ export default function BookingTrial({ mentor, onBookTrial }: Props) {
         
         alert(`Trial session booked successfully! Session ID: ${bookedSession.id}`);
         
-        // Refresh the available slots after booking
+        // 🔄 Refresh the available slots after booking
         await fetchAvailableSlots();
+        
+        // Reset selections after successful booking
+        setSelectedDate("");
+        setSelectedTime("");
+        setSelectedSessionId(null);
       }
     } catch (error) {
       console.error("Error booking trial session:", error);
