@@ -17,14 +17,13 @@ const MentorProfileTabs = ({ mentor, activeTab, setActiveTab, mentorshipPackages
   const { isDarkMode } = useTheme();
 
   return (
-    <div className="xl:w-2/3 w-full">
+  <div className="w-full">
       <Tabs value={activeTab} onChange={(value) => setActiveTab(value || "overview")}>
         <Tabs.List className="overflow-x-auto">
           <Tabs.Tab value="overview">Overview</Tabs.Tab>
           <Tabs.Tab value="experience">Experience</Tabs.Tab>
           <Tabs.Tab value="skills">Skills</Tabs.Tab>
           <Tabs.Tab value="certifications">Certifications</Tabs.Tab>
-          <Tabs.Tab value="reviews">Reviews</Tabs.Tab>
         </Tabs.List>
       
         <Tabs.Panel value="overview" pt="md" className="min-h-[320px] md:min-h-[420px]">
@@ -217,13 +216,7 @@ const MentorProfileTabs = ({ mentor, activeTab, setActiveTab, mentorshipPackages
           </div>
         </Tabs.Panel>
         
-        <Tabs.Panel value="reviews" pt="md" className="min-h-[320px] md:min-h-[420px]">
-          <div className="text-center py-8">
-            <Text className={`${isDarkMode ? 'text-cape-cod-400' : 'text-gray-500'}`}>
-              Reviews feature coming soon...
-            </Text>
-          </div>
-        </Tabs.Panel>
+  {/* Reviews tab removed as per requirement */}
       </Tabs>
     </div>
   );

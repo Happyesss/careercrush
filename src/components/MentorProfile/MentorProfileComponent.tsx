@@ -7,10 +7,10 @@ import { useTheme } from "../../ThemeContext";
 import { getMentor, requestMentorshipSession } from "../../Services/MentorService";
 import { useSelector } from "react-redux";
 import { Mentor } from "../../types/mentor";
-import MentorProfileHeader from "./MentorProfileHeader";
 import PublicMentorProfileHeader from "./PublicMentorProfileHeader";
 import MentorProfileTabs from "./MentorProfileTabs";
-import PricingCard from "./PricingCard";
+import PricingSummaryCard from "./PricingSummaryCard";
+import PricingDetailsCard from "./PricingDetailsCard";
 import { packageService } from "../../Services/MentorshipPackageService";
 import MentorshipRequestModal from "./MentorshipRequestModal";
 import BookTrial from "./BookTrial";
@@ -27,6 +27,7 @@ const MentorProfileComponent = () => {
   const [activePackageId, setActivePackageId] = useState<number | null>(null);
   const [basePrice, setBasePrice] = useState<number>(0);
   const [mentorshipPackages, setMentorshipPackages] = useState<any[]>([]);
+  const [selectedPlan, setSelectedPlan] = useState<'1'|'3'|'6'>('6');
   const [packageLoading, setPackageLoading] = useState(true);
   
   const [requestForm, setRequestForm] = useState({
@@ -46,7 +47,6 @@ const MentorProfileComponent = () => {
     }
   }, [params.id]);
 
-  // Listen for public header request event to open the modal when header's Request is clicked
   useEffect(() => {
     const handler = (e: Event) => {
       const custom = e as CustomEvent;
@@ -65,20 +65,17 @@ const MentorProfileComponent = () => {
       console.log("Fetched mentor data:", data);
       setMentor(data);
       
-      // Fetch mentorship packages for this mentor
       try {
         setPackageLoading(true);
         let pkgList = await packageService.getActivePackagesByMentor(Number(params.id));
         console.log("Fetched ACTIVE packages for mentor:", pkgList?.length || 0, pkgList);
 
-        // Fallback: if no active packages, fetch all (maybe mentor hasn't activated yet)
         if (!pkgList || pkgList.length === 0) {
           const allPkgs = await packageService.getPackagesByMentor(Number(params.id));
             console.log("No active packages. Fetched ALL packages:", allPkgs?.length || 0, allPkgs);
             pkgList = allPkgs || [];
         }
 
-        // Build pricing maps (reuse logic from FindMentorsComponent)
         const planPriceMap: Record<string, number> = {};
         const discountMap: Record<string, number> = {};
         const originalPriceMap: Record<string, number> = {};
@@ -131,7 +128,6 @@ const MentorProfileComponent = () => {
 
         console.log("Profile pricing maps", { planPriceMap, discountMap, originalPriceMap });
 
-        // Choose preferred package (6 -> 3 -> 1)
         if (pkgList && pkgList.length > 0) {
           const preferred = pkgList.find(p => p.durationMonths === 6) || pkgList.find(p => p.durationMonths === 3) || pkgList.find(p => p.durationMonths === 1) || pkgList[0];
           setActivePackageId(preferred?.id ?? null);
@@ -142,7 +138,6 @@ const MentorProfileComponent = () => {
           setBasePrice(0);
         }
 
-        // Store merged data (attach pricing maps to first package for downstream pass)
         const augmented = pkgList.map(p => ({ ...p }));
         setMentorshipPackages(augmented);
       } catch (e) {
@@ -160,14 +155,10 @@ const MentorProfileComponent = () => {
 
   const handleBookTrial = async (selectedDate: string, selectedTime: string) => {
     try {
-      // You can integrate with your booking API here
       console.log("Booking trial session:", { mentorId: mentor?.id, date: selectedDate, time: selectedTime });
       
-      // For now, just show an alert - replace with actual booking logic
       alert(`Trial session booked with ${mentor?.name} for ${selectedDate} at ${selectedTime}!`);
       
-      // Optional: Navigate to booking confirmation or calendar
-      // router.push(`/booking-confirmation?mentor=${mentor?.id}&date=${selectedDate}&time=${selectedTime}`);
     } catch (error) {
       console.error("Error booking trial session:", error);
       alert("Failed to book trial session. Please try again.");
@@ -217,42 +208,46 @@ const MentorProfileComponent = () => {
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'}`}>
       <div className="w-full px-4 sm:px-6 lg:px-8 py-10">
-        {/* Main layout with left content and right sidebar */}
-        <div className="flex flex-col lg:flex-row gap-6 justify-around">
+  <div className="flex flex-col lg:flex-row gap-6 items-start">
           
-          {/* Left Content - Main mentor profile */}
-          <div className="flex-1 lg:w-3/4">
+          <div className="w-full lg:flex-1">
             <div className="space-y-6">
-              {/* Public-facing profile header matching the provided layout */}
               <PublicMentorProfileHeader mentor={mentor} />
-
-              {/* Optional pricing card if package exists */}
-              {activePackageId && (
-                <div>
-                  <PricingCard 
-                    mentorId={Number(params.id)} 
-                    packageId={activePackageId} 
-                    basePricePerMonth={basePrice}
-                    packageData={mentorshipPackages.find(p => p.id === activePackageId)}
-                    packagesList={mentorshipPackages}
-                  />
+              <div className="flex flex-col lg:flex-row gap-6 w-full">
+                <div className="w-full lg:w-[60%]">
+                  <div className={`${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'} rounded-xl shadow-sm p-4 sm:p-6`}>
+                    <MentorProfileTabs 
+                      mentor={mentor} 
+                      activeTab={activeTab} 
+                      setActiveTab={setActiveTab} 
+                      mentorshipPackages={mentorshipPackages}
+                      packageLoading={packageLoading}
+                    />
+                  </div>
                 </div>
-              )}
-
-              {/* Tabs section with mentor details */}
-              <div className={`${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'} rounded-xl shadow-sm p-4 sm:p-6`}>
-                <MentorProfileTabs 
-                  mentor={mentor} 
-                  activeTab={activeTab} 
-                  setActiveTab={setActiveTab} 
-                  mentorshipPackages={mentorshipPackages}
-                  packageLoading={packageLoading}
-                />
+                {activePackageId && (
+                  <div className="w-full lg:w-[40%] flex-shrink-0">
+                    <PricingSummaryCard 
+                      mentorId={Number(params.id)}
+                      packagesList={mentorshipPackages}
+                      basePricePerMonth={basePrice}
+                      selectedPlan={selectedPlan}
+                      setSelectedPlan={setSelectedPlan}
+                    />
+                  </div>
+                )}
               </div>
+
+              {activePackageId && (
+                <PricingDetailsCard 
+                  mentorId={Number(params.id)}
+                  packagesList={mentorshipPackages}
+                  selectedPlan={selectedPlan}
+                />
+              )}
             </div>
           </div>
 
-          {/* Right Sidebar - Book Trial */}
           <BookTrial mentor={mentor} />
           
         </div>
