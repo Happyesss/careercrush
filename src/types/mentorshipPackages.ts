@@ -95,6 +95,7 @@ export interface TrialSession {
   menteeEmail?: string;
   menteeName?: string;
   menteePhone?: string;
+  menteeProfilePicture?: string; // Base64 encoded profile picture
   createdAt?: string;
   updatedAt?: string;
   completedAt?: string;

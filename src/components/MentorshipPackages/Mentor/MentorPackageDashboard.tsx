@@ -2,15 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useTheme } from '../../../ThemeContext';
-import { MentorshipPackage, PackageStats, TrialSessionStats } from '../../../types/mentorshipPackages';
+import { MentorshipPackage, PackageStats } from '../../../types/mentorshipPackages';
 import { packageService, statsService } from '../../../Services/MentorshipPackageService';
 import CreatePackageWizard from './CreatePackageWizard';
 import PackageCard from './PackageCard';
 import HorizontalPackageCard from './HorizontalPackageCard';
 import PackageStatsCard from './PackageStatsCard';
-import TrialSessionManager from './TrialSessionManager';
 import { Button, Card, Container, Group, Stack, Text, Title, Tabs, Badge, ActionIcon, Menu } from '@mantine/core';
-import { IconPlus, IconPackage, IconCalendarTime, IconChartBar, IconDots, IconEdit, IconTrash, IconEye } from '@tabler/icons-react';
+import { IconPlus, IconPackage, IconChartBar, IconDots, IconEdit, IconTrash, IconEye, IconUsers, IconTrendingUp } from '@tabler/icons-react';
 import { notifications } from '@mantine/notifications';
 
 interface MentorPackageDashboardProps {
@@ -21,7 +20,6 @@ const MentorPackageDashboard: React.FC<MentorPackageDashboardProps> = ({ mentorI
   const { isDarkMode } = useTheme();
   const [packages, setPackages] = useState<MentorshipPackage[]>([]);
   const [packageStats, setPackageStats] = useState<PackageStats | null>(null);
-  const [trialStats, setTrialStats] = useState<TrialSessionStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<MentorshipPackage | null>(null);
@@ -34,15 +32,13 @@ const MentorPackageDashboard: React.FC<MentorPackageDashboardProps> = ({ mentorI
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [packagesData, packageStatsData, trialStatsData] = await Promise.all([
+      const [packagesData, packageStatsData] = await Promise.all([
         packageService.getPackagesByMentor(mentorId),
-        statsService.getPackageStats(mentorId),
-        statsService.getTrialSessionStats(mentorId),
+        statsService.getPackageStats(mentorId)
       ]);
       
       setPackages(packagesData);
       setPackageStats(packageStatsData);
-      setTrialStats(trialStatsData);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
       notifications.show({
@@ -200,7 +196,7 @@ const MentorPackageDashboard: React.FC<MentorPackageDashboardProps> = ({ mentorI
             title="Total Sessions"
             value={packageStats?.totalSessions || 0}
             subtitle="Across all packages"
-            icon={<IconCalendarTime size={20} />}
+            icon={<IconUsers size={20} />}
             color="green"
           />
           <StatCard
@@ -211,10 +207,10 @@ const MentorPackageDashboard: React.FC<MentorPackageDashboardProps> = ({ mentorI
             color="yellow"
           />
           <StatCard
-            title="Trial Conversion"
-            value={`${Math.round(trialStats?.conversionRate || 0)}%`}
-            subtitle={`${trialStats?.completedSessions || 0} completed`}
-            icon={<IconCalendarTime size={20} />}
+            title="Average Price"
+            value={packageStats ? `₹${Math.round(packageStats.averagePrice || 0).toLocaleString()}` : '₹0'}
+            subtitle="Per package"
+            icon={<IconTrendingUp size={20} />}
             color="violet"
           />
         </div>
@@ -224,9 +220,6 @@ const MentorPackageDashboard: React.FC<MentorPackageDashboardProps> = ({ mentorI
           <Tabs.List>
             <Tabs.Tab value="packages" leftSection={<IconPackage size={16} />}>
               Packages ({packages.length})
-            </Tabs.Tab>
-            <Tabs.Tab value="trials" leftSection={<IconCalendarTime size={16} />}>
-              Trial Sessions
             </Tabs.Tab>
             <Tabs.Tab value="analytics" leftSection={<IconChartBar size={16} />}>
               Analytics
@@ -269,35 +262,27 @@ const MentorPackageDashboard: React.FC<MentorPackageDashboardProps> = ({ mentorI
             )}
           </Tabs.Panel>
 
-          <Tabs.Panel value="trials" pt="md">
-            <TrialSessionManager mentorId={mentorId} />
-          </Tabs.Panel>
-
           <Tabs.Panel value="analytics" pt="md">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <PackageStatsCard stats={packageStats} />
               <Card p="md" radius="md" withBorder>
-                <Title order={4} mb="md">Trial Session Performance</Title>
+                <Title order={4} mb="md">Package Performance</Title>
                 <Stack gap="sm">
                   <Group justify="space-between">
-                    <Text>Total Sessions</Text>
-                    <Badge color="blue">{trialStats?.totalSessions || 0}</Badge>
+                    <Text>Total Packages</Text>
+                    <Badge color="blue">{packageStats?.totalPackages || 0}</Badge>
                   </Group>
                   <Group justify="space-between">
-                    <Text>Available</Text>
-                    <Badge color="green">{trialStats?.availableSessions || 0}</Badge>
+                    <Text>Active Packages</Text>
+                    <Badge color="green">{packageStats?.activePackages || 0}</Badge>
                   </Group>
                   <Group justify="space-between">
-                    <Text>Booked</Text>
-                    <Badge color="yellow">{trialStats?.bookedSessions || 0}</Badge>
+                    <Text>Average Price</Text>
+                    <Badge color="purple">${Math.round(packageStats?.averagePrice || 0)}</Badge>
                   </Group>
                   <Group justify="space-between">
-                    <Text>Completed</Text>
-                    <Badge color="violet">{trialStats?.completedSessions || 0}</Badge>
-                  </Group>
-                  <Group justify="space-between">
-                    <Text>Conversion Rate</Text>
-                    <Badge color="indigo">{Math.round(trialStats?.conversionRate || 0)}%</Badge>
+                    <Text>Total Revenue</Text>
+                    <Badge color="orange">${Math.round(packageStats?.totalRevenue || 0)}</Badge>
                   </Group>
                 </Stack>
               </Card>

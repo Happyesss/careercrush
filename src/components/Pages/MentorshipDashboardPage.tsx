@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import { Container, Card, Title, Text, Badge, Button, Stack, Group } from '@mantine/core';
-import { IconPackage, IconChartBar, IconUsers, IconTrendingUp, IconMenu2, IconX } from '@tabler/icons-react';
+import { IconPackage, IconChartBar, IconUsers, IconTrendingUp, IconMenu2, IconX, IconCalendarTime } from '@tabler/icons-react';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'next/navigation';
 import { useTheme } from '../../ThemeContext';
 import MentorPackageDashboard from '../MentorshipPackages/Mentor/MentorPackageDashboard';
+import TrialSessionsDashboard from '../MentorshipPackages/Mentor/TrialSessionsDashboard';
 import MentorAnalyticsComponent from '../MentorAnalytics/MentorAnalyticsComponent';
 const MentorshipDashboardPage = () => {
   const { isDarkMode } = useTheme();
@@ -81,6 +82,35 @@ const MentorshipDashboardPage = () => {
                 </div>
               </Button>
 
+              {/* Trial Sessions Navigation Item */}
+              <Button
+                variant={activeTab === 'trials' ? 'filled' : 'subtle'}
+                justify="flex-start"
+                leftSection={<IconCalendarTime size={18} />}
+                fullWidth
+                onClick={() => {
+                  setActiveTab('trials');
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`h-12 transition-all duration-200 ${
+                  activeTab === 'trials' 
+                    ? 'bg-blue-500 text-white shadow-md' 
+                    : `${isDarkMode ? 'hover:bg-cape-cod-800' : 'hover:bg-gray-100'}`
+                }`}
+              >
+                <div className="flex items-center justify-between w-full">
+                  <span className="font-medium">Trial Sessions</span>
+                  <Badge 
+                    size="sm" 
+                    variant={activeTab === 'trials' ? 'outline' : 'light'} 
+                    color={activeTab === 'trials' ? 'white' : 'green'}
+                    className={activeTab === 'trials' ? 'border-white text-white' : ''}
+                  >
+                    Manage
+                  </Badge>
+                </div>
+              </Button>
+
               {/* Analytics Navigation Item */}
               <Button
                 variant={activeTab === 'analytics' ? 'filled' : 'subtle'}
@@ -131,6 +161,11 @@ const MentorshipDashboardPage = () => {
             {/* Packages Content */}
             {activeTab === 'packages' && (
               <MentorPackageDashboard mentorId={Number(user.id)} />
+            )}
+
+            {/* Trial Sessions Content */}
+            {activeTab === 'trials' && (
+              <TrialSessionsDashboard mentorId={Number(user.id)} />
             )}
 
             {/* Analytics Content */}
