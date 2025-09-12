@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Container, Group, Stack, Text, Title, Tabs, Badge, Card, Loader, Paper } from '@mantine/core';
+import Link from 'next/link';
 import { IconCalendarTime, IconChartBar, IconTrendingUp, IconUsers, IconCheck, IconX } from '@tabler/icons-react';
 import { useTheme } from '../../../ThemeContext';
 import { TrialSessionStats, TrialSession, TrialSessionStatus } from '../../../types/mentorshipPackages';
@@ -21,10 +22,8 @@ const TrialSessionsDashboard: React.FC<TrialSessionsDashboardProps> = ({ mentorI
   const [activeTab, setActiveTab] = useState('all');
 
   useEffect(() => {
+    // Initial fetch only — no periodic refresh
     fetchData();
-    // Set up periodic refresh for when new sessions are created
-    const interval = setInterval(fetchData, 30000); // Refresh every 30 seconds
-    return () => clearInterval(interval);
   }, [mentorId]);
 
   const fetchData = async () => {
@@ -136,51 +135,98 @@ const TrialSessionsDashboard: React.FC<TrialSessionsDashboardProps> = ({ mentorI
             </Badge>
           </Group>
 
-          {/* Mentee Profile Section */}
+          {/* Mentee Profile Section (clickable to open profile) */}
           {session.menteeEmail && (
-            <Card withBorder radius="md" p="md" bg={isDarkMode ? 'dark.6' : 'gray.0'}>
-              <Group gap="md" align="flex-start">
-                {/* Profile Picture or Avatar placeholder */}
-                {session.menteeProfilePicture ? (
-                  <img 
-                    src={`data:image/jpeg;base64,${session.menteeProfilePicture}`}
-                    alt={`${session.menteeName}'s profile`}
-                    className="w-12 h-12 rounded-full object-cover border-2 border-gray-300"
-                    onError={(e) => {
-                      // Fallback to initial avatar on image load error
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'flex';
-                    }}
-                  />
-                ) : null}
-                <div 
-                  className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${
-                    getStatusColor(session.status) === 'blue' ? 'bg-blue-500' :
-                    getStatusColor(session.status) === 'teal' ? 'bg-teal-500' :
-                    getStatusColor(session.status) === 'red' ? 'bg-red-500' : 'bg-gray-500'
-                  } ${session.menteeProfilePicture ? 'hidden' : ''}`}
-                >
-                  {session.menteeName?.charAt(0)?.toUpperCase() || 'U'}
-                </div>
-                
-                <div style={{ flex: 1 }}>
-                  <Text size="lg" fw={600}>{session.menteeName || 'Unknown User'}</Text>
-                  <Text size="sm" c="dimmed" mb="xs">{session.menteeEmail}</Text>
-                  {session.menteePhone && (
-                    <Text size="sm" c="dimmed">{session.menteePhone}</Text>
-                  )}
-                  
-                  {session.notes && session.status === TrialSessionStatus.COMPLETED && (
-                    <div className="mt-2 p-2 rounded bg-teal-50 border border-teal-200">
-                      <Text size="xs" fw={500} c="teal.7">Session Notes:</Text>
-                      <Text size="sm" c="teal.8">{session.notes}</Text>
+            session.menteeId ? (
+              <Link href={`/talent-profile/${session.menteeId}`} className="no-underline">
+                <Card withBorder radius="md" p="md" bg={isDarkMode ? 'dark.6' : 'gray.0'} className="cursor-pointer hover:shadow-md transition-shadow">
+                  <Group gap="md" align="flex-start">
+                    {/* Profile Picture or Avatar placeholder */}
+                    {session.menteeProfilePicture ? (
+                      <img 
+                        src={`data:image/jpeg;base64,${session.menteeProfilePicture}`}
+                        alt={`${session.menteeName}'s profile`}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-gray-300"
+                        onError={(e) => {
+                          // Fallback to initial avatar on image load error
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const fallback = target.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div 
+                      className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${
+                        getStatusColor(session.status) === 'blue' ? 'bg-blue-500' :
+                        getStatusColor(session.status) === 'teal' ? 'bg-teal-500' :
+                        getStatusColor(session.status) === 'red' ? 'bg-red-500' : 'bg-gray-500'
+                      } ${session.menteeProfilePicture ? 'hidden' : ''}`}
+                    >
+                      {session.menteeName?.charAt(0)?.toUpperCase() || 'U'}
                     </div>
-                  )}
-                </div>
-              </Group>
-            </Card>
+                    
+                    <div style={{ flex: 1 }}>
+                      <Text size="lg" fw={600}>{session.menteeName || 'Unknown User'}</Text>
+                      <Text size="sm" c="dimmed" mb="xs">{session.menteeEmail}</Text>
+                      {session.menteePhone && (
+                        <Text size="sm" c="dimmed">{session.menteePhone}</Text>
+                      )}
+                      
+                      {session.notes && session.status === TrialSessionStatus.COMPLETED && (
+                        <div className="mt-2 p-2 rounded bg-teal-50 border border-teal-200">
+                          <Text size="xs" fw={500} c="teal.7">Session Notes:</Text>
+                          <Text size="sm" c="teal.8">{session.notes}</Text>
+                        </div>
+                      )}
+                    </div>
+                  </Group>
+                </Card>
+              </Link>
+            ) : (
+              <Card withBorder radius="md" p="md" bg={isDarkMode ? 'dark.6' : 'gray.0'}>
+                <Group gap="md" align="flex-start">
+                  {/* Profile Picture or Avatar placeholder */}
+                  {session.menteeProfilePicture ? (
+                    <img 
+                      src={`data:image/jpeg;base64,${session.menteeProfilePicture}`}
+                      alt={`${session.menteeName}'s profile`}
+                      className="w-12 h-12 rounded-full object-cover border-2 border-gray-300"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const fallback = target.nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div 
+                    className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${
+                      getStatusColor(session.status) === 'blue' ? 'bg-blue-500' :
+                      getStatusColor(session.status) === 'teal' ? 'bg-teal-500' :
+                      getStatusColor(session.status) === 'red' ? 'bg-red-500' : 'bg-gray-500'
+                    } ${session.menteeProfilePicture ? 'hidden' : ''}`}
+                  >
+                    {session.menteeName?.charAt(0)?.toUpperCase() || 'U'}
+                  </div>
+                  
+                  <div style={{ flex: 1 }}>
+                    <Text size="lg" fw={600}>{session.menteeName || 'Unknown User'}</Text>
+                    <Text size="sm" c="dimmed" mb="xs">{session.menteeEmail}</Text>
+                    {session.menteePhone && (
+                      <Text size="sm" c="dimmed">{session.menteePhone}</Text>
+                    )}
+                    
+                    {session.notes && session.status === TrialSessionStatus.COMPLETED && (
+                      <div className="mt-2 p-2 rounded bg-teal-50 border border-teal-200">
+                        <Text size="xs" fw={500} c="teal.7">Session Notes:</Text>
+                        <Text size="sm" c="teal.8">{session.notes}</Text>
+                      </div>
+                    )}
+                  </div>
+                </Group>
+              </Card>
+            )
           )}
           
           <Group gap="sm">
