@@ -197,53 +197,85 @@ const ScheduleCalendar = () => {
 
   if (loading) {
     return (
-      <Card shadow="sm" p="md" radius="md" className={`bg-white dark:bg-[var(--color-third)]`}>
-        <Group justify="space-between" mb="md">
-          <Text fw={500} size="lg" className="text-gray-900 dark:text-white">
+      <div className={`p-6 rounded-2xl shadow-lg transition-all duration-300 ${
+        isDarkMode 
+          ? 'bg-third border border-gray-700/30' 
+          : 'bg-white border border-gray-200/60'
+      }`}>
+        <div className="flex items-center gap-3 mb-4">
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-blue-500/10' : 'bg-blue-50'}`}>
+            <IconCalendarEvent className="h-5 w-5 text-blue-600" stroke={1.5} />
+          </div>
+          <h3 className={`text-lg font-semibold ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>
             Schedule
-          </Text>
-        </Group>
-        <div className="flex items-center justify-center py-8">
-          <Text size="sm" className="text-gray-500 dark:text-gray-400">
-            Loading schedule...
-          </Text>
+          </h3>
         </div>
-      </Card>
+        <div className="flex items-center justify-center py-8">
+          <div className="animate-pulse space-y-3 w-full">
+            <div className={`h-4 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'} rounded`}></div>
+            <div className={`h-4 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'} rounded w-3/4`}></div>
+            <div className={`h-4 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'} rounded w-1/2`}></div>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card shadow="sm" p="md" radius="md" className={`bg-white dark:bg-[var(--color-third)]`}>
-      <Group justify="space-between" mb="md">
-        <Text fw={500} size="lg" className="text-gray-900 dark:text-white">
-          Schedule
-        </Text>
-        <Badge size="sm" variant="light" color="blue">
+    <div className={`p-6 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl ${
+      isDarkMode 
+        ? 'bg-third border border-gray-700/30' 
+        : 'bg-white border border-gray-200/60'
+    }`}>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-blue-500/10' : 'bg-blue-50'}`}>
+            <IconCalendarEvent className="h-5 w-5 text-blue-600" stroke={1.5} />
+          </div>
+          <h3 className={`text-lg font-semibold ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>
+            Schedule
+          </h3>
+        </div>
+        <Badge 
+          size="sm" 
+          variant="light" 
+          color="blue"
+          className={isDarkMode ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'}
+        >
           {events.length} Events
         </Badge>
-      </Group>
+      </div>
 
-      <Stack gap="md">
+      <div className="space-y-6">
         {/* Calendar */}
-        <Calendar
-          onChange={handleDateChange as any}
-          size="sm"
-          renderDay={renderDay}
-          excludeDate={(date: Date) => isPastDate(date)}
-          className="dark:[&_.mantine-Calendar-month]:text-white dark:[&_.mantine-Calendar-weekday]:text-gray-400 dark:[&_.mantine-Calendar-day]:text-gray-200 dark:[&_.mantine-Calendar-day_today]:border dark:[&_.mantine-Calendar-day_today]:border-gray-600 dark:[&_.mantine-Calendar-day_disabled]:opacity-30"
-        />
+        <div className={`flex justify-center ${isDarkMode ? '[&_.mantine-Calendar-month]:text-white [&_.mantine-Calendar-weekday]:text-gray-400 [&_.mantine-Calendar-day]:text-gray-200 [&_.mantine-Calendar-day:hover]:bg-gray-700 [&_.mantine-Calendar-calendarHeader]:text-white [&_.mantine-Calendar-calendarHeaderControl]:text-gray-300 [&_.mantine-Calendar-calendarHeaderControl:hover]:bg-gray-700' : ''}`}>
+          <Calendar
+            onChange={handleDateChange as any}
+            size="sm"
+            renderDay={renderDay}
+            excludeDate={(date: Date) => isPastDate(date)}
+          />
+        </div>
 
         {/* Event Legend */}
-        <Stack gap="xs">
-          <Text size="sm" fw={500} className="text-gray-900 dark:text-white">
+        <div className="space-y-3">
+          <h4 className={`text-sm font-medium ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>
             Event Types
-          </Text>
-          <Group gap="xs">
+          </h4>
+          <div className="flex flex-wrap gap-2">
             <Badge 
               size="xs" 
               variant="light" 
               color="blue" 
               leftSection={<IconUsers size={12} />}
+              className="bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400"
             >
               Interview
             </Badge>
@@ -252,6 +284,7 @@ const ScheduleCalendar = () => {
               variant="light" 
               color="orange" 
               leftSection={<IconClock size={12} />}
+              className="bg-orange-50 text-orange-600 dark:bg-orange-500/10 dark:text-orange-400"
             >
               Trial
             </Badge>
@@ -260,31 +293,38 @@ const ScheduleCalendar = () => {
               variant="light" 
               color="green" 
               leftSection={<IconCalendarEvent size={12} />}
+              className="bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400"
             >
               Mentorship
             </Badge>
-          </Group>
-        </Stack>
+          </div>
+        </div>
 
         {/* Selected Date Events */}
         {selectedDate && (
-          <Stack gap="xs">
-            <Text size="sm" fw={500} className="text-gray-900 dark:text-white">
+          <div className="space-y-3">
+            <h4 className={`text-sm font-medium ${
+              isDarkMode ? 'text-white' : 'text-gray-900'
+            }`}>
               {selectedDate.toLocaleDateString('en-US', { 
                 weekday: 'long', 
                 year: 'numeric', 
                 month: 'long', 
                 day: 'numeric' 
               })}
-            </Text>
+            </h4>
             {getDayEvents(selectedDate).length > 0 ? (
-              <Stack gap="xs">
+              <div className="space-y-2">
                 {getDayEvents(selectedDate).map((event, index) => (
                   <div 
                     key={index}
-                    className="p-2 rounded-lg bg-gray-50 dark:bg-gray-800"
+                    className={`p-3 rounded-lg transition-colors duration-200 ${
+                      isDarkMode 
+                        ? 'bg-gray-800/50 hover:bg-gray-700/50' 
+                        : 'bg-gray-50 hover:bg-gray-100'
+                    }`}
                   >
-                    <Group gap="xs">
+                    <div className="flex items-center gap-2">
                       <Badge 
                         size="xs" 
                         variant="light" 
@@ -293,22 +333,26 @@ const ScheduleCalendar = () => {
                       >
                         {event.type}
                       </Badge>
-                      <Text size="xs" className="text-gray-600 dark:text-gray-300">
+                      <span className={`text-xs ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                      }`}>
                         {event.title}
-                      </Text>
-                    </Group>
+                      </span>
+                    </div>
                   </div>
                 ))}
-              </Stack>
+              </div>
             ) : (
-              <Text size="xs" className="text-gray-500 dark:text-gray-400">
+              <p className={`text-xs text-center py-4 italic ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-500'
+              }`}>
                 No events scheduled for this date
-              </Text>
+              </p>
             )}
-          </Stack>
+          </div>
         )}
-      </Stack>
-    </Card>
+      </div>
+    </div>
   );
 };
 

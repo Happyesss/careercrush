@@ -12,11 +12,13 @@ import { getBase64 } from "../../Services/Utilities";
 import ProfilePostedJob from "../PostedJob/ProfilePostedJob";
 import MentorInfo from "./MentorInfo";
 import SessionManagement from "./SessionManagement";
+import { useTheme } from "../../ThemeContext";
 
 const UserProfile = (props: any) => {
   const dispatch = useDispatch();
   const profile = useSelector((state: any) => state.profile);
   const user = useSelector((state: any) => state.user);
+  const { isDarkMode } = useTheme();
 
   const handleProfilePicChange = async (image: any) => {
     if (image.size > 1 * 1024 * 1024) { 
@@ -42,95 +44,171 @@ const UserProfile = (props: any) => {
 
   return (
 
-    <div className="w-2/3 mx-10 lg-mx:w-full bs-mx:mx-2 ">
-      <div className="relative">
-        <img
-          className="rounded-t-2xl w-full h-40 xsm:h-44 xs:h-48 sm:h-52 md:h-56 bs:h-60 lg:h-64 xl:h-72 object-cover"
-          src={profile.profileBackground ? `data:image/jpeg;base64,${profile.profileBackground}` : ((): string => { const mod = require(`../../assets/images/bgimg.jpg`); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()}
-          alt="Profile Background"
-        />
+    <div className="w-full lg:w-2/3 mx-auto lg:mx-10 lg-mx:w-full bs-mx:mx-2 animate-fade-in">
+      {/* Profile Header Card */}
+      <div className={`relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ${
+        isDarkMode 
+          ? 'bg-third border border-gray-700/30 shadow-2xl' 
+          : 'bg-white border border-gray-200/60 shadow-xl hover:shadow-2xl'
+      }`}>
+        
+        {/* Background Image Section */}
+        <div className="relative">
+          <img
+            className="rounded-t-2xl w-full h-44 xsm:h-48 xs:h-52 sm:h-56 md:h-60 bs:h-64 lg:h-68 xl:h-72 object-cover transition-transform duration-500 hover:scale-105"
+            src={profile.profileBackground ? `data:image/jpeg;base64,${profile.profileBackground}` : ((): string => { const mod = require(`../../assets/images/bgimg.jpg`); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()}
+            alt="Profile Background"
+          />
 
-        <div className="absolute bottom-1/6 right-1">
-          <Indicator
-            className="[&_.mantine-Indicator-indicator]:!border-4 [&_.img]:hover:opacity-80"
-            autoContrast
-            inline
-            offset={30}
-            label={<IconPencil className="h-4/5 w-4/5" stroke={1.5} />}
-            size="45"
-            position="bottom-end"
-            color="blue.4"
-            withBorder
-          >
-            <FileInput
-              onChange={handleprofileBackgroundChange}
-              className="absolute bottom-2 right-2 z-[201] w-12 [&_div]:text-transparent"
-              variant="unstyled"
-              size="lg"
-              radius="xl"
-              accept="image/png,image/jpeg"
-            />
-          </Indicator>
+          {/* Background Image Edit Button */}
+          <div className="absolute bottom-4 right-4">
+            <Indicator
+              className="[&_.mantine-Indicator-indicator]:!border-4 [&_.img]:hover:opacity-80"
+              autoContrast
+              inline
+              offset={30}
+              label={<IconPencil className="h-4/5 w-4/5" stroke={1.5} />}
+              size="48"
+              position="bottom-end"
+              color="blue.4"
+              withBorder
+            >
+              <FileInput
+                onChange={handleprofileBackgroundChange}
+                className={`absolute bottom-2 right-2 z-[201] w-12 [&_div]:text-transparent rounded-full transition-all duration-300 ${
+                  isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/5'
+                }`}
+                variant="unstyled"
+                size="lg"
+                radius="xl"
+                accept="image/png,image/jpeg"
+              />
+            </Indicator>
+          </div>
+
+          {/* Profile Picture */}
+          <div className="absolute -bottom-16 left-6 lg-mx:left-4">
+            <Indicator color="transparent">
+              <Avatar
+                className={`!w-32 !h-32 xs:!w-36 xs:!h-36 sm:!w-40 sm:!h-40 md:!w-44 md:!h-44 lg:!w-48 lg:!h-48 rounded-full cursor-pointer transition-all duration-300 border-4 ${
+                  isDarkMode 
+                    ? 'border-third hover:border-primary/50' 
+                    : 'border-white hover:border-primary/30'
+                } shadow-xl hover:shadow-2xl hover:scale-105`}
+                src={profile.picture ? `data:image/jpeg;base64,${profile.picture}` : ((): string => { const mod = require(`../../assets/images/avatar.png`); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()}
+                alt="Profile"
+                onClick={() => document.getElementById('profile-pic-input')?.click()}
+              />
+              <FileInput
+                id="profile-pic-input"
+                onChange={handleProfilePicChange}
+                className="absolute bottom-2 right-2 z-[201] w-12 [&_div]:text-transparent sm-mx:!w-8"
+                variant="unstyled"
+                size="lg"
+                radius="xl"
+                accept="image/png,image/jpeg"
+                style={{ display: 'none' }}
+              />
+            </Indicator>
+          </div>
         </div>
-        <div className="absolute -bottom-1/3 left-3">
-          <Indicator color="transparent"
-          >
-            <Avatar
-              className="!w-48 !h-48 lg-mx:!h-40 lg-mx:!w-40 sm-mx:!w-28 sm-mx:!h-28  rounded-full -bottom-1/3 absolute left-1.5 border-cape-cod-950 border-4 cursor-pointer"
-              src={profile.picture ? `data:image/jpeg;base64,${profile.picture}` : ((): string => { const mod = require(`../../assets/images/avatar.png`); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()}
-              alt="Profile"
-              onClick={() => document.getElementById('profile-pic-input')?.click()}
-            />
-            <FileInput
-              id="profile-pic-input"
-              onChange={handleProfilePicChange}
-              className="absolute bottom-2 right-2 z-[201] w-12 [&_div]:text-transparent sm-mx:!w-8"
-              variant="unstyled"
-              size="lg"
-              radius="xl"
-              accept="image/png,image/jpeg"
-              style={{ display: 'none' }}
-            />
-          </Indicator>
+
+        {/* Profile Info Section */}
+        <div className="pt-20 pb-6">
+          <Info />
         </div>
       </div>
-      <Info />
       
-      {/* Only show About for non-mentors */}
-      {user.accountType !== 'MENTOR' && (
-        <>
-          <Divider mx="xs" my="xl" color="dark" />
-          <About />
-        </>
-      )}
+      {/* Content Sections */}
+      <div className="mt-8 space-y-6">
+        {/* About Section - Only show for non-mentors */}
+        {user.accountType !== 'MENTOR' && (
+          <div className={`rounded-2xl p-6 transition-all duration-300 animate-slide-up ${
+            isDarkMode 
+              ? 'bg-third border border-gray-700/30 shadow-lg hover:shadow-xl' 
+              : 'bg-white border border-gray-200/60 shadow-md hover:shadow-lg'
+          }`}>
+            <About />
+          </div>
+        )}
 
-      {user.accountType === 'COMPANY' &&
-      <><Divider mx="xs" my="xl" color="dark" /><ProfilePostedJob /></>
-       }
-      
-      {user.accountType !== 'COMPANY' && user.accountType !== 'MENTOR' && (
-        <>
-          <Divider mx="xs" my="xl" color="dark" />
-          <Skills />
-          <Divider mx="xs" my="xl" color="dark" />
-          <Experience />
-          <Divider mx="xs" my="xl" color="dark" />
-          <Certificate />
-        </>
-      )}
+        {/* Company Posted Jobs Section */}
+        {user.accountType === 'COMPANY' && (
+          <div className={`rounded-2xl p-6 transition-all duration-300 animate-slide-up ${
+            isDarkMode 
+              ? 'bg-third border border-gray-700/30 shadow-lg hover:shadow-xl' 
+              : 'bg-white border border-gray-200/60 shadow-md hover:shadow-lg'
+          }`}>
+            <ProfilePostedJob />
+          </div>
+        )}
+        
+        {/* Skills, Experience, and Certificates for Applicants */}
+        {user.accountType !== 'COMPANY' && user.accountType !== 'MENTOR' && (
+          <>
+            <div className={`rounded-2xl p-6 transition-all duration-300 animate-slide-up ${
+              isDarkMode 
+                ? 'bg-third border border-gray-700/30 shadow-lg hover:shadow-xl' 
+                : 'bg-white border border-gray-200/60 shadow-md hover:shadow-lg'
+            }`} style={{ animationDelay: '0.1s' }}>
+              <Skills />
+            </div>
+            
+            <div className={`rounded-2xl p-6 transition-all duration-300 animate-slide-up ${
+              isDarkMode 
+                ? 'bg-third border border-gray-700/30 shadow-lg hover:shadow-xl' 
+                : 'bg-white border border-gray-200/60 shadow-md hover:shadow-lg'
+            }`} style={{ animationDelay: '0.2s' }}>
+              <Experience />
+            </div>
+            
+            <div className={`rounded-2xl p-6 transition-all duration-300 animate-slide-up ${
+              isDarkMode 
+                ? 'bg-third border border-gray-700/30 shadow-lg hover:shadow-xl' 
+                : 'bg-white border border-gray-200/60 shadow-md hover:shadow-lg'
+            }`} style={{ animationDelay: '0.3s' }}>
+              <Certificate />
+            </div>
+          </>
+        )}
 
-      {user.accountType === 'MENTOR' && (
-        <>
-          <Divider mx="xs" my="xl" color="dark" />
-          <MentorInfo />
-          <Divider mx="xs" my="xl" color="dark" />
-          <SessionManagement />
-          <Divider mx="xs" my="xl" color="dark" />
-          <Experience />
-          <Divider mx="xs" my="xl" color="dark" />
-          <Certificate />
-        </>
-      )}
+        {/* Mentor Specific Sections */}
+        {user.accountType === 'MENTOR' && (
+          <>
+            <div className={`rounded-2xl p-6 transition-all duration-300 animate-slide-up ${
+              isDarkMode 
+                ? 'bg-third border border-gray-700/30 shadow-lg hover:shadow-xl' 
+                : 'bg-white border border-gray-200/60 shadow-md hover:shadow-lg'
+            }`} style={{ animationDelay: '0.1s' }}>
+              <MentorInfo />
+            </div>
+            
+            <div className={`rounded-2xl p-6 transition-all duration-300 animate-slide-up ${
+              isDarkMode 
+                ? 'bg-third border border-gray-700/30 shadow-lg hover:shadow-xl' 
+                : 'bg-white border border-gray-200/60 shadow-md hover:shadow-lg'
+            }`} style={{ animationDelay: '0.2s' }}>
+              <SessionManagement />
+            </div>
+            
+            <div className={`rounded-2xl p-6 transition-all duration-300 animate-slide-up ${
+              isDarkMode 
+                ? 'bg-third border border-gray-700/30 shadow-lg hover:shadow-xl' 
+                : 'bg-white border border-gray-200/60 shadow-md hover:shadow-lg'
+            }`} style={{ animationDelay: '0.3s' }}>
+              <Experience />
+            </div>
+            
+            <div className={`rounded-2xl p-6 transition-all duration-300 animate-slide-up ${
+              isDarkMode 
+                ? 'bg-third border border-gray-700/30 shadow-lg hover:shadow-xl' 
+                : 'bg-white border border-gray-200/60 shadow-md hover:shadow-lg'
+            }`} style={{ animationDelay: '0.4s' }}>
+              <Certificate />
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };
