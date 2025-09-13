@@ -8,10 +8,10 @@ interface PricingSummaryCardProps {
   packagesList?: any[];
   basePricePerMonth: number;
   selectedPlan: '1' | '3' | '6';
-  setSelectedPlan: (p: '1' | '3' | '6') => void;
+  setSelectedPlanAction: (p: '1' | '3' | '6') => void;
 }
 
-export default function PricingSummaryCard({ mentorId, packagesList = [], basePricePerMonth, selectedPlan, setSelectedPlan }: PricingSummaryCardProps) {
+export default function PricingSummaryCard({ mentorId, packagesList = [], basePricePerMonth, selectedPlan, setSelectedPlanAction }: PricingSummaryCardProps) {
   const [internalPackages, setInternalPackages] = useState<any[]>(packagesList);
   const [planPriceMap, setPlanPriceMap] = useState<Record<string, number>>({});
   const [discountMap, setDiscountMap] = useState<Record<string, number>>({});
@@ -91,7 +91,7 @@ const planOptions = useMemo(() => [
           return (
             <button 
               key={p.key} 
-              onClick={() => setSelectedPlan(p.key as any)} 
+              onClick={() => setSelectedPlanAction(p.key as any)} 
               className={`relative px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
                 active 
                   ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform scale-105' 
@@ -138,13 +138,13 @@ const planOptions = useMemo(() => [
         </div>
       </div>
 
-      {/* What's Included Section */}
+  {/* What&#39;s Included Section */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-4">
           <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <div className="text-lg font-semibold text-gray-800">What's Included</div>
+          <div className="text-lg font-semibold text-gray-800">What&#39;s Included</div>
         </div>
         <ul className="space-y-3">
           <li className="flex items-center gap-3">

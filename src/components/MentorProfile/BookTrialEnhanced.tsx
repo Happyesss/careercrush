@@ -616,7 +616,7 @@ const BookTrialEnhanced = ({ mentor }: BookTrialEnhancedProps) => {
             <h5 className="font-medium">Confirmation Required</h5>
           </div>
           <p className="text-sm text-orange-600">
-            This session requires confirmation from the mentor before it's finalized.
+            This session requires confirmation from the mentor before it&#39;s finalized.
           </p>
         </div>
       )}
@@ -650,7 +650,7 @@ const BookTrialEnhanced = ({ mentor }: BookTrialEnhancedProps) => {
           </p>
           <p>
             Trial session with mentor helps you understand the required structure, 
-            effort & duration to achieve your personal goals.
+            effort &amp; duration to achieve your personal goals.
           </p>
           {selectedTimeSlot?.timeZone && selectedTimeSlot.timeZone !== 'UTC' && (
             <p className="mt-1 text-blue-600">

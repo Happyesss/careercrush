@@ -461,7 +461,7 @@ const BookTrial = ({ mentor }: BookTrialProps) => {
                 <h5 className="font-medium">Confirmation Required</h5>
               </div>
               <p className="text-sm text-orange-600">
-                This session requires confirmation from the mentor before it's finalized.
+                This session requires confirmation from the mentor before it&#39;s finalized.
               </p>
             </div>
           )}
@@ -493,7 +493,7 @@ const BookTrial = ({ mentor }: BookTrialProps) => {
           <p className="font-medium">
             {selectedSlot?.duration || '30'} mins 1:1 call with the mentor
           </p>
-          <p>Trial session with mentor helps you understand the required structure, effort & duration to achieve your personal goals.</p>
+          <p>Trial session with mentor helps you understand the required structure, effort &amp; duration to achieve your personal goals.</p>
           {selectedSlot?.timeZone && selectedSlot.timeZone !== 'UTC' && (
             <p className="mt-1 text-blue-600">
               <IconMapPin className="inline mr-1" size={12} />

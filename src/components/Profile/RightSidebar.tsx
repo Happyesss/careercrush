@@ -6,6 +6,9 @@ import { useTheme } from "../../ThemeContext";
 import About from "./About";
 import Skills from "./Skills";
 import MentorshipDashboardRedirect from "./MentorshipDashboardRedirect";
+import ScheduleCalendar from "./ScheduleCalendar";
+import UpcomingSessions from "./UpcomingSessions";
+import GalleryRedirect from "./GalleryRedirect";
 
 const RightSidebar: React.FC = () => {
   const tags = [
@@ -34,17 +37,22 @@ const RightSidebar: React.FC = () => {
           <div className={`rounded-lg shadow-md ${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'}`}>
             <MentorshipDashboardRedirect />
           </div>
-        </div>
+       </div>
       </aside>
     );
   }
 
-  // Show a simple placeholder for other users while profile widgets are being prepared
   return (
-    <aside className="hidden lg:block w-72 mt-10 mr-6 text-sm">
-      <div className={`mb-6 shadow-md rounded-2xl p-6 text-center ${isDarkMode ? 'bg-cape-cod-900 text-white' : 'bg-white text-gray-700'}`}>
-        <h4 className="text-lg font-semibold mb-2">Coming soon</h4>
-        <p className="text-sm opacity-80">We&apos;re working on profile widgets to enhance your experience. Check back soon for updates.</p>
+    <aside className="hidden lg:block w-80 mt-10 mr-6">
+      <div className="space-y-6">
+        {/* Schedule Calendar */}
+        <ScheduleCalendar />
+
+        {/* Upcoming Sessions */}
+        <UpcomingSessions />
+
+        {/* Gallery Redirect */}
+        <GalleryRedirect />
       </div>
     </aside>
   );
