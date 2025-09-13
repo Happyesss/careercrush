@@ -1,5 +1,5 @@
 import { Avatar, Divider, FileInput, Indicator } from "@mantine/core";
-import { IconPencil } from "@tabler/icons-react";
+import { IconCamera } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import Info from "./Info";
 import { changeProfile } from "../../Slices/ProfileSlice";
@@ -61,17 +61,16 @@ const UserProfile = (props: any) => {
           />
 
           {/* Background Image Edit Button */}
-          <div className="absolute bottom-4 right-4">
+          <div className="absolute top-12 right-4">
             <Indicator
-              className="[&_.mantine-Indicator-indicator]:!border-4 [&_.img]:hover:opacity-80"
+              className="[&_.mantine-Indicator-indicator]:!border-0 [&_.img]:hover:opacity-80"
               autoContrast
               inline
               offset={30}
-              label={<IconPencil className="h-4/5 w-4/5" stroke={1.5} />}
+              label={<IconCamera className="h-4/5 w-4/5" stroke={1.5} />}
               size="48"
               position="bottom-end"
-              color="blue.4"
-              withBorder
+              color="gray.7"
             >
               <FileInput
                 onChange={handleprofileBackgroundChange}

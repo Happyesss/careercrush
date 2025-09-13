@@ -203,8 +203,8 @@ const ScheduleCalendar = () => {
           : 'bg-white border border-gray-200/60'
       }`}>
         <div className="flex items-center gap-3 mb-4">
-          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-blue-500/10' : 'bg-blue-50'}`}>
-            <IconCalendarEvent className="h-5 w-5 text-blue-600" stroke={1.5} />
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-orange-500/10' : 'bg-orange-50'}`}>
+            <IconCalendarEvent className="h-5 w-5 text-orange-600" stroke={1.5} />
           </div>
           <h3 className={`text-lg font-semibold ${
             isDarkMode ? 'text-white' : 'text-gray-900'
@@ -232,8 +232,8 @@ const ScheduleCalendar = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-blue-500/10' : 'bg-blue-50'}`}>
-            <IconCalendarEvent className="h-5 w-5 text-blue-600" stroke={1.5} />
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-orange-500/10' : 'bg-orange-50'}`}>
+            <IconCalendarEvent className="h-5 w-5 text-orange-600" stroke={1.5} />
           </div>
           <h3 className={`text-lg font-semibold ${
             isDarkMode ? 'text-white' : 'text-gray-900'
@@ -244,8 +244,8 @@ const ScheduleCalendar = () => {
         <Badge 
           size="sm" 
           variant="light" 
-          color="blue"
-          className={isDarkMode ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'}
+          color="orange"
+          className={isDarkMode ? 'bg-orange-500/10 text-orange-400' : 'bg-orange-50 text-orange-600'}
         >
           {events.length} Events
         </Badge>

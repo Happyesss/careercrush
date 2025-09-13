@@ -109,13 +109,13 @@ const Info = () => {
           <ActionIcon 
             variant="subtle" 
             radius="lg" 
-            color={edit ? "red.8" : "blue.4"} 
+            color={edit ? "red.8" : "orange.4"} 
             size="xl" 
             onClick={handleEdit}
             className={`transition-all duration-200 hover:scale-110 ${
               edit 
                 ? (isDarkMode ? 'hover:bg-red-500/10' : 'hover:bg-red-50')
-                : (isDarkMode ? 'hover:bg-blue-500/10' : 'hover:bg-blue-50')
+                : (isDarkMode ? 'hover:bg-orange-500/10' : 'hover:bg-orange-50')
             }`}
           >
             {edit ? (

@@ -45,6 +45,23 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  
+  .animate-shimmer {
+    animation: shimmer 2s ease-in-out infinite;
+  }
+  
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite;
+  }
+  
+  .animate-fade-in-delayed {
+    animation: fadeIn 0.6s ease-out forwards;
+    opacity: 0;
+  }
 }
 
 /* Custom animations for modern UI */
@@ -96,6 +113,33 @@ body {
   }
   50% {
     opacity: 0.8;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(252, 116, 62, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(252, 116, 62, 0.6);
   }
 }
 
@@ -251,6 +295,25 @@ html {
 
 .dark .job-gallery-tabs :where(.mantine-Tabs-list button[data-active='true']) {
   box-shadow: none !important;
+}
+
+/* Make the active tab orange to match the brand -- override Mantine's default blue */
+.job-gallery-tabs :where(.mantine-Tabs-list button[data-active='true']) {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+  border-color: transparent !important;
+}
+
+.dark .job-gallery-tabs :where(.mantine-Tabs-list button[data-active='true']) {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+  box-shadow: 0 6px 18px rgba(214, 117, 87, 0.18) !important;
+}
+
+/* Ensure tab icons (svg) inside active tabs are white */
+.job-gallery-tabs :where(.mantine-Tabs-list button[data-active='true'] svg) {
+  color: white !important;
+  fill: white !important;
 }
 
 

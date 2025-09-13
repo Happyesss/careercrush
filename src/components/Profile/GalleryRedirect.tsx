@@ -24,8 +24,8 @@ const GalleryRedirect = () => {
       <div className="space-y-5">
         {/* Header */}
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-indigo-500/10' : 'bg-indigo-50'}`}>
-            <IconPhoto className="h-5 w-5 text-indigo-600" stroke={1.5} />
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-orange-500/10' : 'bg-orange-50'}`}>
+            <IconPhoto className="h-5 w-5 text-orange-600" stroke={1.5} />
           </div>
           <h3 className={`text-lg font-semibold ${
             isDarkMode ? 'text-white' : 'text-gray-900'

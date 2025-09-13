@@ -269,8 +269,8 @@ const UpcomingSessions = () => {
           : 'bg-white border border-gray-200/60'
       }`}>
         <div className="flex items-center gap-3 mb-4">
-          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-purple-500/10' : 'bg-purple-50'}`}>
-            <IconCalendarTime className="h-5 w-5 text-purple-600" stroke={1.5} />
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-orange-500/10' : 'bg-orange-50'}`}>
+            <IconCalendarTime className="h-5 w-5 text-orange-600" stroke={1.5} />
           </div>
           <h3 className={`text-lg font-semibold ${
             isDarkMode ? 'text-white' : 'text-gray-900'
@@ -298,8 +298,8 @@ const UpcomingSessions = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-purple-500/10' : 'bg-purple-50'}`}>
-            <IconCalendarTime className="h-5 w-5 text-purple-600" stroke={1.5} />
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-orange-500/10' : 'bg-orange-50'}`}>
+            <IconCalendarTime className="h-5 w-5 text-orange-600" stroke={1.5} />
           </div>
           <h3 className={`text-lg font-semibold ${
             isDarkMode ? 'text-white' : 'text-gray-900'
@@ -310,8 +310,8 @@ const UpcomingSessions = () => {
         <Badge 
           size="sm" 
           variant="light" 
-          color="purple"
-          className={isDarkMode ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-50 text-purple-600'}
+          color="orange"
+          className={isDarkMode ? 'bg-orange-500/10 text-orange-400' : 'bg-orange-50 text-orange-600'}
         >
           {sessions.length}
         </Badge>

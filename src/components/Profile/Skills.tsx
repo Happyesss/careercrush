@@ -38,8 +38,8 @@ const Skills = () => {
       {/* Section Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-green-500/10' : 'bg-green-50'}`}>
-            <IconTool className="h-5 w-5 text-green-600" stroke={1.5} />
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-orange-500/10' : 'bg-orange-50'}`}>
+            <IconTool className="h-5 w-5 text-orange-600" stroke={1.5} />
           </div>
           <h2 className={`text-xl md:text-2xl font-semibold ${
             isDarkMode ? 'text-white' : 'text-gray-900'
@@ -67,13 +67,13 @@ const Skills = () => {
           <ActionIcon 
             variant="subtle" 
             radius="lg" 
-            color={edit ? "red.8" : "blue.4"} 
+            color={edit ? "red.8" : "orange.4"} 
             size="lg" 
             onClick={handleEdit}
             className={`transition-all duration-200 hover:scale-110 ${
               edit 
                 ? (isDarkMode ? 'hover:bg-red-500/10' : 'hover:bg-red-50')
-                : (isDarkMode ? 'hover:bg-blue-500/10' : 'hover:bg-blue-50')
+                : (isDarkMode ? 'hover:bg-orange-500/10' : 'hover:bg-orange-50')
             }`}
           >
             {edit ? (
