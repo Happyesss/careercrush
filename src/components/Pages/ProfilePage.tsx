@@ -23,6 +23,7 @@ const ProfilePage = () => {
   <div className={`min-h-[90vh] mb-8 ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'}`}>
         <Divider mx="md" mb="xl" color={isDarkMode ? 'dark' : 'transparent'}/>
   <div className='flex gap-5 pr-3 sm:pr-4 md:pr-6 xl:pr-8'>
+
         <UserProfile {...profile}/>
         <RightSidebar />
         </div>

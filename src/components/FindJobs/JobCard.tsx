@@ -17,7 +17,7 @@ const JobCard = (props: any) => {
   const { isDarkMode } = useTheme();
 const hasApplied = props.applicants?.some(
   (applicant: any) => applicant.name === profile?.name
-);console.log("hasApplied", hasApplied);
+);
 
   const handleSaveJob = (event: React.MouseEvent) => {
     event.preventDefault();
