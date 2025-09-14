@@ -69,21 +69,48 @@ const MentorFilters = ({
   ];
 
   return (
-    <div className={`rounded-xl p-5 ${isDarkMode ? "bg-cape-cod-900" : "bg-white"}`}>
-      {/* Search */}
-      <TextInput
-        placeholder="Search mentors by name, skills, or company..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.currentTarget.value)}
-        leftSection={<IconSearch size={16} />}
-      />
+    <div
+      className={` w-full lg:w-80 flex flex-col gap-6 tracking-tight shadow-lg rounded-xl border transition-all duration-300
+        ${isDarkMode ? "bg-third text-white border-none" : "bg-white text-black border-gray-200"}
+         sticky top-6  p-6`}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <IconFilter size={20} className="text-primary" />
+          <h3 className="text-lg font-semibold">Filters</h3>
+        </div>
+        <button
+          onClick={clearFilters}
+          className="text-xs font-medium text-primary hover:text-primary transition-colors"
+        >
+          Clear all
+        </button>
+      </div>
 
-      <Divider className="my-4" />
+      {/* Search Input */}
+      <div>
+        <label className={`text-sm font-medium mb-2 block ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>Search</label>
+        <div className="relative">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="Search mentors by name, skills, or company..."
+            className={`w-full px-3 py-2 rounded-lg border text-sm transition-colors pl-9
+              ${isDarkMode ? '!bg-secondary !placeholder-gray-500 focus:!bg-secondary border-gray-600 text-white' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-primary'}`}
+            style={isDarkMode ? { backgroundColor: '#201e1c', borderColor: '#201e1c', outline: 'none', boxShadow: 'none' } : {}}
+          />
+          <IconSearch size={16} className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+        </div>
+      </div>
 
-      {/* Domain chips */}
-      <div className="mb-3">
-        <div className="text-sm font-medium mb-2">Domain</div>
-        <Group gap="xs">
+      <Divider className={isDarkMode ? 'border-cape-cod-700' : 'border-gray-300'} />
+
+      {/* Domain Chips */}
+      <div>
+        <label className={`text-sm font-medium mb-2 block ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>Domain</label>
+        <div className="flex flex-wrap gap-2">
           {[
             "Frontend",
             "Backend",
@@ -93,44 +120,70 @@ const MentorFilters = ({
             "Data Scientist / AI/ML",
             "Data Analyst",
           ].map((d) => (
-            <Chip
+            <button
               key={d}
-              checked={filters.expertise === d}
-              onChange={() => setFilters({ ...filters, expertise: filters.expertise === d ? "" : d })}
-              variant="outline"
-              color="blue"
+              type="button"
+              onClick={() => setFilters({ ...filters, expertise: filters.expertise === d ? "" : d })}
+              className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border transition-colors
+                ${filters.expertise === d ? 'bg-primary/10 text-primary border-primary' : isDarkMode ? 'bg-secondary text-white border-gray-600' : 'bg-white text-black border-gray-300'}
+                hover:bg-primary/20`}
             >
               {d}
-            </Chip>
+              {filters.expertise === d && (
+                <IconX size={12} className="ml-1" />
+              )}
+            </button>
           ))}
-        </Group>
+        </div>
       </div>
 
-      {/* 'Offering mentorship for' filter removed as requested */}
+      {/* Location Input */}
+      <div>
+        <label className={`text-sm font-medium mb-2 block ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>Location</label>
+        <input
+          type="text"
+          value={filters.location}
+          onChange={e => setFilters({ ...filters, location: e.target.value })}
+          placeholder="Enter location"
+          className={`w-full px-3 py-2 rounded-lg border text-sm transition-colors
+            ${isDarkMode ? '!bg-secondary !placeholder-gray-500 focus:!bg-secondary border-gray-600 text-white' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-primary'}`}
+          style={isDarkMode ? { backgroundColor: '#201e1c', borderColor: '#201e1c', outline: 'none', boxShadow: 'none' } : {}}
+        />
+      </div>
 
-      <TextInput
-        label="Location"
-        placeholder="Enter location"
-        value={filters.location}
-        onChange={(e) => setFilters({ ...filters, location: e.currentTarget.value })}
-        className="mb-4"
-      />
+      {/* Skills Multi-Tag Input */}
+      <div>
+        <label className={`text-sm font-medium mb-2 block ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>Skills</label>
+        <div className="flex flex-wrap gap-2">
+          {skillOptions.map((skill) => (
+            <button
+              key={skill}
+              type="button"
+              onClick={() => {
+                setFilters({
+                  ...filters,
+                  skills: filters.skills.includes(skill)
+                    ? filters.skills.filter((s) => s !== skill)
+                    : [...filters.skills, skill],
+                });
+              }}
+              className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border transition-colors
+                ${filters.skills.includes(skill) ? 'bg-primary/10 text-primary border-primary' : isDarkMode ? 'bg-secondary text-white border-gray-600' : 'bg-white text-black border-gray-300'}
+                hover:bg-primary/20`}
+            >
+              {skill}
+              {filters.skills.includes(skill) && (
+                <IconX size={12} className="ml-1" />
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
 
-      <MultiSelect
-        label="Skills"
-        placeholder="Select skills"
-        value={filters.skills}
-        onChange={(value) => setFilters({ ...filters, skills: value })}
-        data={skillOptions}
-        searchable
-        clearable
-        className="mb-5"
-      />
+      <Divider className={isDarkMode ? 'border-cape-cod-700' : 'border-gray-300'} />
 
-
-
-      {/* Experience range */}
-      <div className="mb-6">
+      {/* Experience Range */}
+      <div>
         <label className="block text-sm font-medium mb-2">Experience</label>
         <RangeSlider
           value={(filters.expRange || [0, 15]) as [number, number]}
@@ -138,22 +191,32 @@ const MentorFilters = ({
           min={0}
           max={15}
           step={1}
-          marks={[
-            { value: 0, label: "0 Years" },
-            { value: 15, label: "15+ Years" },
-          ]}
+         
+          size="sm"
+          styles={{
+            track: {
+              backgroundColor: isDarkMode ? '#3f4950' : '#e5e7eb',
+            },
+            bar: {
+              backgroundColor: 'var(--color-primary)',
+            },
+            thumb: {
+              backgroundColor: 'var(--color-primary)',
+              borderColor: 'var(--color-primary)',
+            },
+          }}
         />
       </div>
 
+      {/* Available Only Switch */}
       <div className="flex items-center justify-between">
-        <Switch
-          label="Available mentors only"
+        <label className={`text-sm font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>Available mentors only</label>
+        <input
+          type="checkbox"
           checked={filters.availableOnly}
-          onChange={(e) => setFilters({ ...filters, availableOnly: e.currentTarget.checked })}
+          onChange={e => setFilters({ ...filters, availableOnly: e.target.checked })}
+          className="w-4 h-4 accent-primary"
         />
-        <Button variant="subtle" leftSection={<IconX size={16} />} onClick={clearFilters}>
-          Clear Filters
-        </Button>
       </div>
     </div>
   );

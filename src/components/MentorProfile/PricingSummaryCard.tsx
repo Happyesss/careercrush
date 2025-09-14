@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { packageService } from "../../Services/MentorshipPackageService";
+import { useTheme } from "../../ThemeContext";
 
 interface PricingSummaryCardProps {
   mentorId: number;
@@ -18,6 +19,7 @@ export default function PricingSummaryCard({ mentorId, packagesList = [], basePr
   const [originalPriceMap, setOriginalPriceMap] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(false);
 
+  const { isDarkMode } = useTheme();
   const buildMaps = useCallback((pkgs: any[]) => {
     const p: Record<string, number> = {}; const d: Record<string, number> = {}; const o: Record<string, number> = {};
     pkgs.forEach(pkg => {
@@ -79,10 +81,10 @@ const planOptions = useMemo(() => [
   };
 
   return (
-    <div className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl p-6 w-full shadow-lg hover:shadow-xl transition-all duration-300 sticky top-4">
+    <div className={` tracking-tight   border ${isDarkMode ? 'bg-third text-white border-none' : 'bg-white text-black'} border-gray-200 rounded-2xl p-6 w-full shadow-md sticky top-4`}>
       <div className="text-center mb-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">Choose Your Plan</h3>
-        <p className="text-sm text-gray-600">Select the duration that works best for you</p>
+        <h3 className="text-lg font-semibold text-black mb-2">Choose Your Plan</h3>
+        <p className={`text-sm  ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Select the duration that works best for you</p>
       </div>
       
       <div className="flex gap-2 mb-6 justify-center">
@@ -94,16 +96,16 @@ const planOptions = useMemo(() => [
               onClick={() => setSelectedPlanAction(p.key as any)} 
               className={`relative px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
                 active 
-                  ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform scale-105' 
-                  : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 hover:border-blue-300 hover:shadow-md'
-              }`}
+                  ? 'bg-primary text-white shadow-lg transform scale-105' 
+                  : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200  hover:shadow-md'
+              }  `}
             >
               <span>{p.label}</span>
               {p.discount > 0 && (
                 <span className={`px-2 py-1 rounded-full text-xs font-bold ${
                   active 
-                    ? 'bg-white text-blue-600' 
-                    : 'bg-green-100 text-green-700'
+                    ? 'bg-white text-primary' 
+                    : 'bg-[#fcf3ed] text-primary'
                 }`}>
                   -{p.discount}%
                 </span>
@@ -118,17 +120,17 @@ const planOptions = useMemo(() => [
       
       <div className="text-center mb-6">
         <div className="relative">
-          {discount > 0 && (
-            <div className="text-sm text-gray-400 line-through mb-1">
-              ₹{original?.toLocaleString('en-IN')}
-            </div>
-          )}
-          <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          {/* {discount > 0 && (
+            // <div className="text-sm text-gray-400 line-through mb-1">
+            //   ₹{original?.toLocaleString('en-IN')}
+            // </div>
+          )} */}
+          <div className="text-4xl font-bold   text-black">
             ₹{monthly?.toLocaleString('en-IN')}
           </div>
-          <div className="text-sm text-gray-500 mt-1">per month</div>
+          <div className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-500'} mt-1`}>per month</div>
           {discount > 0 && (
-            <div className="inline-flex items-center gap-1 mt-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+            <div className=" inline-flex items-center gap-1 mt-2 px-3 py-1 bg-[#fcf3ed] text-primary tracking-normal rounded-full text-xs font-medium">
               <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
@@ -140,22 +142,22 @@ const planOptions = useMemo(() => [
 
   {/* What&#39;s Included Section */}
       <div className="mb-6">
-        <div className="flex items-center gap-2 mb-4">
+        {/* <div className="flex items-center gap-2 mb-4">
           <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div className="text-lg font-semibold text-gray-800">What&#39;s Included</div>
-        </div>
+        </div> */}
         <ul className="space-y-3">
           <li className="flex items-center gap-3">
-            <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
-              <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <div className="w-5 h-5 bg-[#fcf3ed] rounded-full flex items-center justify-center">
+              <svg className="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
             </div>
-            <span className="text-gray-700 font-medium">1:1 Live Sessions</span>
+            <span className={`text-gray-700 ${isDarkMode ? '!text-gray-300' : '!text-gray-500'} font-medium`}  >1:1 Live Sessions</span>
           </li>
-          {selectedPkg?.hasUnlimitedChat && (
+          {/* {selectedPkg?.hasUnlimitedChat && (
             <li className="flex items-center gap-3">
               <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
                 <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -164,8 +166,8 @@ const planOptions = useMemo(() => [
               </div>
               <span className="text-gray-700">Unlimited chat with mentor</span>
             </li>
-          )}
-          {selectedPkg?.hasCuratedTasks && (
+          )} */}
+          {/* {selectedPkg?.hasCuratedTasks && (
             <li className="flex items-center gap-3">
               <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
                 <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -174,45 +176,45 @@ const planOptions = useMemo(() => [
               </div>
               <span className="text-gray-700">Task & curated resources</span>
             </li>
-          )}
+          )} */}
           {selectedPkg?.hasRegularFollowups && (
             <li className="flex items-center gap-3">
-              <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <div className="w-5 h-5 bg-[#fcf3ed] rounded-full flex items-center justify-center">
+                <svg className="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
-              <span className="text-gray-700">Regular follow-ups (accountability)</span>
+              <span className={`text-gray-700 ${isDarkMode ? '!text-gray-300' : '!text-gray-500'} font-medium`}>Regular follow-ups (accountability)</span>
             </li>
           )}
           {selectedPkg?.hasJobReferrals && (
             <li className="flex items-center gap-3">
-              <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <div className="w-5 h-5 bg-[#fcf3ed] rounded-full flex items-center justify-center">
+                <svg className="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
-              <span className="text-gray-700">Job referrals</span>
+              <span className={`text-gray-700 ${isDarkMode ? '!text-gray-300' : '!text-gray-500'} font-medium`}>Job referrals</span>
             </li>
           )}
           {selectedPkg?.hasCertification && (
             <li className="flex items-center gap-3">
-              <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <div className="w-5 h-5 bg-[#fcf3ed] rounded-full flex items-center justify-center">
+                <svg className="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
-              <span className="text-gray-700">Certification on completion</span>
+              <span className={` ${isDarkMode ? '!text-gray-300' : '!text-gray-500'} font-medium`}>Certification on completion</span>
             </li>
           )}
           {selectedPkg?.hasRescheduling && (
             <li className="flex items-center gap-3">
-              <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <div className="w-5 h-5 bg-[#fcf3ed] rounded-full flex items-center justify-center">
+                <svg className="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
-              <span className="text-gray-700">Reschedule anytime</span>
+              <span className={`text-gray-700 ${isDarkMode ? '!text-gray-300' : '!text-gray-500'} font-medium`}>Reschedule anytime</span>
             </li>
           )}
         </ul>
@@ -221,7 +223,7 @@ const planOptions = useMemo(() => [
       <button 
         disabled={loading} 
         onClick={handleBuy} 
-        className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-semibold disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+        className="w-full py-3 rounded-xl bg-primary text-white text-sm font-semibold disabled:opacity-60 disabled:cursor-not-allowed shadow-lg "
       >
         {loading ? (
           <div className="flex items-center justify-center gap-2">

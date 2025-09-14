@@ -214,10 +214,10 @@ const FindMentorsComponent = () => {
   };
 
   return (
-    <div className={`min-h-screen py-8 ${isDarkMode ? "bg-cape-cod-950 text-gray-200" : "bg-gray-50 text-gray-900"}`}>
-      <div className="container mx-auto px-4">
+    <div className={`min-h-screen py-8 ${isDarkMode ? "bg-secondary text-white" : "bg-secondary text-black"}`}>
+      <div className="px-8">
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="flex gap-6 flex-col sm:flex-row">
           {/* Left sidebar */}
           <aside className="lg:col-span-4 xl:col-span-3">
             <div className="sticky top-6">
@@ -234,7 +234,7 @@ const FindMentorsComponent = () => {
           </aside>
 
           {/* Right content */}
-          <main className="lg:col-span-8 xl:col-span-9">
+          <main className="w-full ">
             <MentorGrid mentors={filteredMentors} loading={loading} clearFilters={clearFilters} />
           </main>
         </div>
