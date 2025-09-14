@@ -26,7 +26,7 @@ const ProfileMenu = () => {
     <Menu shadow="md" width={220} opened={opened} onChange={setOpened}>
       <Menu.Target>
         <div className="flex gap-2 items-center cursor-pointer">
-          <div className='xs-mx:hidden text-black dark:text-primary text-sm'>{profile.name}</div>
+          <div className='xs-mx:hidden text-black dark:text-white text-sm'>{profile.name}</div>
           <Avatar
             src={profile.picture ? `data:image/jpeg;base64,${profile.picture}` : ((): string => { const mod = require(`../../assets/images/avatar.png`); return typeof mod === 'string' ? mod : (mod?.default?.src ?? mod?.src ?? mod?.default ?? ''); })()}
             alt=""
@@ -34,14 +34,14 @@ const ProfileMenu = () => {
         </div>
       </Menu.Target>
 
-      <Menu.Dropdown onChange={() => setOpened(true)} className="bg-white dark:bg-third text-primary  dark:text-primary border border-black/10 dark:border-white/10 rounded-md">
+      <Menu.Dropdown onChange={() => setOpened(true)} className="bg-white dark:bg-third text-primary dark:text-white border border-black/10 dark:border-white/10 rounded-md">
         <Link href="/profile">
-          <Menu.Item leftSection={<IconUserCircle size={16} />} className="hover:bg-primary/10 dark:text-primary dark:hover:bg-secondary">
+          <Menu.Item leftSection={<IconUserCircle size={16} />} className="hover:bg-primary/10 dark:text-white dark:hover:bg-secondary">
             Profile
           </Menu.Item>
         </Link>
         <Link href="/job-gallery">
-          <Menu.Item leftSection={<IconBrandAppgallery size={16} />} className="hover:bg-primary/10 dark:text-primary dark:hover:bg-secondary">
+          <Menu.Item leftSection={<IconBrandAppgallery size={16} />} className="hover:bg-primary/10 dark:text-white dark:hover:bg-secondary">
             Gallery
           </Menu.Item>
         </Link>
@@ -63,12 +63,12 @@ const ProfileMenu = () => {
               }
             />
           }
-          className="hover:bg-primary/1 dark:text-primary dark:hover:bg-secondary"
+          className="hover:bg-primary/1 dark:text-white dark:hover:bg-secondary"
         >
           Theme
         </Menu.Item>
 
-        <Menu.Item onClick={handleLogout} leftSection={<IconLogout size={16} />} className="text-red-500 dark:text-primary hover:bg-red-500/10">
+        <Menu.Item onClick={handleLogout} leftSection={<IconLogout size={16} />} className="text-red-500 dark:text-red-400 hover:bg-red-500/10">
           Logout
         </Menu.Item>
       </Menu.Dropdown>

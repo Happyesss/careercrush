@@ -263,50 +263,87 @@ const UpcomingSessions = () => {
 
   if (loading) {
     return (
-      <Card shadow="sm" p="md" radius="md" className={`bg-white dark:bg-[var(--color-third)]`}>
-        <Group justify="space-between" mb="md">
-          <Text fw={500} size="lg" className="text-gray-900 dark:text-white">
+      <div className={`p-6 rounded-2xl shadow-lg transition-all duration-300 ${
+        isDarkMode 
+          ? 'bg-third border border-gray-700/30' 
+          : 'bg-white border border-gray-200/60'
+      }`}>
+        <div className="flex items-center gap-3 mb-4">
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-orange-500/10' : 'bg-orange-50'}`}>
+            <IconCalendarTime className="h-5 w-5 text-orange-600" stroke={1.5} />
+          </div>
+          <h3 className={`text-lg font-semibold ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>
             Upcoming Sessions
-          </Text>
-        </Group>
-        <div className="flex items-center justify-center py-8">
-          <Text size="sm" className="text-gray-500 dark:text-gray-400">
-            Loading sessions...
-          </Text>
+          </h3>
         </div>
-      </Card>
+        <div className="flex items-center justify-center py-8">
+          <div className="animate-pulse space-y-3 w-full">
+            <div className={`h-4 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'} rounded`}></div>
+            <div className={`h-4 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'} rounded w-3/4`}></div>
+            <div className={`h-4 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'} rounded w-1/2`}></div>
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card shadow="sm" p="md" radius="md" className={`bg-white dark:bg-[var(--color-third)]`}>
-      <Group justify="space-between" mb="md">
-        <Text fw={500} size="lg" className="text-gray-900 dark:text-white">
-          Upcoming Sessions
-        </Text>
-        <Badge size="sm" variant="light" color="blue">
+    <div className={`p-6 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl ${
+      isDarkMode 
+        ? 'bg-third border border-gray-700/30' 
+        : 'bg-white border border-gray-200/60'
+    }`}>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-orange-500/10' : 'bg-orange-50'}`}>
+            <IconCalendarTime className="h-5 w-5 text-orange-600" stroke={1.5} />
+          </div>
+          <h3 className={`text-lg font-semibold ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>
+            Upcoming Sessions
+          </h3>
+        </div>
+        <Badge 
+          size="sm" 
+          variant="light" 
+          color="orange"
+          className={isDarkMode ? 'bg-orange-500/10 text-orange-400' : 'bg-orange-50 text-orange-600'}
+        >
           {sessions.length}
         </Badge>
-      </Group>
+      </div>
 
       {sessions.length > 0 ? (
-        <Stack gap="sm">
-          {sessions.slice(0, 3).map((session) => (
-            <Card 
+        <div className="space-y-4">
+          {sessions.slice(0, 3).map((session, index) => (
+            <div 
               key={session.id} 
-              p="sm" 
-              radius="md" 
-              className={`border bg-gray-50 dark:bg-gray-800 dark:border-gray-700 border-gray-200`}
+              className={`p-4 rounded-xl border transition-all duration-200 hover:shadow-md ${
+                isDarkMode 
+                  ? 'bg-gray-800/50 border-gray-700/50 hover:bg-gray-700/50' 
+                  : 'bg-gray-50 border-gray-200/60 hover:bg-gray-100'
+              }`}
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <Stack gap="xs">
+              <div className="space-y-3">
                 {/* Header */}
-                <Group justify="space-between">
-                  <Group gap="xs">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
                     <Badge 
                       size="sm" 
                       variant="light" 
                       color={getTypeColor(session.type)}
                       leftSection={getTypeIcon(session.type)}
+                      className={`${
+                        getTypeColor(session.type) === 'blue' ? 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400' :
+                        getTypeColor(session.type) === 'orange' ? 'bg-orange-50 text-orange-600 dark:bg-orange-500/10 dark:text-orange-400' :
+                        getTypeColor(session.type) === 'green' ? 'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400' :
+                        'bg-gray-50 text-gray-600 dark:bg-gray-500/10 dark:text-gray-400'
+                      }`}
                     >
                       {session.type}
                     </Badge>
@@ -314,17 +351,25 @@ const UpcomingSessions = () => {
                       size="xs" 
                       variant="light" 
                       color={getStatusColor(session.status)}
+                      className={`${
+                        getStatusColor(session.status) === 'green' ? 'bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400' :
+                        getStatusColor(session.status) === 'yellow' ? 'bg-yellow-50 text-yellow-600 dark:bg-yellow-500/10 dark:text-yellow-400' :
+                        getStatusColor(session.status) === 'orange' ? 'bg-orange-50 text-orange-600 dark:bg-orange-500/10 dark:text-orange-400' :
+                        'bg-gray-50 text-gray-600 dark:bg-gray-500/10 dark:text-gray-400'
+                      }`}
                     >
                       {session.status}
                     </Badge>
-                  </Group>
-                  <Text size="xs" className="text-gray-500 dark:text-gray-400">
+                  </div>
+                  <span className={`text-xs ${
+                    isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
                     in {getTimeUntilSession(session.date)}
-                  </Text>
-                </Group>
+                  </span>
+                </div>
 
                 {/* Session Info */}
-                <Group gap="sm" align="flex-start">
+                <div className="flex items-start gap-3">
                   <Avatar 
                     src={session.contact.avatar} 
                     size="sm" 
@@ -335,44 +380,55 @@ const UpcomingSessions = () => {
                   </Avatar>
                   
                   <div className="flex-1 min-w-0">
-                    <Text size="sm" fw={500} className={`truncate text-gray-900 dark:text-white`}>
+                    <h4 className={`text-sm font-medium truncate ${
+                      isDarkMode ? 'text-white' : 'text-gray-900'
+                    }`}>
                       {session.title}
-                    </Text>
-                    <Text size="xs" className="text-gray-600 dark:text-gray-300">
+                    </h4>
+                    <p className={`text-xs ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}>
                       with {session.contact.name}
                       {session.contact.company && ` • ${session.contact.company}`}
-                    </Text>
-                    <Text size="xs" className="text-gray-500 dark:text-gray-400">
+                    </p>
+                    <p className={`text-xs ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
                       {session.description}
-                    </Text>
+                    </p>
                   </div>
-                </Group>
+                </div>
 
                 {/* Time and Duration */}
-                <Group gap="sm" className="text-xs">
-                  <Group gap="xs">
-                    <IconCalendarTime size={14} className="text-gray-500 dark:text-gray-400" />
-                    <Text size="xs" className="text-gray-600 dark:text-gray-300">
+                <div className="flex items-center gap-4 text-xs">
+                  <div className="flex items-center gap-1">
+                    <IconCalendarTime size={14} className={isDarkMode ? 'text-gray-400' : 'text-gray-500'} />
+                    <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
                       {formatDate(session.date)} at {formatTime(session.date)}
-                    </Text>
-                  </Group>
-                  <Group gap="xs">
-                    <IconClock size={14} className="text-gray-500 dark:text-gray-400" />
-                    <Text size="xs" className="text-gray-600 dark:text-gray-300">
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <IconClock size={14} className={isDarkMode ? 'text-gray-400' : 'text-gray-500'} />
+                    <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
                       {session.duration} min
-                    </Text>
-                  </Group>
-                </Group>
+                    </span>
+                  </div>
+                </div>
 
                 {/* Actions */}
-                <Group justify="space-between">
-                  <Group gap="xs">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
                     {session.meetingLink && (
                       <Button 
                         size="xs" 
                         variant="light" 
                         leftSection={<IconVideo size={14} />}
                         onClick={() => joinMeeting(session.meetingLink)}
+                        className={`${
+                          isDarkMode 
+                            ? 'bg-blue-500/10 text-blue-400 hover:bg-blue-500/20' 
+                            : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                        }`}
                       >
                         Join
                       </Button>
@@ -382,51 +438,64 @@ const UpcomingSessions = () => {
                       variant="light" 
                       color="blue"
                       title="Send message"
+                      className={`${
+                        isDarkMode 
+                          ? 'bg-blue-500/10 text-blue-400 hover:bg-blue-500/20' 
+                          : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                      }`}
                     >
                       <IconMessage size={14} />
                     </ActionIcon>
-                  </Group>
+                  </div>
                   
-          {session.location && (
-                    <Group gap="xs">
-            <IconMapPin size={14} className="text-gray-500 dark:text-gray-400" />
-            <Text size="xs" className="text-gray-500 dark:text-gray-400">
+                  {session.location && (
+                    <div className="flex items-center gap-1">
+                      <IconMapPin size={14} className={isDarkMode ? 'text-gray-400' : 'text-gray-500'} />
+                      <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                         {session.location}
-                      </Text>
-                    </Group>
+                      </span>
+                    </div>
                   )}
-                </Group>
-              </Stack>
-            </Card>
+                </div>
+              </div>
+            </div>
           ))}
 
           {sessions.length > 3 && (
             <Button 
               variant="light" 
-              size="xs" 
+              size="sm" 
               fullWidth
-              className="mt-2"
+              className={`mt-4 ${
+                isDarkMode 
+                  ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
             >
               View All Sessions ({sessions.length})
             </Button>
           )}
-        </Stack>
+        </div>
       ) : (
-        <Stack align="center" gap="sm" className="py-8">
-          <IconCalendarTime size={48} className="text-gray-400 dark:text-gray-500" />
-          <div className="text-center">
-            <Text size="sm" fw={500} className="text-gray-600 dark:text-gray-300">
+        <div className="text-center py-8 space-y-3">
+          <IconCalendarTime size={48} className={isDarkMode ? 'text-gray-600' : 'text-gray-400'} />
+          <div className="space-y-1">
+            <h4 className={`text-sm font-medium ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-600'
+            }`}>
               No upcoming sessions
-            </Text>
-            <Text size="xs" className="text-gray-500 dark:text-gray-400">
+            </h4>
+            <p className={`text-xs ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-500'
+            }`}>
               {user?.accountType === 'MENTOR' && 'Students can book trial sessions with you'}
               {user?.accountType === 'APPLICANT' && 'Book trial sessions with mentors or check for interview invitations'}
               {user?.accountType === 'COMPANY' && 'Schedule interviews with job applicants'}
-            </Text>
+            </p>
           </div>
-        </Stack>
+        </div>
       )}
-    </Card>
+    </div>
   );
 };
 

@@ -20,13 +20,13 @@ const NavLinks = () => {
   }
 
   return (
-    <div className="flex gap-5 bs-mx:hidden text-[14px] text-[#000] dark:text-primary font-normal">
+    <div className="flex gap-5 bs-mx:hidden text-[14px] text-[#000] dark:text-white font-normal">
       {links.map((link, index) => (
         <Link
           key={index}
           href={`/${link.url}`}
           className={`transition-colors duration-300 ${
-            pathname === `/${link.url}` ? "text-black" : "hover:text-primary"
+            pathname === `/${link.url}` ? "text-black dark:text-white" : "hover:text-primary"
           }`}
         >
           {link.name}

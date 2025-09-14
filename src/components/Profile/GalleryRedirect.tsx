@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Card, Text, Button } from '@mantine/core';
+import { Button } from '@mantine/core';
 import { IconArrowRight, IconPhoto } from '@tabler/icons-react';
 import { useTheme } from '../../ThemeContext';
 import { useRouter } from 'next/navigation';
@@ -16,59 +16,84 @@ const GalleryRedirect = () => {
   };
 
   return (
-    <Card shadow="sm" p="md" radius="md" className={`bg-white dark:bg-[var(--color-third)]`}>
-      <div className="space-y-4">
+    <div className={`p-6 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl ${
+      isDarkMode 
+        ? 'bg-third border border-gray-700/30' 
+        : 'bg-white border border-gray-200/60'
+    }`}>
+      <div className="space-y-5">
         {/* Header */}
-        <div className="flex items-center gap-2">
-          <IconPhoto size={20} className="text-gray-600 dark:text-gray-300" />
-          <Text fw={500} size="lg" className="text-gray-900 dark:text-white">
+        <div className="flex items-center gap-3">
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-orange-500/10' : 'bg-orange-50'}`}>
+            <IconPhoto className="h-5 w-5 text-orange-600" stroke={1.5} />
+          </div>
+          <h3 className={`text-lg font-semibold ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>
             Gallery
-          </Text>
+          </h3>
         </div>
 
         {/* Gallery Image Preview */}
-        <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
+        <div className="relative aspect-video rounded-xl overflow-hidden bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 group">
           {!imageLoaded && (
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
-              <IconPhoto size={48} className="text-gray-400" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center space-y-2">
+                <IconPhoto size={40} className={isDarkMode ? 'text-gray-500' : 'text-gray-400'} />
+                <div className="animate-pulse space-y-1">
+                  <div className={`h-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'} rounded`}></div>
+                  <div className={`h-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-300'} rounded w-3/4`}></div>
+                </div>
+              </div>
             </div>
           )}
           <img
-            src="/cc.jpg" // Using the existing cc.jpg from public folder
+            src="/cc.jpg"
             alt="Career Gallery Preview"
-            className={`w-full h-full object-cover transition-opacity duration-300 ${
+            className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
             onLoad={() => setImageLoaded(true)}
-            onError={() => setImageLoaded(true)} // Show placeholder on error
+            onError={() => setImageLoaded(true)}
           />
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-            <div className="text-center text-white">
-              <IconPhoto size={32} className="mx-auto mb-2" />
-              <Text size="sm" fw={500}>Explore Gallery</Text>
+          {/* Enhanced Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-4 transition-all duration-300 group-hover:from-black/80">
+            <div className="text-white space-y-1">
+              <div className="flex items-center gap-2">
+                <IconPhoto size={18} />
+                <span className="text-sm font-medium">Explore Gallery</span>
+              </div>
+              <p className="text-xs text-gray-200">
+                Discover career opportunities
+              </p>
             </div>
           </div>
         </div>
 
         {/* Description */}
-  <Text size="sm" className="text-gray-600 dark:text-gray-300">
-          Discover amazing career opportunities and connect with top talent in our gallery.
-        </Text>
+        <p className={`text-sm leading-relaxed ${
+          isDarkMode ? 'text-gray-300' : 'text-gray-600'
+        }`}>
+          Discover amazing career opportunities and connect with top talent in our comprehensive gallery.
+        </p>
 
-        {/* Redirect Button */}
+        {/* Enhanced Redirect Button */}
         <Button
           fullWidth
           variant="light"
-          color="blue"
+          size="md"
           rightSection={<IconArrowRight size={16} />}
           onClick={handleGalleryRedirect}
-          className="mt-3"
+          className={`font-medium transition-all duration-200 ${
+            isDarkMode 
+              ? 'bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 border-indigo-500/20' 
+              : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border-indigo-200'
+          }`}
         >
           Visit Gallery
         </Button>
       </div>
-    </Card>
+    </div>
   );
 };
 
