@@ -18,20 +18,30 @@ const MentorGrid = ({ mentors, loading, clearFilters }: MentorGridProps) => {
     return (
       <div className="flex flex-col gap-6">
         {[...Array(3)].map((_, index) => (
-          <div key={index} className={`rounded-xl p-6 animate-pulse ${isDarkMode ? "bg-cape-cod-800" : "bg-white"}`}>
-            <div className="flex gap-6">
-              <div className="flex-1">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className={`${isDarkMode ? "bg-cape-cod-700" : "bg-gray-200"} w-16 h-16 rounded-full`} />
-                  <div className="flex-1">
-                    <div className={`${isDarkMode ? "bg-cape-cod-700" : "bg-gray-200"} h-4 rounded mb-2`} />
-                    <div className={`${isDarkMode ? "bg-cape-cod-700" : "bg-gray-200"} h-3 rounded w-3/4`} />
-                  </div>
-                </div>
-                <div className={`${isDarkMode ? "bg-cape-cod-800" : "bg-gray-200"} h-3 rounded mb-2`} />
-                <div className={`${isDarkMode ? "bg-cape-cod-800" : "bg-gray-200"} h-3 rounded w-2/3`} />
+          <div key={index} className={`rounded-2xl p-5 animate-pulse border transform transition-all duration-200 ${isDarkMode ? 'bg-third border-none shadow-sm' : 'bg-white border-gray-200 shadow-sm'}`}>
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className={`h-10 w-10 rounded-full ${isDarkMode ? "bg-secondary" : "bg-gray-200"}`} />
               </div>
-              <div className={`w-80 hidden lg:block rounded-xl ${isDarkMode ? "bg-cape-cod-700" : "bg-gray-100"}`} />
+              <div className={`h-8 w-16 rounded-lg ${isDarkMode ? "bg-secondary" : "bg-gray-200"}`} />
+            </div>
+            <div className="flex items-center gap-2 mb-1">
+              <div className={`h-3 w-20 rounded ${isDarkMode ? "bg-secondary" : "bg-gray-200"}`} />
+              <div className={`h-3 w-12 rounded ${isDarkMode ? "bg-secondary" : "bg-gray-200"}`} />
+            </div>
+            <div className={`h-6 w-3/4 rounded mb-3 ${isDarkMode ? "bg-secondary" : "bg-gray-200"}`} />
+            <div className="flex flex-wrap gap-2 mb-4">
+              <div className={`h-6 w-16 rounded-md ${isDarkMode ? "bg-secondary" : "bg-gray-200"}`} />
+              <div className={`h-6 w-20 rounded-md ${isDarkMode ? "bg-secondary" : "bg-gray-200"}`} />
+              <div className={`h-6 w-14 rounded-md ${isDarkMode ? "bg-secondary" : "bg-gray-200"}`} />
+            </div>
+            <div className={`h-px ${isDarkMode ? 'bg-cape-cod-700' : 'bg-gray-200'} mb-4`} />
+            <div className="flex items-end justify-between">
+              <div>
+                <div className={`h-4 w-24 rounded ${isDarkMode ? "bg-secondary" : "bg-gray-200"} mb-2`} />
+                <div className={`h-3 w-16 rounded ${isDarkMode ? "bg-secondary" : "bg-gray-200"}`} />
+              </div>
+              <div className={`h-8 w-20 rounded-md ${isDarkMode ? "bg-secondary" : "bg-gray-200"}`} />
             </div>
           </div>
         ))}
@@ -41,22 +51,28 @@ const MentorGrid = ({ mentors, loading, clearFilters }: MentorGridProps) => {
 
   if (mentors.length === 0) {
     return (
-      <div className={`${isDarkMode ? "bg-cape-cod-900" : "bg-white"} text-center py-12 rounded-xl`}>
-        <h3 className="text-xl font-semibold mb-2">No mentors found</h3>
-        <p className={`${isDarkMode ? "text-cape-cod-300" : "text-gray-600"} mb-4`}>
+      <div className={`${isDarkMode ? "bg-third" : "bg-white"} text-center py-12 rounded-2xl border ${isDarkMode ? 'border-none shadow-sm' : 'border-gray-200 shadow-sm'}`}>
+        <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>No mentors found</h3>
+        <p className={`${isDarkMode ? "text-gray-300" : "text-gray-600"} mb-4`}>
           Try adjusting your search criteria or filters
         </p>
-        <Button onClick={clearFilters}>Clear All Filters</Button>
+        <button
+          onClick={clearFilters}
+          className="px-4 py-2 bg-primary text-white rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
+        >
+          Clear All Filters
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      {mentors.map((mentor) => (
-        <MentorCard key={mentor.id} {...mentor} />
-      ))}
-    </div>
+  <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 w-full ">
+  {mentors.map((mentor) => (
+    <MentorCard key={mentor.id} {...mentor} />
+  ))}
+</div>
+
   );
 };
 

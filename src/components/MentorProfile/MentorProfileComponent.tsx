@@ -206,16 +206,18 @@ const MentorProfileComponent = () => {
   }
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'}`}>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-secondary text-white' : 'bg-secondary text-black'}`}>
       <div className="w-full px-4 sm:px-6 lg:px-8 py-10">
-  <div className="flex flex-col lg:flex-row gap-6 items-start">
+  <div className="flex flex-col lg:flex-row items-start px-0 lg:px-28">
           
-          <div className="w-full lg:flex-1">
-            <div className="space-y-6">
+          <div className="w-full ">
+            <div className="space-y-4">
               <PublicMentorProfileHeader mentor={mentor} />
+
+
               <div className="flex flex-col lg:flex-row gap-6 w-full">
-                <div className="w-full lg:w-[60%]">
-                  <div className={`${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'} rounded-xl shadow-sm p-4 sm:p-6`}>
+                <div className="w-full ">
+                  <div className={`${isDarkMode ? 'bg-[#5f33251e]' : 'bg-[#ffe5db51]'} p-4 rounded-3xl  `}>
                     <MentorProfileTabs 
                       mentor={mentor} 
                       activeTab={activeTab} 
@@ -227,13 +229,14 @@ const MentorProfileComponent = () => {
                 </div>
                 {activePackageId && (
                   <div className="w-full lg:w-[40%] flex-shrink-0">
-                    <PricingSummaryCard 
-                      mentorId={Number(params.id)}
-                      packagesList={mentorshipPackages}
-                      basePricePerMonth={basePrice}
-                      selectedPlan={selectedPlan}
-                      setSelectedPlan={setSelectedPlan}
-                    />
+                    <PricingSummaryCard
+  mentorId={Number(params.id)}
+  packagesList={mentorshipPackages}
+  basePricePerMonth={basePrice}
+  selectedPlan={selectedPlan}
+  setSelectedPlanAction={(p) => setSelectedPlan(p)}
+/>
+
                   </div>
                 )}
               </div>
@@ -248,8 +251,8 @@ const MentorProfileComponent = () => {
             </div>
           </div>
 
-          <BookTrial mentor={mentor} />
-          
+          {/* <BookTrial mentor={mentor} /> */}
+
         </div>
       </div>
 

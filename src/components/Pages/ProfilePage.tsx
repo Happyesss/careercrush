@@ -22,7 +22,6 @@ const ProfilePage = () => {
 }, [])
   return (
   <div className={`min-h-[90vh] ${isDarkMode ? 'bg-cape-cod-950 text-gray-200' : 'bg-cape-cod-10 text-black'}`}>
-        <Divider mx="md" mb="xl" color={isDarkMode ? 'dark' : 'transparent'}/>
         <div className='flex gap-5'>
         <UserProfile {...profile}/>
         {/* <SmallCardRecommend {...talents} /> */}
