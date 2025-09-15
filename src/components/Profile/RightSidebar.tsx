@@ -11,30 +11,42 @@ import UpcomingSessions from "./UpcomingSessions";
 import GalleryRedirect from "./GalleryRedirect";
 
 const RightSidebar: React.FC = () => {
-  const tags = [
-    "c", "css", "express", "firebase", "html", "java", "javascript", "github",
-    "mongodb", "mysql", "next.js", "node.js", "php", "python", "reactjs"
-  ];
   const { isDarkMode } = useTheme();
   const user = useSelector((state: any) => state.user);
 
   // Show About and Skills in right sidebar for mentors
   if (user?.accountType === 'MENTOR') {
     return (
-      <aside className="hidden lg:block w-80 mt-10 mr-6">
-        <div className="space-y-6">
+      // Add a right-side gutter so cards don't touch the viewport edge; keep left section untouched
+      <aside
+        className="hidden lg:block w-80 xl:w-96 flex-shrink-0 pr-3 sm:pr-4 md:pr-6 xl:pr-8 [padding-right:env(safe-area-inset-right)]"
+        aria-label="Profile right sidebar"
+      >
+  <div className="space-y-6 sticky top-6 pb-2">
           {/* About Section */}
-          <div className={`p-4 rounded-lg shadow-md ${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'}`}>
+          <div className={`p-6 rounded-2xl shadow-lg transition-all duration-300 ${
+            isDarkMode 
+              ? 'bg-third border border-gray-700/30 hover:shadow-xl' 
+              : 'bg-white border border-gray-200/60 hover:shadow-xl'
+          }`}>
             <About />
           </div>
           
           {/* Skills Section */}
-          <div className={`p-4 rounded-lg shadow-md ${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'}`}>
+          <div className={`p-6 rounded-2xl shadow-lg transition-all duration-300 ${
+            isDarkMode 
+              ? 'bg-third border border-gray-700/30 hover:shadow-xl' 
+              : 'bg-white border border-gray-200/60 hover:shadow-xl'
+          }`}>
             <Skills />
           </div>
 
           {/* Mentorship Dashboard Shortcut */}
-          <div className={`rounded-lg shadow-md ${isDarkMode ? 'bg-cape-cod-900' : 'bg-white'}`}>
+          <div className={`rounded-2xl shadow-lg transition-all duration-300 ${
+            isDarkMode 
+              ? 'bg-third border border-gray-700/30 hover:shadow-xl' 
+              : 'bg-white border border-gray-200/60 hover:shadow-xl'
+          }`}>
             <MentorshipDashboardRedirect />
           </div>
        </div>
@@ -43,16 +55,38 @@ const RightSidebar: React.FC = () => {
   }
 
   return (
-    <aside className="hidden lg:block w-80 mt-10 mr-6">
-      <div className="space-y-6">
+    // Add a right-side gutter so cards don't touch the viewport edge; keep left section untouched
+    <aside
+      className="hidden lg:block w-80 xl:w-96 flex-shrink-0 pr-3 sm:pr-4 md:pr-6 xl:pr-8 [padding-right:env(safe-area-inset-right)]"
+      aria-label="Profile right sidebar"
+    >
+  <div className="space-y-6 sticky top-6 pb-2">
         {/* Schedule Calendar */}
-        <ScheduleCalendar />
+        <div className={`rounded-2xl shadow-lg transition-all duration-300 ${
+          isDarkMode 
+            ? 'bg-third border border-gray-700/30 hover:shadow-xl' 
+            : 'bg-white border border-gray-200/60 hover:shadow-xl'
+        }`}>
+          <ScheduleCalendar />
+        </div>
 
         {/* Upcoming Sessions */}
-        <UpcomingSessions />
+        <div className={`rounded-2xl shadow-lg transition-all duration-300 ${
+          isDarkMode 
+            ? 'bg-third border border-gray-700/30 hover:shadow-xl' 
+            : 'bg-white border border-gray-200/60 hover:shadow-xl'
+        }`}>
+          <UpcomingSessions />
+        </div>
 
         {/* Gallery Redirect */}
-        <GalleryRedirect />
+        <div className={`rounded-2xl shadow-lg transition-all duration-300 ${
+          isDarkMode 
+            ? 'bg-third border border-gray-700/30 hover:shadow-xl' 
+            : 'bg-white border border-gray-200/60 hover:shadow-xl'
+        }`}>
+          <GalleryRedirect />
+        </div>
       </div>
     </aside>
   );

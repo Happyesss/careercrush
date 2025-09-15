@@ -22,8 +22,8 @@ const ExperienceCard = (props:any) => {
 
   }
   return (
-    !edit?<div className="flex flex-col gap-2">
-        <div className="flex justify-between">
+    !edit?<div className="flex flex-col gap-3 p-3 rounded-lg bg-gray-50/30 dark:bg-gray-800/20">
+        <div className="flex justify-between items-start">
           <div className="flex gap-2 items-center">
             <div className={`p-2 rounded-md ${isDarkMode ? 'bg-cape-cod-800' : 'bg-gray-100'}`}>
               {props.companyLogo ? (
@@ -58,11 +58,11 @@ const ExperienceCard = (props:any) => {
           </div>
           <div className="text-sm text-cape-cod-300">{formatDate(props.startDate)} - {props.working?"Present":formatDate(props.endDate)}</div>
           </div>
-          <div className="text-sm text-cape-cod-300 text-justify">
+          <div className="text-sm text-cape-cod-300 text-justify leading-relaxed">
             {props.description}
           </div>
           {props.edit&&
-          <div className="flex gap-3">
+          <div className="flex gap-3 mt-1">
             <Button onClick={()=>setEdit(true)} color="blue.4" variant="outline">Edit</Button>
             <Button color="red.8" variant="light" onClick={handleDelete}>Delete</Button>
           </div>

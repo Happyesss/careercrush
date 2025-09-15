@@ -67,7 +67,7 @@ const MentorGrid = ({ mentors, loading, clearFilters }: MentorGridProps) => {
   }
 
   return (
-  <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 w-full ">
+  <div className="grid grid-cols-1 gap-6 lg:grid-cols-1 w-full ">
   {mentors.map((mentor) => (
     <MentorCard key={mentor.id} {...mentor} />
   ))}

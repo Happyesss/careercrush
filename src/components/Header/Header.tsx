@@ -90,7 +90,7 @@ const Header = () => {
             priority
           />
          <div>
-            <h1 className="font-semibold text-lg text-black dark:text-primary hidden md:block">CareerCrush</h1>
+            <h1 className="font-semibold text-lg text-black dark:text-white hidden md:block">CareerCrush</h1>
          </div>
         </Link>
       </div>
@@ -131,7 +131,7 @@ const Header = () => {
           <>
             <Link href="/login">
               <button
-                className="font-medium text-black dark:text-primary text-sm mx-3 hover:text-primary  transition-colors duration-300"
+                className="font-medium text-black dark:text-white text-sm mx-3 hover:text-primary  transition-colors duration-300"
               >
                 Login
               </button>
@@ -148,7 +148,7 @@ const Header = () => {
 
         {/* Burger Menu */}
         <Burger
-          className="bs:hidden text-primary dark:text-primary"
+          className="bs:hidden text-primary dark:text-white"
           opened={opened}
           onClick={open}
           aria-label="Toggle navigation"
@@ -170,7 +170,7 @@ const Header = () => {
                 key={index}
                 href={`/${link.url}`}
                 onClick={close}
-                className={`transition-colors duration-300 flex text-lg text-primary hover:opacity-80 ${
+                className={`transition-colors duration-300 flex text-lg text-primary dark:text-white hover:opacity-80 ${
                   pathname === `/${link.url}`
                     ? "font-semibold"
                     : ""
